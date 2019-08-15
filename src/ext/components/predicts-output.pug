@@ -12,11 +12,11 @@
     tbody
       tr
         th(width='1' style='font-size:inherit')
-          input(type='checkbox' title='Select or deselect all' data-bind="checked:checkAllPredictions")
+          input(type='checkbox' title='全选或全不选' data-bind="checked:checkAllPredictions")
         th(width='1') &nbsp;
-        th Model
-        th Frame
-        th.flow-right Actions
+        th 模型
+        th 数据帧
+        th.flow-right 操作
     tbody
       // ko foreach:predictionViews
       tr
@@ -28,7 +28,7 @@
         td(data-bind='text:frameKey')
         td.flow-right 
           // ko if:hasFrame
-          +button('View', 'bolt', 'view')
+          +button('查看详情', 'bolt', 'view')
           // /ko
           //- +button('Inspect', 'list', 'inspect')
       // /ko
