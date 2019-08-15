@@ -6,7 +6,7 @@
 module.exports = (_, _go, _importResults) ->
   _allFrames = flatten compact map _importResults, (result) -> result.destination_frames
   _canParse = _allFrames.length > 0
-  _title = "#{_allFrames.length} / #{_importResults.length} files imported."
+  _title = "#{_allFrames.length} / #{_importResults.length} 个文件被导入。"
 
   createImportView = (result) ->
     #TODO dels?

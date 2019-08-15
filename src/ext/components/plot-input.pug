@@ -1,29 +1,29 @@
 .flow-widget
-  +subtitle('Plot', 'bar-chart')
+  +subtitle('绘图', 'bar-chart')
 
   table.flow-form
     tr
       th(width='1')
-        label Type:
+        label 类型：
       td
         select(data-bind="options:types, value:type, optionsCaption:'(Select)'")
     tr
       th
-        label X-Axis:
+        label X轴：
       td
         select(data-bind="options:vectors, value:x, optionsCaption:'(Select)'")
     tr
       th
-        label Y-Axis:
+        label Y轴：
       td
         select(data-bind="options:vectors, value:y, optionsCaption:'(Select)'")
     tr
       th
-        label Color:
+        label 颜色：
       td
         select(data-bind="options:vectors, value:color, optionsCaption:'(Select)'")
     tr
       th
-        label Actions:
+        label 操作：
       td
-        +button('Plot', 'bar-chart', 'plot', 'canPlot')
+        +button('绘图', 'bar-chart', 'plot', 'canPlot')

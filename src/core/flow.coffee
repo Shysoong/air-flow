@@ -16,7 +16,7 @@ ko = require('./modules/knockout')
 
 getContextPath = (_) ->
     if process.env.NODE_ENV == "development"
-      console.debug "Development mode, using localhost:54321"
+      console.debug "开发模式, 正在使用 localhost:54321 的服务"
       _.ContextPath = "http://localhost:54321/"
     else
       _.ContextPath = "/"
@@ -41,7 +41,7 @@ checkSparklingWater = (context) ->
         async: false
 
 $ ->
-  console.debug "Starting Flow"
+  console.debug "正在启动Flow"
   getContextPath context
   checkSparklingWater context
   window.flow = application.init context
@@ -49,4 +49,4 @@ $ ->
   ko.applyBindings window.flow
   context.ready()
   context.initialized()
-  console.debug "Initialization complete", context
+  console.debug "初始化完成", context

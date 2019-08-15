@@ -1,7 +1,7 @@
 .flow-widget
   h3.flow-hint
     i.fa.fa-cube
-    | Model
+    | 模型
 
   // ko with:output
 
@@ -9,54 +9,54 @@
     table.flow-form
       tbody
         tr
-          th.flow-narrow Model ID:
+          th.flow-narrow 模型 ID：
           td.flow-wide(data-bind='text:key.name')
         tr
-          th.flow-narrow Algorithm:
+          th.flow-narrow 算法：
           td.flow-wide(data-bind='text:algo')
         tr 
-          th(width='1') Actions:
+          th(width='1') 操作：
           td
             button.flow-button(type='button' data-bind="click:$parent.toggleRefresh, css:{ 'flow-button-toggle':$parent.isLive }")
               // ko if:$parent.isLive
               i.fa.fa-refresh.fa-spin
-              | Stop
+              | 结束
               // /ko
               // ko ifnot:$parent.isLive
               i.fa.fa-refresh
-              | Refresh
+              | 刷新
               // /ko
 
-            +button('Predict&hellip;', 'bolt', 'predict')
+            +button('预测&hellip;', 'bolt', 'predict')
             //- +button('Clone this model&hellip;', 'copy', 'cloneModel')
             button.flow-button(type='button' data-bind="click: downloadPojo, enable: $data.havePojo")
               i.fa.fa-download
               span
-              | Download POJO
+              | 下载 POJO
             button.flow-button(type='button' data-bind="click: downloadMojo, enable: $data.haveMojo")
               i.fa.fa-download
               span
-              | Download Model Deployment Package (MOJO)
-            +button('Export', 'save', 'exportModel')
-            +button('Inspect', 'list', 'inspect')
-            +button('Delete', 'trash-o', 'deleteModel')
-            +button('Download Gen Model', 'download', 'downloadGenJar')
+              | 下载模型部署包 (MOJO)
+            +button('导出', 'save', 'exportModel')
+            +button('检查', 'list', 'inspect')
+            +button('删除', 'trash-o', 'deleteModel')
+            +button('下载h2o-genmodel.jar', 'download', 'downloadGenJar')
       
-  h4(data-bind='collapse:true') Model Parameters
+  h4(data-bind='collapse:true') 模型参数
   div(data-bind="css:{ 'flow-unhide':isExpanded }")
     .flow-right.flow-margin-after 
       // ko ifnot:isExpanded
-      +button('Show all parameters', 'angle-double-down', 'toggle')
+      +button('显示所有参数', 'angle-double-down', 'toggle')
       // /ko
       // ko if:isExpanded
-      +button('Show modified parameters', 'angle-double-up', 'toggle')
+      +button('显示更改过的参数', 'angle-double-up', 'toggle')
       // /ko
     table.flow-form.flow-form-ruled
       thead
         tr
-          th Parameter
-          th Value
-          th Description
+          th 参数名
+          th 值
+          th 说明
       tbody
         // ko foreach:inputParameters
         tr(data-bind="css:{ 'flow-hide':isModified }")
@@ -98,13 +98,13 @@
   // /ko
 
   div(data-bind='visible: $data.havePojo')
-    h4(data-bind='collapse:false') Preview POJO
+    h4(data-bind='collapse:false') 预览POJO
     div
       // ko ifnot:isPojoLoaded
       button.flow-button(type='button' data-bind="click: previewPojo, enable: $data.havePojo")
         i.fa.fa-code
         span
-        | Preview POJO
+        | 预览 POJO
       // /ko
       // ko if:isPojoLoaded
       div(data-bind='html:pojoPreview')

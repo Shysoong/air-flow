@@ -17,19 +17,19 @@ exports.init = (_) ->
     _fromNow = lift _date, fromNow
 
     load = ->
-      _.confirm 'This action will replace your active notebook.\nAre you sure you want to continue?', { acceptCaption: 'Load Notebook', declineCaption: 'Cancel' }, (accept) ->
+      _.confirm '本操作将会替换掉您当前激活的流程笔记。\n您确定要继续吗？', { acceptCaption: '加载流程笔记', declineCaption: '取消' }, (accept) ->
         if accept
           _.load _name
 
     purge = ->
-      _.confirm "Are you sure you want to delete this notebook?\n\"#{_name}\"", { acceptCaption: 'Delete', declineCaption: 'Keep' }, (accept) ->
+      _.confirm "您确定要删除本流程笔记吗？\n\"#{_name}\"", { acceptCaption: '删除', declineCaption: '保留' }, (accept) ->
         if accept
           _.requestDeleteObject 'notebook', _name, (error) ->
             if error
               _alert error.message ? error
             else
               _docs.remove self
-              _.growl 'Notebook deleted.'
+              _.growl '流程笔记已删除。'
 
     self =
       name: _name

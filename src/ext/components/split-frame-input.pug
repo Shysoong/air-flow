@@ -1,24 +1,24 @@
 .flow-widget
   h3.flow-hint
     i.fa.fa-scissors
-    | Split Frame
+    | 拆分数据帧
 
   table.flow-form
     tbody
       tr
         th
-          label Frame:
+          label 数据帧：
         td
           select(data-bind="options:frames, value:frame, optionsCaption:'(Select)'")
       tr
         th
-          label Splits:
+          label 拆分：
         td
           table
             thead
               tr
-                th(style='text-align:left') Ratio
-                th Key
+                th(style='text-align:left') 比例
+                th 键
             tbody
               // ko foreach:splits
               tr
@@ -36,14 +36,14 @@
                   input.flow-textbox(type='text' style='width:300px' data-bind="value:lastSplitKey")
                 td &nbsp; 
           div
-            a.flow-pointer(data-bind='click:addSplit') Add a new split
+            a.flow-pointer(data-bind='click:addSplit') 再拆分一次
       tr
         th
-          label Seed:
+          label 随机种子：
         td
           input.flow-textbox(type='text' style='width:100px' data-bind="value:seed")
 
   .flow-panel
-    +button('Create', 'scissors', 'splitFrame')
+    +button('创建拆分', 'scissors', 'splitFrame')
     div(style='color:red' data-bind='text:validationMessage')
 

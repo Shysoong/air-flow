@@ -1,21 +1,21 @@
 .flow-widget
   h3.flow-hint
     i.fa.fa-question-circle
-    | Assistance
+    | 建模助手
 
   table.flow-form
     thead
       tr
         th(width='1') &nbsp;
-        th.flow-narrow Routine
-        th.flow-wide Description
+        th.flow-narrow 常 用 的 建 模 步 骤
+        th.flow-wide 说 明 描 述
     tbody
       // ko foreach:routines  
       tr
         td
           i(data-bind="attr:{'class':icon}")
         td
-          a.flow-monospace(href='#' data-bind='click:execute, text:name')
+          a.flow-monospace(href='#' data-bind='click:execute, text:cnName')
         td(data-bind='html:description')
 
       // /ko

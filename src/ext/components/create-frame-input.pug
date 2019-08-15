@@ -1,142 +1,142 @@
 .flow-widget
   h3.flow-hint
     i.fa.fa-table
-    | Create a Frame
+    | 创建一个数据帧
 
   table.flow-form
     tbody
       tr
         th
-          label Name
+          label 名称
         td
           input.flow-textbox(type='text' data-bind="value:key")
-        td The name of the frame.
+        td 数据帧的名称
       tr
         th
-          label Rows
+          label 行数
         td
           input.flow-textbox(type='text' data-bind="value:rows")
-        td Number of rows
+        td 数据记录的行数
           
       tr
         th
-          label Columns
+          label 列数
         td
           input.flow-textbox(type='text' data-bind="value:columns")
-        td Number of data columns (in addition to the first response column)
+        td 数据列数（除第一个响应列外）
           
       tr
         th
-          label Randomize
+          label 随机化
         td
           input(type='checkbox' data-bind="checked:randomize")
-        td Whether frame should be randomized
+        td 是否随机化数据帧
 
       tr
         th
-          label Seed
+          label 随机种子
         td
           input.flow-textbox(type='text' data-bind="value:seed")
-        td Random number seed
+        td 随机数种子
 
       tr
         th
-          label Seed for Column Types
+          label 列类型随机种子
         td
           input.flow-textbox(type='text' data-bind="value:seed_for_column_types")
-        td Random number seed for column types (-1 to use the main seed)
+        td 列类型的随机数种子 （-1 表示使用主随机种子）
           
       tr
         th
-          label Value
+          label 值
         td
           input.flow-textbox(type='text' data-bind="value:value")
-        td Constant value (for randomize=false)
+        td 常量值 (不随机化时此选项设置有效)
 
       tr
         th
-          label Factors
+          label 因子
         td
           input.flow-textbox(type='text' data-bind="value:factors")
-        td Factor levels for categorical variables
+        td 分类变量的因子水平
           
       tr
         th
-          label Categorical Fraction
+          label 分类列占比
         td
           input.flow-textbox(type='text' data-bind="value:categoricalFraction")
-        td Fraction of categorical columns (for randomize=true)
+        td 分类列占总列的比例分数（随机化时此选项有效）
           
       tr
         th
-          label Integer Fraction
+          label 整形列占比
         td
           input.flow-textbox(type='text' data-bind="value:integerFraction")
-        td Fraction of integer columns (for randomize=true)
+        td 整形列占总列的比例分数（随机化时此选项有效）
           
       tr
         th
-          label Binary Fraction
+          label 二项列占比
         td
           input.flow-textbox(type='text' data-bind="value:binaryFraction")
-        td Fraction of binary columns (for randomize=true)
+        td 二项列占总列的比例分数 （随机化时此选项有效）
 
       tr
         th
-          label Binary Ones Fraction
+          label 二项列中1的占比
         td
           input.flow-textbox(type='text' data-bind="value:binaryOnesFraction")
-        td Fraction of 1's in binary columns
+        td 在二项列中值为1的数据占二项列总数据的比例分数
 
       tr
         th
-          label Time Fraction
+          label 时间类型列占比
         td
           input.flow-textbox(type='text' data-bind="value:timeFraction")
-        td Fraction of date/time columns (for randomize=true)
+        td 日期/时间列占总列的比例分数（随机化时此选项有效）
 
       tr
         th
-          label String Fraction
+          label 字符串类型列占比
         td
           input.flow-textbox(type='text' data-bind="value:stringFraction")
-        td Fraction of string columns (for randomize=true)
+        td 字符串类型列占总列的比例分数（随机化时此选项有效）
           
       tr
         th
-          label Missing Fraction
+          label 缺失数据占比
         td
           input.flow-textbox(type='text' data-bind="value:missingFraction")
-        td Fraction of missing values
+        td 缺失数据占总数据的比例分数
           
       tr
         th
-          label Response Factors
+          label 响应因子
         td
           input.flow-textbox(type='text' data-bind="value:responseFactors")
-        td Number of factor levels of the first column (1=real, 2=binomial, N=multinomial)
+        td 首列因子个数（1=实数，2=二项式，N=多项）
           
       tr
         th
-          label Real Range
+          label 实数范围
         td
           input.flow-textbox(type='text' data-bind="value:realRange")
-        td Range for real variables (-range ... range)
+        td 实数变量范围range(-range ... range)
           
       tr
         th
-          label Integer Range
+          label 整数范围
         td
           input.flow-textbox(type='text' data-bind="value:integerRange")
-        td Range for integer variables (-range ... range)
+        td 整数变量范围range(-range ... range)
 
       tr
         th
-          label Has Response?
+          label 有无响应列？
         td
           input(type='checkbox' data-bind="checked:hasResponse")
-        td Whether an additional response column should be generated
+        td 是否应该生成额外的响应列
 
         
   .flow-panel
-    +button('Create', 'table', 'createFrame')
+    +button('创建', 'table', 'createFrame')

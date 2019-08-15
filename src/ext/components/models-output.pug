@@ -1,10 +1,10 @@
 .flow-widget
-  +subtitle('Models', 'cubes')
+  +subtitle('模型列表', 'cubes')
   
   // ko ifnot:hasModels
-  blockquote Your H<sub>2</sub>O cloud has no models.
+  blockquote 您的AIR云端还没有模型。
   .flow-panel
-    +button('Build a model&hellip;', 'cube', 'buildModel')
+    +button('构建模型&hellip;', 'cube', 'buildModel')
   // /ko
 
   // ko if:hasModels
@@ -12,11 +12,11 @@
     thead
       tr
         th(width='1' style='font-size:inherit')
-          input(type='checkbox' title='Select or deselect all' data-bind="checked:checkAllModels")
+          input(type='checkbox' title='选择或反选所有' data-bind="checked:checkAllModels")
         th(width='1') &nbsp;
-        th Key
-        th Algorithm
-        th.flow-right Actions
+        th 键
+        th 算法
+        th.flow-right 操作
     tbody
       // ko foreach:modelViews
       tr
@@ -28,15 +28,15 @@
           +link('@key', 'view')
         td(data-bind='text:algo')
         td.flow-right 
-          +button('Predict&hellip;', 'bolt', 'predict')
+          +button('预测&hellip;', 'bolt', 'predict')
           //- +button('Clone&hellip;', 'copy', 'clone')
-          +button('Inspect', 'list', 'inspect')
+          +button('检查', 'list', 'inspect')
       // /ko
   .flow-panel
     //- +button('Compare selected&hellip;', 'area-chart', 'compareModels', 'canCompareModels')
     //- +button('Predict using selected models&hellip;', 'bolt', 'predictUsingModels', 'canCompareModels')
-    +button('Inspect', 'list', 'inspect')
-    +button('Delete selected', 'trash', 'deleteModels', 'hasSelectedModels')
+    +button('检查', 'list', 'inspect')
+    +button('删除所选', 'trash', 'deleteModels', 'hasSelectedModels')
 
   // /ko
 

@@ -5,20 +5,20 @@
       .modal-header
         button.close(type='button', data-dismiss='modal')
           span(aria-hidden='true') ×
-          span.sr-only Close
-        h4#keyboardHelpDialogLabel.modal-title Keyboard Shortcuts
+          span.sr-only 关闭
+        h4#keyboardHelpDialogLabel.modal-title 键盘快捷键
       .modal-body
         table.flow-form
           tbody
             tr
               td(width='50%')
-                h5 Command Mode
+                h5 命令行模式
                 div(data-bind="template:{ name:'flow-keyboard-shortcut-table', data:normalMode}")
                 
               td(width='50%')
-                h5 Edit Mode
+                h5 编辑模式
                 div(data-bind="template:{ name:'flow-keyboard-shortcut-table', data:editMode}")
       .modal-footer
-        button.btn.btn-default(type='button', data-dismiss='modal') Close
+        button.btn.btn-default(type='button', data-dismiss='modal') 关闭
 // /ko
 

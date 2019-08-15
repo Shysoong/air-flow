@@ -4,7 +4,7 @@ tr(data-bind="css:{'bg-danger':hasError, 'bg-warning':hasWarning, 'bg-info':hasI
     span(data-bind='visible:isRequired') *
   td(colspan='2')
     div
-      | Show models compatible with frame:
+      | 显示与数据集兼容的模型：
       select(data-bind="options:frames, value:selectedFrame")
     table(style='margin-top:10px;width:100%')
       tbody
@@ -12,7 +12,7 @@ tr(data-bind="css:{'bg-danger':hasError, 'bg-warning':hasWarning, 'bg-info':hasI
           td
             label(style='margin-left: 1px; font-style: italic;')
               input(type='checkbox' title='Select or deselect all' data-bind="checked:checkAllModels")
-              | Select All
+              | 全选
     div(style='margin-bottom:5px;height:300px;overflow:auto;border:1px dotted #ccc')
       // ko foreach:value
       div(style='padding:5px')

@@ -1,17 +1,17 @@
 .flow-widget.flow-timeline-output
   h3.flow-hint
     i.fa.fa-clock-o
-    span Timeline
+    span 时间轴
 
   .flow-panel
     button.flow-button(type='button' data-bind="click:toggleRefresh, css:{ 'flow-button-toggle':isLive }")
       // ko if:isLive
       i.fa.fa-refresh.fa-spin
-      | Stop
+      | 结束
       // /ko
       // ko ifnot:isLive
       i.fa.fa-refresh
-      | Refresh
+      | 刷行
       // /ko
 
   .flow-plot(data-bind='raw:data')

@@ -1,23 +1,23 @@
 .flow-widget
   h3.flow-hint
     i.fa.fa-tasks
-    | Job
+    | 任务
   // ko if:exception
   div(data-bind="template: { name:'flow-failure', data:exception }")
   // /ko
   table.flow-form
     tbody
       tr
-        th.flow-narrow Run Time
+        th.flow-narrow 运行时间
         td.flow-wide(data-bind='text:runTime' style='font-size:120%')
       tr
-        th.flow-narrow Remaining Time
+        th.flow-narrow 剩余时间
         td.flow-wide(data-bind='text:remainingTime' style='font-size:120%')
       tr
-        th.flow-narrow Type
+        th.flow-narrow 目标类型
         td.flow-wide(data-bind='text:destinationType')
       tr
-        th.flow-narrow Key
+        th.flow-narrow 键
         td.flow-wide
           // ko ifnot:canView
           span(data-bind='text:destinationKey')
@@ -28,13 +28,13 @@
             a(href='#' data-bind='text:destinationKey, click:view')
           // /ko
       tr
-        th.flow-narrow Description
+        th.flow-narrow 描述
         td.flow-wide(data-bind='text:description')
       tr
-        th.flow-narrow Status
+        th.flow-narrow 状态
         td.flow-wide(data-bind='text:status')
       tr
-        th.flow-narrow Progress
+        th.flow-narrow 进度
         td.flow-wide
           table
             tbody
@@ -59,13 +59,13 @@
       // /ko
 
       tr
-        th.flow-narrow Actions
+        th.flow-narrow 操作
         td.flow-wide
           button.flow-button(type='button' data-bind="click:view, visible:canView")
             i.fa.fa-search
-            | View
+            | 查看详情
 
           button.flow-button(type='button' data-bind="click:cancel, visible:canCancel")
             i.fa.fa-ban
-            | Cancel Job
+            | 取消任务
 

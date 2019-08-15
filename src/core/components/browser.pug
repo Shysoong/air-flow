@@ -1,16 +1,16 @@
 h4.flow-hint
   i.fa.fa-files-o
-  | Flows
+  | 流程
 
 .flow-sidebar-content
   .flow-browser
     // ko ifnot:hasDocs
     p
-      | You have no saved notebooks. To save a notebook, click the 
+      | 您还没有流程笔记。要保存一个笔记，点击
       i.fa.fa-save
-      | &nbsp;icon, or choose File 
+      | &nbsp;图标，或者从菜单中选择 流程 
       i.fa.fa-angle-right
-      | &nbsp;Save from the application menu.
+      | &nbsp;保存流程。
 
     // /ko
 
@@ -31,5 +31,5 @@ h4.flow-hint
     // /ko
 
     div(style='margin-top:10px')
-      +button('Refresh', 'refresh', 'loadNotebooks')
+      +button('刷新', 'refresh', 'loadNotebooks')
 

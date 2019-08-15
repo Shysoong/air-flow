@@ -5,14 +5,14 @@
   table.flow-form
     tbody
       tr
-        th.flow-narrow Files
+        th.flow-narrow 文件
         td.flow-wide
           div(data-bind="template: { name:templateOf, foreach:importViews }")
       // ko if:canParse
       tr.flow-actions
-        th.flow-narrow Actions
+        th.flow-narrow 操作
         td.flow-wide
-          +button('Parse these files&hellip;', 'cog', 'parse', 'canParse')
+          +button('解析这些文件&hellip;', 'cog', 'parse', 'canParse')
       // /ko
 
 

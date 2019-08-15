@@ -5,8 +5,8 @@ util = require('../modules/util')
 module.exports = (_, _message, _opts={}, _go) ->
 
   lodash.defaults _opts,
-    title: 'Alert'
-    acceptCaption: 'OK'
+    title: '警告'
+    acceptCaption: '确认'
 
   accept = -> _go yes
 

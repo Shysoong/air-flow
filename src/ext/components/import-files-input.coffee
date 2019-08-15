@@ -15,7 +15,7 @@ module.exports = (_, _go) ->
   tryImportFiles = ->
     specifiedPath = _specifiedPath()
     if specifiedPath.trim().length == 0
-      _exception 'Empty path. Please provide a valid path.'
+      _exception '路径为空，请提供一个合法的路径。'
     else
       _.requestFileGlob specifiedPath, -1, (error, result) ->
         if error
@@ -29,7 +29,7 @@ module.exports = (_, _go) ->
   # File selection 
   #
   _importedFiles = signals []
-  _importedFileCount = lift _importedFiles, (files) -> if files.length then "Found #{util.describeCount files.length, 'file'}:" else ''
+  _importedFileCount = lift _importedFiles, (files) -> if files.length then "找到 #{util.describeCount4Cn files.length, '文件或目录'}:" else ''
   _hasImportedFiles = lift _importedFiles, (files) -> files.length > 0
   _hasUnselectedFiles = lift _importedFiles, (files) -> some files, (file) -> not file.isSelected()
   _selectedFiles = signals []
@@ -40,9 +40,9 @@ module.exports = (_, _go) ->
     dictionary
   _selectedFileCount = lift _selectedFiles, (files) -> 
     if files.length
-      "#{util.describeCount files.length, 'file'} selected:"
+      "#{util.describeCount4Cn files.length, 'file'} 文件或目录"
     else
-      "(No files selected)"
+      "(没有选中的文件)"
 
   _hasSelectedFiles = lift _selectedFiles, (files) -> files.length > 0
 

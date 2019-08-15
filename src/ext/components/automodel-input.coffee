@@ -45,14 +45,14 @@ module.exports = (_, _go, opts={}) ->
 
   _ignoredColumnsControl = util.createListControl({
       name: 'ignored_columns',
-      label: 'Ignored Columns',
+      label: '忽略列',
       required: no,
       gridable: no
   })
 
   _excludeAlgosControl = util.createListControl({
       name: 'exclude_algos',
-      label: 'Exclude these algorithms',
+      label: '排除这些算法',
       required: no,
       gridable: no
   })

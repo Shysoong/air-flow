@@ -21,21 +21,21 @@ module.exports = (_, _go, jobs) ->
 
     type = switch job.dest.type
       when 'Key<Frame>'
-        'Frame'
+        '数据帧'
       when 'Key<Model>'
-        'Model'
+        '模型'
       when 'Key<Grid>'
-        'Grid'
+        '网格搜索'
       when 'Key<PartialDependence>'
-        'PartialDependence'
+        '部分依赖'
       when 'Key<AutoML>'
-        'Auto Model'
+        '自动化建模'
       when 'Key<ScalaCodeResult>'
-        'Scala Code Execution'
+        'Scala代码执行'
       when 'Key<KeyedVoid>'
         'Void'
       else
-        'Unknown'
+        '未知'
 
     destination: job.dest.name
     type: type
@@ -54,7 +54,7 @@ module.exports = (_, _go, jobs) ->
     _.requestJobs (error, jobs) ->
       _isBusy no
       if error
-        _exception failure _, new FlowError 'Error fetching jobs', error
+        _exception failure _, new FlowError '抓取任务出错', error
         _isLive no
       else
         _jobViews map jobs, createJobView

@@ -14,11 +14,11 @@ exports.init = (_) ->
         unless error
           for { name, value } in response.entries
             properties.push
-              caption: 'H2O ' + name
+              caption: 'AIR ' + name
               value: value
 
         properties.push
-          caption: 'Flow version'
+          caption: 'Flow 版本'
           value: _.Version
 
         _properties _.BuildProperties = properties

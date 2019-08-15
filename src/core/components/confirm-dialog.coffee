@@ -3,9 +3,9 @@ util = require('../modules/util')
 
 module.exports = (_, _message, _opts={}, _go) ->
   lodash.defaults _opts,
-    title: 'Confirm'
-    acceptCaption: 'Yes'
-    declineCaption: 'No'
+    title: '确认'
+    acceptCaption: '是'
+    declineCaption: '否'
 
   accept = -> _go yes
 

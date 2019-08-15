@@ -1,20 +1,20 @@
 .flow-widget
   h3.flow-hint
     i.fa.fa-file-text-o
-    span Log
+    span 日志
 
   table.flow-form(style='width:auto')
     tbody
       tr
         th
-          label Select Log File Type:
+          label 请选择日志类型:
         td 
           select(data-bind="options:fileTypes, value:activeFileType")
         th
-          label Select Node: 
+          label 请选择服务节点: 
         td
           select(data-bind="options:nodes, optionsText:'name', value:activeNode")
         td
-          +button('Refresh', 'refresh', 'refresh')
+          +button('刷新', 'refresh', 'refresh')
 
   pre(data-bind='text:contents')

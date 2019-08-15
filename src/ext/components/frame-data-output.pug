@@ -3,21 +3,21 @@
     i.fa.fa-table
     span(data-bind="text:key")
 
-  h4(data-bind='collapse:false') Data
+  h4(data-bind='collapse:false') 数据
   div
     // input.flow-textbox(type='text' placeholder='Search by column name...' data-bind="value:columnNameSearchTerm, valueUpdate:'afterkeydown'")
     div(style='padding:0 0 10px 0')
       button.flow-button(type='button' data-bind="click:goToPreviousPage, enable:canGoToPreviousPage")
         i.fa.fa-arrow-left
-        span Previous 20 Columns
+        span 前 20 列
       button.flow-button(type='button' data-bind="click:goToNextPage, enable:canGoToNextPage")
         i.fa.fa-arrow-right
-        span Next 20 Columns
+        span 后 20 列
     .flow-plot(data-bind='raw:data')
     div
       button.flow-button(type='button' data-bind="click:goToPreviousPage, enable:canGoToPreviousPage")
         i.fa.fa-arrow-left
-        span Previous 20 Columns
+        span 前 20 列
       button.flow-button(type='button' data-bind="click:goToNextPage, enable:canGoToNextPage")
         i.fa.fa-arrow-right
-        span Next 20 Columns
+        span 后 20 列

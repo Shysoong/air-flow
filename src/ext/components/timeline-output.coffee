@@ -11,13 +11,13 @@ module.exports = (_, _go, _timeline) ->
   _isBusy = signal no
 
   _headers = [
-    'HH:MM:SS:MS'
-    'nanosec'
-    'Who'
-    'I/O Type'
-    'Event'
-    'Type'
-    'Bytes'
+    '时间'
+    'Unix时间戳（毫秒）'
+    '参与方'
+    'I/O 类型'
+    '事件'
+    '类型'
+    '字节'
   ]
 
   _data = signal null

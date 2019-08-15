@@ -1,14 +1,14 @@
 .flow-widget
   h3.flow-hint
     i.fa.fa-table
-    | Frames
+    | 数据帧
 
   // ko ifnot:hasFrames
-  blockquote Your H<sub>2</sub>O cloud has no frames.
+  blockquote 您的AIR上没有数据帧。
   .flow-panel
     button.flow-button(type='button' data-bind='click:importFiles')
       i.fa.fa-files-o
-      | Import files&hellip;
+      | 导入文件&hellip;
     
   // /ko
 
@@ -18,11 +18,11 @@
       tr
         th(width='1' style='font-size:inherit')
           input(type='checkbox' title='Select or deselect all' data-bind="checked:checkAllFrames")
-        th(width='1') Type
+        th(width='1' style="white-space:nowrap;") 类型
         th ID
-        th.flow-right(width='1') Rows
-        th.flow-right(width='1') Columns
-        th.flow-right(width='1') Size
+        th.flow-right(width='1' style="white-space:nowrap;") 行数
+        th.flow-right(width='1' style="white-space:nowrap;") 列数
+        th.flow-right(width='1' style="white-space:nowrap;") 大小
     tbody
       // ko foreach:frameViews
       tr
@@ -40,20 +40,20 @@
             a(href='#' data-bind='text:key, click:view')
           // ko if:isText
           p
-            +button('Parse&hellip;', 'cog', 'view')
+            +button('解析&hellip;', 'cog', 'view')
           // /ko
           // ko ifnot:isText
           p
-            +button('Build Model&hellip;', 'cube', 'createModel')
-            +button('Predict&hellip;', 'bolt', 'predict')
-            +button('Inspect', 'list', 'inspect')
+            +button('构建模型&hellip;', 'cube', 'createModel')
+            +button('预测&hellip;', 'bolt', 'predict')
+            +button('检查', 'list', 'inspect')
           // /ko
         td.flow-right(data-bind='text:rowCount')
         td.flow-right(data-bind='text:columnCount')
         td.flow-right(data-bind='text:size')
       // /ko
   .flow-panel
-    +button('Predict on selected frames&hellip;', 'bolt', 'predictOnFrames', 'hasSelectedFrames')
-    +button('Delete selected frames', 'trash-o', 'deleteFrames', 'hasSelectedFrames')
+    +button('在所选数据帧上进行预测&hellip;', 'bolt', 'predictOnFrames', 'hasSelectedFrames')
+    +button('删除所选数据帧', 'trash-o', 'deleteFrames', 'hasSelectedFrames')
   // /ko
 

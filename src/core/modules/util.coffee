@@ -16,6 +16,13 @@ describeCount = (count, singular, plural) ->
     else
       "#{count} #{plural}"
 
+describeCount4Cn = (count, singular) ->
+  switch count
+    when 0
+      "没有 #{singular}"
+    else
+      "#{count} 个 #{singular}"
+
 fromNow = (date) -> (moment date).fromNow()
 
 formatBytes = (bytes) ->

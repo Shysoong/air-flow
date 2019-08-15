@@ -2,9 +2,9 @@
   +subtitle('Grids', 'th')
   
   // ko ifnot:hasGrids
-  blockquote Your H<sub>2</sub>O cloud has no grid search results.
+  blockquote 您的AIR上没有网格搜索结果。
   .flow-panel
-    +button('Build a model&hellip;', 'cube', 'buildModel')
+    +button('构建模型&hellip;', 'cube', 'buildModel')
   // /ko
 
   // ko if:hasGrids
@@ -12,8 +12,8 @@
     thead
       tr
         th(width='1') &nbsp;
-        th Key
-        th Models
+        th 键
+        th 模型
     tbody
       // ko foreach:gridViews
       tr

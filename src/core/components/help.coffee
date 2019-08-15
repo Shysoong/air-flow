@@ -11,17 +11,17 @@ _homeContent = null
 
 _homeMarkdown = """
 <blockquote>
-Using Flow for the first time?
+第一次使用Flow？
 <br/>
 <div style='margin-top:10px'>
-  <button type='button' data-action='get-flow' data-pack-name='examples' data-flow-name='QuickStartVideos.flow' class='flow-button'><i class='fa fa-file-movie-o'></i><span>Quickstart Videos</span>
+  <button type='button' data-action='get-flow' data-pack-name='examples' data-flow-name='QuickStartVideos.flow' class='flow-button'><i class='fa fa-file-movie-o'></i><span>快速开始视频</span>
   </button>
 </div>
 </blockquote>
 
-Or, <a href='#' data-action='get-pack' data-pack-name='examples'>view example Flows</a> to explore and learn H<sub>2</sub>O.
+或者，<a href='#' data-action='get-pack' data-pack-name='examples'>查看示例流程</a> 来探索和学习AIR。
 
-###### Star H2O on Github!
+###### 在Github上给AIR点个星星吧 !
 
 <span class="github-btn">
     <a class="gh-btn" href="https://github.com/h2oai/h2o-3/" target="_blank">
@@ -30,15 +30,15 @@ Or, <a href='#' data-action='get-pack' data-pack-name='examples'>view example Fl
 </span>
 <br/>
 
-###### General
+###### 通用
 
 %HELP_TOPICS%
 
-###### Examples
+###### 示例
 
-Flow packs are a great way to explore and learn H<sub>2</sub>O. Try out these Flows and run them in your browser.<br/><a href='#' data-action='get-packs'>Browse installed packs...</a>
+流程包是一种探索和学习AIR很好的方式。 尝试这些流程并在您的浏览器中运行它们。<br/><a href='#' data-action='get-packs'>浏览已经安装的包...</a>
 
-###### H<sub>2</sub>O REST API
+###### AIR REST API
 
 - <a href='#' data-action='endpoints'>Routes</a>
 - <a href='#' data-action='schemas'>Schemas</a>
@@ -116,7 +116,7 @@ exports.init = (_) ->
             displayFlows packName, flowNames
 
       when 'get-flow'
-        _.confirm 'This action will replace your active notebook.\nAre you sure you want to continue?', { acceptCaption: 'Load Notebook', declineCaption: 'Cancel' }, (accept) ->
+        _.confirm '本操作将会替换掉您当前激活的流程笔记。\n您确定要继续吗？', { acceptCaption: '加载流程笔记', declineCaption: '取消' }, (accept) ->
           if accept
             packName = $el.attr 'data-pack-name'
             flowName = $el.attr 'data-flow-name'

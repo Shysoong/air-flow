@@ -20,43 +20,56 @@ lightning = require('../../core/modules/lightning')
 
 _assistance =
   importFiles:
-    description: 'Import file(s) into H<sub>2</sub>O'
+    cnName: '导入文件'
+    description: '导入文件到AIR中'
     icon: 'files-o'
   importSqlTable:
-    description: 'Import SQL table into H<sub>2</sub>O'
+    cnName: '导入数据库表'
+    description: '通过JDBC连接，导入数据库表到AIR中'
     icon: 'table'
   getFrames:
-    description: 'Get a list of frames in H<sub>2</sub>O'
+    cnName: '获取数据帧'
+    description: '获取AIR中的数据帧列表'
     icon: 'table'
   splitFrame:
-    description: 'Split a frame into two or more frames'
+    cnName: '拆分数据帧'
+    description: '将一个数据帧拆分为两个或者多个数据帧'
     icon: 'scissors'
   mergeFrames:
-    description: 'Merge two frames into one'
+    cnName: '合并数据帧'
+    description: '将两个数据帧合并为一个'
     icon: 'link'
   getModels:
-    description: 'Get a list of models in H<sub>2</sub>O'
+    cnName: '获取模型'
+    description: '获取AIR中的模型列表'
     icon: 'cubes'
   getGrids:
-    description: 'Get a list of grid search results in H<sub>2</sub>O'
+    cnName: '获取网格搜索结果'
+    description: '获取AIR中网格搜索的结果列表'
     icon: 'th'
   getPredictions:
-    description: 'Get a list of predictions in H<sub>2</sub>O'
+    cnName: '预测'
+    description: '获取AIR中的预测列表'
     icon: 'bolt'
   getJobs:
-    description: 'Get a list of jobs running in H<sub>2</sub>O'
+    cnName: '获取任务列表'
+    description: '获取正在AIR上运行中的任务作业'
     icon: 'tasks'
   runAutoML:
-    description: 'Automatically train and tune many models'
+    cnName: '运行自动机器学习'
+    description: '自动训练和调整多个模型'
     icon: 'sitemap'
   buildModel:
-    description: 'Build a model'
+    cnName: '构建模型'
+    description: '构建一个模型'
     icon: 'cube'
   importModel:
-    description: 'Import a saved model'
+    cnName: '导入模型'
+    description: '导入一个保存过的模型'
     icon: 'cube'
   predict:
-    description: 'Make a prediction'
+    cnName: '获取预测'
+    description: '构建一个预测'
     icon: 'bolt'
 
 parseNumbers = (source) ->
