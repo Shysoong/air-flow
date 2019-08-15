@@ -671,7 +671,7 @@ exports.init = (_, _renderers) ->
         createMenuItem '堆栈信息', executeCommand 'getStackTrace'
         createMenuItem '网络测试', executeCommand 'testNetwork'
         #TODO Cluster I/O
-        createMenuItem '分析器', executeCommand 'getProfile depth: 10'
+        createMenuItem '分析工具', executeCommand 'getProfile depth: 10'
         createMenuItem '时间轴', executeCommand 'getTimeline'
         #TODO UDP Drop Test
         #TODO Task Status
@@ -682,7 +682,7 @@ exports.init = (_, _renderers) ->
         #TODO createMenuItem 'Tour', startTour, yes
         createMenuItem '建模助手', executeCommand 'assist'
         menuDivider
-        createMenuItem '侧边栏切换到帮助选项卡', showHelp
+        createMenuItem '展示帮助内容', showHelp
         createMenuItem '快捷键', displayKeyboardShortcuts, ['h']
         menuDivider
         createMenuItem '文档', displayDocumentation

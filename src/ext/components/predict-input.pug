@@ -1,15 +1,15 @@
 .flow-widget
-  +subtitle('Predict', 'bolt')
+  +subtitle('预测', 'bolt')
 
   table.flow-form
     tr
-      th(width='1')
-        label Name:
+      th(width='1' style="white-space:nowrap;")
+        label 名称：
       td
         input(data-bind="value:destinationKey")
     tr
       th(width='1')
-        label Model:
+        label 模型：
       td
         // ko if:hasModels
         span(data-bind='text:selectedModelsCaption')
@@ -20,7 +20,7 @@
     // ko ifnot:hasExemplarIndex
     tr
       th
-        label Frame:
+        label 数据帧：
       td
         // ko if:hasFrames
         span(data-bind='text:selectedFramesCaption')
@@ -66,11 +66,11 @@
     // /ko
     tr
       th
-        label Actions:
+        label 操作：
       td
         button.flow-button(type='button' data-bind='click:predict, enable:canPredict')
           i.fa.fa-bolt
-          span Predict
+          span 预测
 
     // /ko
 

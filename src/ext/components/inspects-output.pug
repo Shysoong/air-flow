@@ -1,20 +1,20 @@
 .flow-widget
   h3.flow-hint
     i.fa.fa-info-circle
-    | Data
+    | 数据
 
   // ko ifnot:hasTables
-  blockquote No data found.
+  blockquote 没有数据。
   // /ko
 
   // ko if:hasTables
-  h4 Tables
+  h4 表格
   table.flow-form
     thead
       tr
         th(width='1') &nbsp;
-        th Name
-        th Actions
+        th 名称
+        th 操作
     tbody
       // ko foreach:tables
       tr
@@ -25,11 +25,11 @@
         td
           button.flow-button(type='button' data-bind='click:inspect')
             i.fa.fa-list
-            span Inspect
+            span 检查
           // ko if:canPlot
           button.flow-button(type='button' data-bind='click:plot')
             i.fa.fa-bar-chart
-            span Plot
+            span 绘图
           // /ko
       // /ko
   // /ko
