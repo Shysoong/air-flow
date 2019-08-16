@@ -1,0 +1,61 @@
+.flow-widget
+  h3.flow-hint
+    i.fa.fa-table
+    | 导入数据库表
+  table.flow-form
+    tbody
+      tr
+        th(width='125') 数据库链接URL：
+        td
+          table(width='100%')
+            tbody
+              tr
+                td.flow-wide
+                  input.flow-textbox(type='text' style='width:100%' data-bind="value:specifiedUrl" placeholder='输入JDBC规范的数据库URL。')
+      tr
+        th(width='125') 数据库表：
+        td
+          table(width='100%')
+            tbody
+              tr
+                td.flow-wide
+                  input.flow-textbox(type='text' style='width:100%' data-bind="value:specifiedTable" placeholder='输入数据库中需要导入的表名。')
+      tr
+        th(width='125') 列：
+        td
+          table(width='100%')
+            tbody
+              tr
+                td.flow-wide
+                  input.flow-textbox(type='text' style='width:100%' data-bind="value:specifiedColumns" placeholder='输入一个要被导入的用逗号分割的列名列表。默认导入全部列。')
+      tr
+        th(width='125') 用户名：
+        td
+          table(width='100%')
+            tbody
+              tr
+                td.flow-wide
+                  input.flow-textbox(type='text' style='width:100%' data-bind="value:specifiedUsername" placeholder='输入数据库的用户名。')
+      tr
+        th(width='125') 密码：
+        td
+          table(width='100%')
+            tbody
+              tr
+                td.flow-wide
+                  input.flow-textbox(type='password' style='width:100%' data-bind="value:specifiedPassword" placeholder='输入上面数据库用户名对应的密码。')
+
+      // ko if:hasErrorMessage
+      tr
+        th &nbsp;
+        td(data-bind='text:exception')
+      // /ko
+
+      tr.flow-actions
+        th 操作：
+        td
+          button.flow-button(type='button' data-bind='click:importSqlTableAction')
+            i.fa.fa-cloud-upload
+            | 导入
+// /ko
+

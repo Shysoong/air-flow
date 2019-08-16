@@ -1,0 +1,30 @@
+.flow-widget
+  h3.flow-hint
+    i.fa.fa-tasks
+    | 排行榜
+
+  .flow-panel
+    button.flow-button(type='button' data-bind="click:toggleRefresh, css:{ 'flow-button-toggle':isLive }")
+      // ko if:isLive
+      i.fa.fa-refresh.fa-spin
+      | 停止监控
+      // /ko
+      // ko ifnot:isLive
+      i.fa.fa-refresh
+      | 实时监控
+      // /ko
+
+  // ko if:exception
+  div(data-bind="template: { name:'flow-failure', data:exception }")
+  // /ko
+
+  h4(data-bind='collapse:false') 模型
+  div
+    div(data-bind='text:leaderboardDescription')
+    .flow-plot(data-bind='raw:leaderboard')
+
+  h4(data-bind='collapse:false') 事件日志
+  div
+    div(data-bind='text:eventLogDescription')
+    .flow-plot(data-bind='raw:eventLog')
+

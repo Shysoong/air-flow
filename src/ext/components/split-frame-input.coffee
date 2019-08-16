@@ -1,4 +1,9 @@
-H2O.SplitFrameInput = (_, _go, _frameKey) ->
+{ defer, map, sortBy, uniq } = require('lodash')
+
+{ stringify } = require('../../core/modules/prelude')
+{ react, lift, link, signal, signals } = require("../../core/modules/dataflow")
+
+module.exports = (_, _go, _frameKey) ->
   _frames = signal []
   _frame = signal null
   _lastSplitRatio = signal 1
@@ -6,6 +11,7 @@ H2O.SplitFrameInput = (_, _go, _frameKey) ->
   _lastSplitRatioText = lift _lastSplitRatio, (ratio) -> if isNaN ratio then ratio else format4f ratio
   _lastSplitKey = signal ''
   _splits = signals []
+  _seed = signal (Math.random() * 1000000) | 0
   react _splits, -> updateSplitRatiosAndNames()
   _validationMessage = signal ''
 
@@ -57,7 +63,7 @@ H2O.SplitFrameInput = (_, _go, _frameKey) ->
 
     return go 'Please specify at least two splits.' if splitKeys.length < 2
 
-    return go 'Duplicate keys specified.' if splitKeys.length isnt (unique splitKeys).length
+    return go 'Duplicate keys specified.' if splitKeys.length isnt (uniq splitKeys).length
 
     return go null, splitRatios, splitKeys
 
@@ -88,7 +94,7 @@ H2O.SplitFrameInput = (_, _go, _frameKey) ->
         _validationMessage error
       else
         _validationMessage ''
-        _.insertAndExecuteCell 'cs', "splitFrame #{stringify _frame()}, #{stringify splitRatios}, #{stringify splitKeys}"
+        _.insertAndExecuteCell 'cs', "splitFrame #{stringify _frame()}, #{stringify splitRatios}, #{stringify splitKeys}, #{_seed()}"
 
   initialize = ->
     _.requestFrames (error, frames) ->
@@ -96,10 +102,10 @@ H2O.SplitFrameInput = (_, _go, _frameKey) ->
         #TODO handle properly
       else
         frameKeys = (frame.frame_id.name for frame in frames when not frame.is_text)
-        sort frameKeys
+        frameKeys = sortBy frameKeys
         _frames frameKeys
         _frame _frameKey
-    addSplitRatio 0.25
+    addSplitRatio 0.75
     defer _go
 
   initialize()
@@ -110,6 +116,7 @@ H2O.SplitFrameInput = (_, _go, _frameKey) ->
   lastSplitRatioText: _lastSplitRatioText
   lastSplitKey: _lastSplitKey
   splits: _splits
+  seed: _seed
   addSplit: addSplit
   splitFrame: splitFrame
   validationMessage: _validationMessage

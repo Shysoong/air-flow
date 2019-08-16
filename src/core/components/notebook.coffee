@@ -1,16 +1,27 @@
-Flow.Renderers = (_, _sandbox) ->
-  h1: -> Flow.Heading _, 'h1'
-  h2: -> Flow.Heading _, 'h2'
-  h3: -> Flow.Heading _, 'h3'
-  h4: -> Flow.Heading _, 'h4'
-  h5: -> Flow.Heading _, 'h5'
-  h6: -> Flow.Heading _, 'h6'
-  md: -> Flow.Markdown _
-  cs: (guid) -> Flow.Coffeescript _, guid, _sandbox
-  raw: -> Flow.Raw _
+{ map, defer, head, join, find, escape, last } = require('lodash')
 
-Flow.Notebook = (_, _renderers) ->
-  _localName = signal 'Untitled Flow'
+Mousetrap = require('mousetrap')
+window.Mousetrap = Mousetrap
+require('mousetrap/plugins/global-bind/mousetrap-global-bind')
+
+{ react, link, signal, signals } = require("../modules/dataflow")
+{ stringify } = require('../modules/prelude')
+
+status = require('./status')
+sidebar = require('./sidebar')
+status = require('./status')
+about = require('./about')
+dialogs = require('../modules/dialogs')
+Cell = require('./cell')
+util = require('../modules/util')
+fileOpenDialog = require('../../ext/components/file-open-dialog')
+fileUploadDialog = require('../../ext/components/file-upload-dialog')
+
+exports.init = (_, _renderers) ->
+  _localName = signal '未命名的流程'
+  react _localName, (name) ->
+    document.title = 'AIR' + if name and name.trim() then "- #{name}" else ''
+
   _remoteName = signal null
 
   _isEditingName = signal no
@@ -26,18 +37,33 @@ Flow.Notebook = (_, _renderers) ->
   _areOutputsHidden = signal no
   _isSidebarHidden = signal no
   _isRunningAll = signal no
-  _runningCaption = signal 'Running'
+  _runningCaption = signal '运行中'
   _runningPercent = signal '0%'
   _runningCellInput = signal ''
-  _status = Flow.Status _
-  _sidebar = Flow.Sidebar _, _cells
-  _about = Flow.About _
-  _dialogs = Flow.Dialogs _
+  _status = status.init _
+  _sidebar = sidebar.init _, _cells
+  _about = about.init _
+  _dialogs = dialogs.init _
+
+  # initialize the interpreter when the notebook is created
+  # one interpreter is shared by all scala cells
+  _initializeInterpreter = ->
+    _.requestScalaIntp (error,response) ->
+      if error
+        # Handle the error
+        _.scalaIntpId -1
+        _.scalaIntpAsync false
+      else
+        _.scalaIntpId response.session_id
+        _.scalaIntpAsync response.async
+
+  sanitizeCellInput = (cellInput) ->
+    cellInput.replace /\"password\":\"[^\"]*\"/g, "\"password\":\"\""
 
   serialize = ->
     cells = for cell in _cells()
       type: cell.type()
-      input: cell.input()
+      input: sanitizeCellInput cell.input()
 
     version: '1.0.0'
     cells: cells
@@ -53,13 +79,13 @@ Flow.Notebook = (_, _renderers) ->
     selectCell head cells
 
     # Execute all non-code cells (headings, markdown, etc.)
-    for cell in _cells()
-      cell.execute() unless cell.isCode() 
+    for c in _cells()
+      c.execute() unless c.isCode()
 
     return
 
   createCell = (type='cs', input='') ->
-    Flow.Cell _, _renderers, type, input
+    Cell _, _renderers, type, input
 
   checkConsistency = ->
     selectionCount = 0
@@ -98,7 +124,7 @@ Flow.Notebook = (_, _renderers) ->
   convertCellToCode = ->
     _selectedCell.type 'cs'
 
-  convertCellToHeading = (level) -> -> 
+  convertCellToHeading = (level) -> ->
     _selectedCell.type "h#{level}"
     _selectedCell.execute()
 
@@ -109,6 +135,9 @@ Flow.Notebook = (_, _renderers) ->
   convertCellToRaw = ->
     _selectedCell.type 'raw'
     _selectedCell.execute()
+
+  convertCellToScala = ->
+    _selectedCell.type 'sca'
 
   copyCell = ->
     _clipboardCell = _selectedCell
@@ -126,17 +155,17 @@ Flow.Notebook = (_, _renderers) ->
     if cells.length > 1
       if _selectedCellIndex is cells.length - 1
         #TODO call dispose() on this cell
-        removedCell = head splice _cells, _selectedCellIndex, 1
+        removedCell = head _cells.splice _selectedCellIndex, 1
         selectCell cells[_selectedCellIndex - 1]
       else
         #TODO call dispose() on this cell
-        removedCell = head splice _cells, _selectedCellIndex, 1
+        removedCell = head _cells.splice _selectedCellIndex, 1
         selectCell cells[_selectedCellIndex]
       _.saveClip 'trash', removedCell.type(), removedCell.input() if removedCell
     return
-    
+
   insertCell = (index, cell) ->
-    splice _cells, index, 0, cell
+    _cells.splice index, 0, cell
     selectCell cell
     cell
 
@@ -161,6 +190,12 @@ Flow.Notebook = (_, _renderers) ->
   insertNewCellBelow = ->
     insertBelow createCell 'cs'
 
+  insertNewScalaCellAbove = ->
+    insertAbove createCell 'sca'
+
+  insertNewScalaCellBelow = ->
+    insertBelow createCell 'sca'
+
   insertCellAboveAndRun = (type, input) ->
     cell = insertAbove createCell type, input
     cell.execute()
@@ -172,7 +207,7 @@ Flow.Notebook = (_, _renderers) ->
     cell
 
   appendCellAndRun = (type, input) ->
-    cell = appendCell createCell type, input 
+    cell = appendCell createCell type, input
     cell.execute()
     cell
 
@@ -180,17 +215,16 @@ Flow.Notebook = (_, _renderers) ->
   moveCellDown = ->
     cells = _cells()
     unless _selectedCellIndex is cells.length - 1
-      splice _cells, _selectedCellIndex, 1
+      _cells.splice _selectedCellIndex, 1
       _selectedCellIndex++
-      splice _cells, _selectedCellIndex, 0, _selectedCell
+      _cells.splice _selectedCellIndex, 0, _selectedCell
     return
 
   moveCellUp = ->
     unless _selectedCellIndex is 0
-      cells = _cells()
-      splice _cells, _selectedCellIndex, 1
+      _cells.splice _selectedCellIndex, 1
       _selectedCellIndex--
-      splice _cells, _selectedCellIndex, 0, _selectedCell
+      _cells.splice _selectedCellIndex, 0, _selectedCell
     return
 
   mergeCellBelow = ->
@@ -244,21 +278,21 @@ Flow.Notebook = (_, _renderers) ->
   storeNotebook = (localName, remoteName) ->
     _.requestPutObject 'notebook', localName, serialize(), (error) ->
       if error
-        _.alert "Error saving notebook: #{error.message}"
+        _.alert "保存流程笔记出错：#{error.message}"
       else
         _remoteName localName
         _localName localName
         if remoteName isnt localName # renamed document
           _.requestDeleteObject 'notebook', remoteName, (error) ->
             if error
-              _.alert "Error deleting remote notebook [#{remoteName}]: #{error.message}"
+              _.alert "删除远程笔记[#{remoteName}]出错：#{error.message}"
             _.saved()
         else
           _.saved()
 
   saveNotebook = ->
-    localName = Flow.Util.sanitizeName _localName()
-    return _.alert 'Invalid notebook name.' if localName is ''
+    localName = util.sanitizeName _localName()
+    return _.alert '无效的笔记名称。' if localName is ''
 
     remoteName = _remoteName()
     if remoteName # saved document
@@ -266,7 +300,7 @@ Flow.Notebook = (_, _renderers) ->
     else # unsaved document
       checkIfNameIsInUse localName, (isNameInUse) ->
         if isNameInUse
-          _.confirm "A notebook with that name already exists.\nDo you want to replace it with the one you're saving?", { acceptCaption: 'Replace', declineCaption: 'Cancel' }, (accept) ->
+          _.confirm "已经有一个以该名字命名的笔记存在。\n您想要用您正视图保存的笔记来替换它吗？", { acceptCaption: '替换', declineCaption: '取消' }, (accept) ->
             if accept
               storeNotebook localName, remoteName
         else
@@ -274,7 +308,7 @@ Flow.Notebook = (_, _renderers) ->
     return
 
   promptForNotebook = ->
-    _.dialog Flow.FileOpenDialog, (result) ->
+    _.dialog fileOpenDialog, (result) ->
       if result
         { error, filename } = result
         if error
@@ -284,13 +318,13 @@ Flow.Notebook = (_, _renderers) ->
           _.loaded()
 
   uploadFile = ->
-    _.dialog Flow.FileUploadDialog, (result) ->
+    _.dialog fileUploadDialog, (result) ->
       if result
         { error } = result
         if error
           _.growl error.message ? error
         else
-          _.growl 'File uploaded successfully!'
+          _.growl '文件已经成功上传！'
           _.insertAndExecuteCell 'cs', "setupParse source_frames: [ #{stringify result.result.destination_frame }]"
 
   toggleInput = ->
@@ -304,7 +338,7 @@ Flow.Notebook = (_, _renderers) ->
     _areInputsHidden not wereHidden
     #
     # If cells are generated while inputs are hidden, the input boxes
-    #   do not resize to fit contents. So explicitly ask all cells 
+    #   do not resize to fit contents. So explicitly ask all cells
     #   to resize themselves.
     #
     if wereHidden
@@ -345,14 +379,40 @@ Flow.Notebook = (_, _renderers) ->
   displayKeyboardShortcuts = ->
     $('#keyboardHelpDialog').modal()
 
-  displayDocumentation = ->
-    hash = if Flow.BuildProperties
-      hashEntry = find Flow.BuildProperties, (entry) -> entry.caption is 'H2O Build git hash'
-      if hashEntry then hashEntry.value else 'master'
+  findBuildProperty = (caption) ->
+    if _.BuildProperties
+      if entry = (find _.BuildProperties, (entry) -> entry.caption is caption)
+        entry.value
+      else
+        undefined
     else
-      'master'
+      undefined
 
-    window.open "https://github.com/h2oai/h2o-dev/blob/#{hash}/h2o-docs/src/product/flow/README.md", '_blank'
+
+  getBuildProperties = ->
+    projectVersion = findBuildProperty 'H2O Build project version'
+    [
+      findBuildProperty 'H2O Build git branch'
+      projectVersion
+      if projectVersion then last projectVersion.split '.' else undefined
+      (findBuildProperty 'H2O Build git hash') or 'master'
+    ]
+
+  displayDocumentation = ->
+    [ gitBranch, projectVersion, buildVersion, gitHash ] = getBuildProperties()
+
+    if buildVersion and buildVersion isnt '99999'
+      window.open "http://h2o-release.s3.amazonaws.com/h2o/#{gitBranch}/#{buildVersion}/docs-website/h2o-docs/index.html", '_blank'
+    else
+      window.open "https://github.com/h2oai/h2o-3/blob/#{gitHash}/h2o-docs/src/product/flow/README.md", '_blank'
+
+  displayFAQ = ->
+    [ gitBranch, projectVersion, buildVersion, gitHash ] = getBuildProperties()
+
+    if buildVersion and buildVersion isnt '99999'
+      window.open "http://h2o-release.s3.amazonaws.com/h2o/#{gitBranch}/#{buildVersion}/docs-website/h2o-docs/index.html", '_blank'
+    else
+      window.open "https://github.com/h2oai/h2o-3/blob/#{gitHash}/h2o-docs/src/product/howto/FAQ.md", '_blank'
 
   executeCommand = (command) -> ->
     _.insertAndExecuteCell 'cs', command
@@ -363,9 +423,9 @@ Flow.Notebook = (_, _renderers) ->
   shutdown = ->
     _.requestShutdown (error, result) ->
       if error
-        _.growl "Shutdown failed: #{error.message}", 'danger'
+        _.growl "关闭失败：#{error.message}", 'danger'
       else
-        _.growl 'Shutdown complete!', 'warning'
+        _.growl '关闭完成！', 'warning'
 
 
   showHelp = ->
@@ -373,16 +433,17 @@ Flow.Notebook = (_, _renderers) ->
     _.showHelp()
 
   createNotebook = ->
-    _.confirm 'This action will replace your active notebook.\nAre you sure you want to continue?', { acceptCaption: 'Create New Notebook', declineCaption: 'Cancel' }, (accept) ->
-      currentTime = (new Date()).getTime()
-      deserialize 'Untitled Flow', null,
-        cells: [
-          type: 'cs'
-          input: ''
-        ]
+    _.confirm '这个操作会替换你当前激活的流程笔记。\n您确定要继续吗？', {acceptCaption: '创建新的流程笔记', declineCaption: '取消'}, (accept) ->
+      if accept
+        currentTime = (new Date()).getTime()
+        deserialize '未命名的流程', null,
+          cells: [
+            type: 'cs'
+            input: ''
+          ]
 
   duplicateNotebook = ->
-    deserialize "Copy of #{_localName()}", null, serialize()
+    deserialize "#{_localName()}的备份", null, serialize()
 
   openNotebook = (name, doc) ->
     deserialize name, null, doc
@@ -396,9 +457,12 @@ Flow.Notebook = (_, _renderers) ->
 
   exportNotebook = ->
     if remoteName = _remoteName()
-      window.open "/3/NodePersistentStorage.bin/notebook/#{remoteName}", '_blank'
+      window.open _.ContextPath + "3/NodePersistentStorage.bin/notebook/#{remoteName}", '_blank'
     else
-      _.alert "Please save this notebook before exporting."
+      _.alert "在导出之前请先保存这个流程笔记。"
+
+  goToH2OUrl = (url) -> ->
+    window.open _.ContextPath + url, '_blank'
 
   goToUrl = (url) -> ->
     window.open url, '_blank'
@@ -406,24 +470,24 @@ Flow.Notebook = (_, _renderers) ->
   executeAllCells = (fromBeginning, go) ->
     _isRunningAll yes
 
-    cells = slice _cells(), 0
+    cells = _cells().slice 0
     cellCount = cells.length
     cellIndex = 0
 
     unless fromBeginning
-      cells = slice cells, _selectedCellIndex
+      cells = cells.slice _selectedCellIndex
       cellIndex = _selectedCellIndex
 
     executeNextCell = ->
       if _isRunningAll() # will be false if user-aborted
-        cell = shift cells
+        cell = cells.shift()
         if cell
           # Scroll immediately without affecting selection state.
           cell.scrollIntoView yes
 
           cellIndex++
           _runningCaption "Running cell #{cellIndex} of #{cellCount}"
-          _runningPercent "#{floor 100 * cellIndex/cellCount}%"
+          _runningPercent "#{Math.floor 100 * cellIndex/cellCount}%"
           _runningCellInput cell.input()
 
           #TODO Continuation should be EFC, and passing an error should abort 'run all'
@@ -434,7 +498,7 @@ Flow.Notebook = (_, _renderers) ->
               executeNextCell()
         else
           go 'done'
-      else 
+      else
         go 'aborted'
 
     executeNextCell()
@@ -444,11 +508,11 @@ Flow.Notebook = (_, _renderers) ->
       _isRunningAll no
       switch status
         when 'aborted'
-          _.growl 'Stopped running your flow.', 'warning'
+          _.growl '您的流程已停止运行', 'warning'
         when 'failed'
-          _.growl 'Failed running your flow.', 'danger'
+          _.growl '您的流程运行失败。', 'danger'
         else # 'done'
-          _.growl 'Finished running your flow!', 'success'
+          _.growl '您的流程运行结束！', 'success'
 
   continueRunningAllCells = -> runAllCells no
 
@@ -482,80 +546,108 @@ Flow.Notebook = (_, _renderers) ->
     label: label
     action: null
 
-  createMenuItem = (label, action, isDisabled=no) ->
-    label: label
+  createShortcutHint = (shortcut) ->
+    "<span style='float:right'>" + (map shortcut, (key) -> "<kbd>#{ key }</kbd>").join(' ') + "</span>"
+
+  createMenuItem = (label, action, shortcut) ->
+    kbds = if shortcut
+      createShortcutHint shortcut
+    else
+      ''
+
+    label: "#{ escape label }#{ kbds }"
     action: action
-    isDisabled: isDisabled
 
   menuDivider = label: null, action: null
 
   _menus = signal null
 
-  initializeMenus = (builder) ->
-    modelMenuItems = map(builder, (builder) ->
-      createMenuItem builder.algo_full_name, executeCommand "buildModel #{stringify builder.algo}"
-    ).concat [
-      menuDivider
-      createMenuItem 'List All Models', executeCommand 'getModels'
-    ]
-
-    [
-      createMenu 'Flow', [
-        createMenuItem 'New', createNotebook
-        createMenuItem 'Open...', promptForNotebook
-        createMenuItem 'Save', saveNotebook
-        createMenuItem 'Make a Copy...', duplicateNotebook
+  menuCell = [
+        createMenuItem '运行单元格', runCell, ['ctrl', 'enter']
         menuDivider
-        createMenuItem 'Run All', runAllCells
-        createMenuItem 'Run All Below', continueRunningAllCells
-        menuDivider
-        createMenuItem 'Toggle All Inputs', toggleAllInputs
-        createMenuItem 'Toggle All Outputs', toggleAllOutputs
-        createMenuItem 'Clear All Outputs', clearAllCells
-        menuDivider
-        createMenuItem 'Download...', exportNotebook 
-      ]
-    ,
-      createMenu 'Cell', [
-        createMenuItem 'Cut Cell', cutCell
-        createMenuItem 'Copy Cell', copyCell
-        createMenuItem 'Paste Cell Above', pasteCellAbove
-        createMenuItem 'Paste Cell Below', pasteCellBelow
+        createMenuItem '剪切单元格', cutCell, ['x']
+        createMenuItem '复制单元格', copyCell, ['c']
+        createMenuItem '粘贴到单元格之上', pasteCellAbove, ['shift', 'v']
+        createMenuItem '粘贴到单元格之下', pasteCellBelow, ['v']
         #TODO createMenuItem 'Paste Cell and Replace', pasteCellandReplace, yes
-        createMenuItem 'Delete Cell', deleteCell
-        createMenuItem 'Undo Delete Cell', undoLastDelete
+        createMenuItem '删除单元格', deleteCell, ['d', 'd']
+        createMenuItem '撤消删除单元格', undoLastDelete, ['z']
         menuDivider
-        createMenuItem 'Move Cell Up', moveCellUp
-        createMenuItem 'Move Cell Down', moveCellDown
+        createMenuItem '上移单元格', moveCellUp, ['ctrl', 'k']
+        createMenuItem '下移单元格', moveCellDown, ['ctrl', 'j']
         menuDivider
-        createMenuItem 'Insert Cell Above', insertNewCellAbove
-        createMenuItem 'Insert Cell Below', insertNewCellBelow
+        createMenuItem '上插单元格', insertNewCellAbove, ['a']
+        createMenuItem '下插单元格', insertNewCellBelow, ['b']
         #TODO createMenuItem 'Split Cell', splitCell
         #TODO createMenuItem 'Merge Cell Above', mergeCellAbove, yes
         #TODO createMenuItem 'Merge Cell Below', mergeCellBelow
         menuDivider
-        createMenuItem 'Toggle Cell Input', toggleInput
-        createMenuItem 'Toggle Cell Output', toggleOutput
-        createMenuItem 'Clear Cell Output', clearCell
+        createMenuItem '切换单元格可见性', toggleInput
+        createMenuItem '切换单元格输出可见性', toggleOutput, ['o']
+        createMenuItem '清除单元格输出', clearCell
+        ]
+
+  menuCellSW = [
+        menuDivider
+        createMenuItem '上插Scala单元格', insertNewScalaCellAbove
+        createMenuItem '下插Scala单元格', insertNewScalaCellBelow
+        ]
+  if _.onSparklingWater
+    menuCell = [menuCell..., menuCellSW...]
+
+  initializeMenus = (builder) ->
+    modelMenuItems = [createMenuItem('运行自动机器学习...', executeCommand 'runAutoML'), menuDivider]
+    modelMenuItems = modelMenuItems.concat map(builder, (builder) ->
+      createMenuItem("#{ builder.algo_full_name }...", executeCommand "buildModel #{stringify builder.algo}")
+    )
+    modelMenuItems = modelMenuItems.concat [
+      menuDivider
+      createMenuItem '列出所有模型', executeCommand 'getModels'
+      createMenuItem '列出网格搜索结果', executeCommand 'getGrids'
+      createMenuItem '导入模型...', executeCommand 'importModel'
+      createMenuItem '导出模型...', executeCommand 'exportModel'
+    ]
+
+    [
+      createMenu '流程笔记', [
+        createMenuItem '新建笔记', createNotebook
+        createMenuItem '打开笔记...', promptForNotebook
+        createMenuItem '保存笔记', saveNotebook, ['s']
+        createMenuItem '生成拷贝...', duplicateNotebook
+        menuDivider
+        createMenuItem '运行所有单元格', runAllCells
+        createMenuItem '运行当前单元格下方的所有单元格', continueRunningAllCells
+        menuDivider
+        createMenuItem '切换所有单元格可见性', toggleAllInputs
+        createMenuItem '切换所有单元格输出可见性', toggleAllOutputs
+        createMenuItem '清除所有单元格输出', clearAllCells
+        menuDivider
+        createMenuItem '下载本流程笔记...', exportNotebook
       ]
     ,
-      createMenu 'Data', [
-        createMenuItem 'Import Files...', executeCommand 'importFiles'
-        createMenuItem 'Upload File...', uploadFile
-        createMenuItem 'Split Frame...', executeCommand 'splitFrame'
+      createMenu '单元格', menuCell
+    ,
+      createMenu '数据', [
+        createMenuItem '导入文件...', executeCommand 'importFiles'
+        createMenuItem '导入数据库表...', executeCommand 'importSqlTable'
+        createMenuItem '上传文件...', uploadFile
+        createMenuItem '拆分数据帧...', executeCommand 'splitFrame'
+        createMenuItem '合并数据帧...', executeCommand 'mergeFrames'
         menuDivider
-        createMenuItem 'List All Frames', executeCommand 'getFrames'
+        createMenuItem '列出所有数据帧', executeCommand 'getFrames'
+        menuDivider
+        createMenuItem '插补...', executeCommand 'imputeColumn'
         #TODO Quantiles
-        #TODO Impute
         #TODO Interaction
       ]
     ,
-      createMenu 'Model', modelMenuItems
+      createMenu '模型', modelMenuItems
     ,
-      createMenu 'Score', [
-        createMenuItem 'Predict...', executeCommand 'predict'
+      createMenu '评价', [
+        createMenuItem '预测...', executeCommand 'predict'
+        createMenuItem '部分依赖图...', executeCommand 'buildPartialDependence'
         menuDivider
-        createMenuItem 'List All Predictions', executeCommand 'getPredictions'
+        createMenuItem '列出所有的预测信息', executeCommand 'getPredictions'
         #TODO Confusion Matrix
         #TODO AUC
         #TODO Hit Ratio
@@ -564,38 +656,44 @@ Flow.Notebook = (_, _renderers) ->
         #TODO Multi-model Scoring
       ]
     ,
-      createMenu 'Admin', [
-        createMenuItem 'Jobs', executeCommand 'getJobs'
-        createMenuItem 'Cluster Status', executeCommand 'getCloud'
-        createMenuItem 'Water Meter (CPU meter)', goToUrl '/perfbar.html'
+      createMenu '管理', [
+        createMenuItem '任务作业', executeCommand 'getJobs'
+        createMenuItem '集群状态', executeCommand 'getCloud'
+        createMenuItem '气量计(CPU状态)', goToH2OUrl 'perfbar.html'
         menuDivider
-        createMenuHeader 'Inspect Log'
-        createMenuItem 'View Log', executeCommand 'getLogFile'
-        createMenuItem 'Download Logs', goToUrl '/Logs/download'
+        createMenuHeader '日志检查'
+        createMenuItem '查看日志', executeCommand 'getLogFile'
+        createMenuItem '下载日志', goToH2OUrl '3/Logs/download'
         menuDivider
-        createMenuHeader 'Advanced'
-        createMenuItem 'Create Synthetic Frame', executeCommand 'createFrame'
-        createMenuItem 'Stack Trace', executeCommand 'getStackTrace'
-        createMenuItem 'Network Test', executeCommand 'testNetwork'
+        createMenuHeader '高级'
+        createMenuItem '下载h2o-genmodel.jar', goToH2OUrl '3/h2o-genmodel.jar'
+        createMenuItem '创建合成数据帧...', executeCommand 'createFrame'
+        createMenuItem '堆栈信息', executeCommand 'getStackTrace'
+        createMenuItem '网络测试', executeCommand 'testNetwork'
         #TODO Cluster I/O
-        createMenuItem 'Profiler', executeCommand 'getProfile depth: 10'
-        createMenuItem 'Timeline', executeCommand 'getTimeline'
+        createMenuItem '分析工具', executeCommand 'getProfile depth: 10'
+        createMenuItem '时间轴', executeCommand 'getTimeline'
         #TODO UDP Drop Test
         #TODO Task Status
-        createMenuItem 'Shut Down', shutdown
+        createMenuItem '关闭服务器', shutdown
       ]
     ,
-      createMenu 'Help', [
+      createMenu '帮助', [
         #TODO createMenuItem 'Tour', startTour, yes
-        createMenuItem 'Contents', showHelp
-        createMenuItem 'Keyboard Shortcuts', displayKeyboardShortcuts
+        createMenuItem '建模助手', executeCommand 'assist'
         menuDivider
-        createMenuItem 'What is H2O?', goToUrl '/starwars.html'
-        createMenuItem 'H2O Documentation', displayDocumentation
-        createMenuItem 'h2o.ai', goToUrl 'http://h2o.ai/'
+        createMenuItem '展示帮助内容', showHelp
+        createMenuItem '快捷键', displayKeyboardShortcuts, ['h']
+        menuDivider
+        createMenuItem '文档', displayDocumentation
+        createMenuItem '常见问题', displayFAQ
+        createMenuItem 'Air.ai', goToUrl 'http://www.skyease.io/'
+        createMenuItem 'Air on Github', goToUrl 'https://github.com/Shysoong/air-flow'
+        createMenuItem '报告问题', goToUrl 'http://jira.h2o.ai'
+        createMenuItem '论坛 / 提问', goToUrl 'https://groups.google.com/d/forum/h2ostream'
         menuDivider
         #TODO Tutorial Flows
-        createMenuItem 'About', displayAbout
+        createMenuItem '关于', displayAbout
       ]
     ]
 
@@ -611,79 +709,88 @@ Flow.Notebook = (_, _renderers) ->
 
   _toolbar = [
     [
-      createTool 'file-o', 'New', createNotebook
-      createTool 'folder-open-o', 'Open', promptForNotebook
-      createTool 'save', 'Save', saveNotebook
+      createTool 'file-o', '新建', createNotebook
+      createTool 'folder-open-o', '打开', promptForNotebook
+      createTool 'save', '保存(s)', saveNotebook
     ]
   ,
     [
-      createTool 'plus', 'Insert Cell Below', insertNewCellBelow
-      createTool 'arrow-up', 'Move Cell Up', moveCellUp
-      createTool 'arrow-down', 'Move Cell Down', moveCellDown
+      createTool 'plus', '下插单元格(b)', insertNewCellBelow
+      createTool 'arrow-up', '上移单元格(ctrl+k)', moveCellUp
+      createTool 'arrow-down', '下移单元格(ctrl+j)', moveCellDown
     ]
   ,
     [
-      createTool 'cut', 'Cut Cell', cutCell
-      createTool 'copy', 'Copy Cell', copyCell
-      createTool 'paste', 'Paste Cell Below', pasteCellBelow
-      createTool 'eraser', 'Clear Cell', clearCell
+      createTool 'cut', '剪切单元格(x)', cutCell
+      createTool 'copy', '复制单元格(c)', copyCell
+      createTool 'paste', '粘贴到单元格之下(v)', pasteCellBelow
+      createTool 'eraser', '清除单元格输出', clearCell
+      createTool 'trash-o', '删除单元格(d d)', deleteCell
     ]
   ,
     [
-      createTool 'step-forward', 'Run and Select Below', runCellAndSelectBelow
-      createTool 'play', 'Run', runCell
-      createTool 'forward', 'Run All', runAllCells
+      createTool 'step-forward', '运行并选取下方单元格', runCellAndSelectBelow
+      createTool 'play', '运行(ctrl+enter)', runCell
+      createTool 'forward', '运行所有', runAllCells
+    ]
+  ,
+    [
+      createTool 'question-circle', '建模助手', executeCommand 'assist'
     ]
   ]
 
   # (From IPython Notebook keyboard shortcuts dialog)
   # The IPython Notebook has two different keyboard input modes. Edit mode allows you to type code/text into a cell and is indicated by a green cell border. Command mode binds the keyboard to notebook level actions and is indicated by a grey cell border.
-  # 
+  #
   # Command Mode (press Esc to enable)
-  # 
+  #
   normalModeKeyboardShortcuts = [
-    [ 'enter', 'edit mode', switchToEditMode ]
+    [ 'enter', '切换到编辑模式', switchToEditMode ]
     #[ 'shift+enter', 'run cell, select below', runCellAndSelectBelow ]
     #[ 'ctrl+enter', 'run cell', runCell ]
     #[ 'alt+enter', 'run cell, insert below', runCellAndInsertBelow ]
-    [ 'y', 'to code', convertCellToCode ]
-    [ 'm', 'to markdown', convertCellToMarkdown ]
-    [ 'r', 'to raw', convertCellToRaw ]
-    [ '1', 'to heading 1', convertCellToHeading 1 ]
-    [ '2', 'to heading 2', convertCellToHeading 2 ]
-    [ '3', 'to heading 3', convertCellToHeading 3 ]
-    [ '4', 'to heading 4', convertCellToHeading 4 ]
-    [ '5', 'to heading 5', convertCellToHeading 5 ]
-    [ '6', 'to heading 6', convertCellToHeading 6 ]
-    [ 'up', 'select previous cell', selectPreviousCell ]
-    [ 'down', 'select next cell', selectNextCell ]
-    [ 'k', 'select previous cell', selectPreviousCell ]
-    [ 'j', 'select next cell', selectNextCell ]
-    [ 'ctrl+k', 'move cell up', moveCellUp ]
-    [ 'ctrl+j', 'move cell down', moveCellDown ]
-    [ 'a', 'insert cell above', insertNewCellAbove ]
-    [ 'b', 'insert cell below', insertNewCellBelow ]
-    [ 'x', 'cut cell', cutCell ]
-    [ 'c', 'copy cell', copyCell ]
-    [ 'shift+v', 'paste cell above', pasteCellAbove ]
-    [ 'v', 'paste cell below', pasteCellBelow ]
-    [ 'z', 'undo last delete', undoLastDelete ]
-    [ 'd d', 'delete cell (press twice)', deleteCell ]
-    [ 'shift+m', 'merge cell below', mergeCellBelow ]
-    [ 's', 'save notebook', saveNotebook ]
+    [ 'y', '转到代码形式', convertCellToCode ]
+    [ 'm', '转到markdown形式', convertCellToMarkdown ]
+    [ 'r', '转到原始形式', convertCellToRaw ]
+    [ '1', '转到一级标题形式', convertCellToHeading 1 ]
+    [ '2', '转到二级标题形式', convertCellToHeading 2 ]
+    [ '3', '转到三级标题形式', convertCellToHeading 3 ]
+    [ '4', '转到四级标题形式', convertCellToHeading 4 ]
+    [ '5', '转到五级标题形式', convertCellToHeading 5 ]
+    [ '6', '转到六级标题形式', convertCellToHeading 6 ]
+    [ 'up', '选择上一个单元格', selectPreviousCell ]
+    [ 'down', '选择下一个单元格', selectNextCell ]
+    [ 'k', '选择上一个单元格', selectPreviousCell ]
+    [ 'j', '选择下一个单元格', selectNextCell ]
+    [ 'ctrl+k', '上移单元格', moveCellUp ]
+    [ 'ctrl+j', '下移单元格', moveCellDown ]
+    [ 'a', '上插单元格', insertNewCellAbove ]
+    [ 'b', '下插单元格', insertNewCellBelow ]
+    [ 'x', '剪切单元格', cutCell ]
+    [ 'c', '复制单元格', copyCell ]
+    [ 'shift+v', '粘贴到单元格之上', pasteCellAbove ]
+    [ 'v', '粘贴到单元格之下', pasteCellBelow ]
+    [ 'z', '撤消删除', undoLastDelete ]
+    [ 'd d', '删除单元格', deleteCell ]
+    [ 'shift+m', '合并下方单元格', mergeCellBelow ]
+    [ 's', '保存笔记', saveNotebook ]
     #[ 'mod+s', 'save notebook', saveNotebook ]
     # [ 'l', 'toggle line numbers' ]
-    [ 'o', 'toggle output', toggleOutput ]
+    [ 'o', '切换单元格输出可见性', toggleOutput ]
     # [ 'shift+o', 'toggle output scrolling' ]
-    # [ 'q', 'close pager' ]
-    [ 'h', 'keyboard shortcuts', displayKeyboardShortcuts ]
+    [ 'h', '键盘快捷键', displayKeyboardShortcuts ]
     # [ 'i', 'interrupt kernel (press twice)' ]
     # [ '0', 'restart kernel (press twice)' ]
-  ] 
+  ]
 
-  # 
-  # Edit Mode (press Enter to enable) 
-  # 
+  if _.onSparklingWater
+    normalModeKeyboardShortcuts.push [ 'q', 'to Scala', convertCellToScala ]
+
+
+
+  #
+  # Edit Mode (press Enter to enable)
+  #
   editModeKeyboardShortcuts = [
     # Tab : code completion or indent
     # Shift-Tab : tooltip
@@ -699,18 +806,18 @@ Flow.Notebook = (_, _renderers) ->
     # Opt-Right : go one word right
     # Opt-Backspace : del word before
     # Opt-Delete : del word after
-    [ 'esc', 'command mode', switchToCommandMode ]
-    [ 'ctrl+m', 'command mode', switchToCommandMode ]
-    [ 'shift+enter', 'run cell, select below', runCellAndSelectBelow ]
-    [ 'ctrl+enter', 'run cell', runCell ]
-    [ 'alt+enter', 'run cell, insert below', runCellAndInsertBelow ]
-    [ 'ctrl+shift+-', 'split cell', splitCell ]
-    [ 'mod+s', 'save notebook', saveNotebook ]
+    [ 'esc', '切换到命令模式', switchToCommandMode ]
+    [ 'ctrl+m', '切换到命令模式', switchToCommandMode ]
+    [ 'shift+enter', '运行并选取下方单元格', runCellAndSelectBelow ]
+    [ 'ctrl+enter', '运行单元格', runCell ]
+    [ 'alt+enter', '运行并下插单元格', runCellAndInsertBelow ]
+    [ 'ctrl+shift+-', '拆分单元格', splitCell ]
+    [ 'mod+s', '保存笔记', saveNotebook ]
   ]
-  
+
   toKeyboardHelp = (shortcut) ->
     [ seq, caption ] = shortcut
-    keystrokes = join (map (split seq, /\+/g), (key) -> "<kbd>#{key}</kbd>"), ' '
+    keystrokes = (map seq.split(/\+/g), (key) -> "<kbd>#{key}</kbd>").join ' '
     keystrokes: keystrokes
     caption: caption
 
@@ -730,8 +837,6 @@ Flow.Notebook = (_, _renderers) ->
     setupKeyboardHandling 'normal'
 
     setupMenus()
-   
-    insertNewCellBelow()
 
     link _.load, loadNotebook
     link _.open, openNotebook
@@ -752,7 +857,11 @@ Flow.Notebook = (_, _renderers) ->
     link _.loaded, ->
       _.growl 'Notebook loaded.'
 
+    do (executeCommand 'assist')
+
     _.setDirty() #TODO setPristine() when autosave is implemented.
+    if _.onSparklingWater
+      _initializeInterpreter()
 
   link _.ready, initialize
 
@@ -780,4 +889,3 @@ Flow.Notebook = (_, _renderers) ->
   about: _about
   dialogs: _dialogs
   templateOf: (view) -> view.template
-

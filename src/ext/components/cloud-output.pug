@@ -1,0 +1,86 @@
+.flow-widget.flow-cloud-output
+  h3.flow-hint
+    i.fa.fa-cloud
+    span(data-bind='text:name')
+
+  h4 云端状态
+
+  div
+    // ko if:isHealthy
+    .flow-hud
+      i.fa.fa-check-circle.text-success
+      span.flow-small-caps 健康
+    // /ko
+
+    // ko ifnot:isHealthy
+    .flow-hud
+      i.fa.fa-exclamation-circle.text-danger
+      span.flow-small-caps.text-danger 不健康
+    // /ko
+
+    // ko if:hasConsensus
+    .flow-hud
+      i.fa.fa-check-circle.text-success
+      span.flow-small-caps 一致
+    // /ko
+
+    // ko ifnot:hasConsensus
+    .flow-hud
+      i.fa.fa-exclamation-circle.text-danger
+      span.flow-small-caps text-danger 不一致
+    // /ko
+
+    // ko if:isLocked
+    .flow-hud
+      i.fa.fa-lock.text-muted
+      span.flow-small-caps 锁定
+    // /ko
+
+    // ko ifnot:isLocked
+    .flow-hud
+      i.fa.fa-unlock.text-muted
+      span.flow-small-caps 非锁定
+    // /ko
+
+  .flow-plot
+    table
+      thead
+        tr
+          th(style='text-align:left') 版本
+          th 启动于
+          th 节点 (使用的 / 所有)
+
+      tbody
+        tr
+          td(data-bind='text:version')
+          td(data-bind='text:uptime')
+          td(data-bind='text:nodeCounts')
+  
+  h4 节点状态
+  .flow-right.flow-margin-after 
+    // ko ifnot:isExpanded
+    +button('显示高级属性', 'angle-double-down', 'toggleExpansion')
+    // /ko
+    // ko if:isExpanded
+    +button('隐藏高级属性', 'angle-double-up', 'toggleExpansion')
+    // /ko
+
+  .flow-plot.flow-nowrap(data-bind='raw:nodes')
+
+  .flow-panel
+    button.flow-button(type='button' data-bind="click:toggleRefresh, css:{ 'flow-button-toggle':isLive }")
+      // ko if:isLive
+      i.fa.fa-refresh.fa-spin
+      | 结束
+      // /ko
+      // ko ifnot:isLive
+      i.fa.fa-refresh
+      | 刷新
+      // /ko
+
+
+
+
+
+
+

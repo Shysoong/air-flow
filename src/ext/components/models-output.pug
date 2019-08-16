@@ -1,0 +1,42 @@
+.flow-widget
+  +subtitle('模型列表', 'cubes')
+  
+  // ko ifnot:hasModels
+  blockquote 您的AIR云端还没有模型。
+  .flow-panel
+    +button('构建模型&hellip;', 'cube', 'buildModel')
+  // /ko
+
+  // ko if:hasModels
+  table.flow-form
+    thead
+      tr
+        th(width='1' style='font-size:inherit')
+          input(type='checkbox' title='选择或反选所有' data-bind="checked:checkAllModels")
+        th(width='1') &nbsp;
+        th 键
+        th 算法
+        th.flow-right 操作
+    tbody
+      // ko foreach:modelViews
+      tr
+        td
+          input(type='checkbox' data-bind="checked:isChecked")
+        td
+          i.fa.fa-cube
+        td
+          +link('@key', 'view')
+        td(data-bind='text:algo')
+        td.flow-right 
+          +button('预测&hellip;', 'bolt', 'predict')
+          //- +button('Clone&hellip;', 'copy', 'clone')
+          +button('检查', 'list', 'inspect')
+      // /ko
+  .flow-panel
+    //- +button('Compare selected&hellip;', 'area-chart', 'compareModels', 'canCompareModels')
+    //- +button('Predict using selected models&hellip;', 'bolt', 'predictUsingModels', 'canCompareModels')
+    +button('检查', 'list', 'inspect')
+    +button('删除所选', 'trash', 'deleteModels', 'hasSelectedModels')
+
+  // /ko
+

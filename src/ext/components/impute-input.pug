@@ -1,0 +1,35 @@
+.flow-widget
+  h3.flow-hint
+    i.fa.fa-reply-all
+    | 插补
+  table.flow-form
+    tbody
+      tr
+        th.flow-narrow 数据帧
+        td.flow-wide
+          select(data-bind="options:frames, value:frame, optionsCaption:'Choose...'")
+      // ko if:hasFrame
+      tr
+        th.flow-narrow 列
+        td.flow-wide
+          select(data-bind="options:columns, value:column, optionsCaption:'Choose...'")
+      tr
+        th.flow-narrow 方法
+        td.flow-wide
+          select(data-bind="options:methods, optionsText:'caption', value:method")
+      // ko if:canUseCombineMethod
+      tr
+        th.flow-narrow 混合方法
+        td.flow-wide
+          select(data-bind="options:combineMethods, optionsText:'caption', value:combineMethod")
+      // /ko
+      // ko if:canGroupByColumns
+      tr
+        th.flow-narrow 分组列
+        td.flow-wide
+          select(data-bind="options:columns, selectedOptions:groupByColumns" size='15' multiple='true')
+      // /ko
+      // /ko
+
+  .flow-panel
+    +button('插补', 'reply-all', 'impute', 'canImpute')

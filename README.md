@@ -1,4 +1,5 @@
-[![Join the chat at https://gitter.im/h2oai/h2o-flow](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/h2oai/h2o-flow?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Join the chat at https://gitter.im/air-flow/community](https://badges.gitter.im/air-flow/community.svg)](https://gitter.im/air-flow/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/air-flow/community](https://badges.gitter.im/air-flow/community.svg)](https://gitter.im/air-flow/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 
 # AIR Flow
 

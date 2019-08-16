@@ -1,14 +1,23 @@
-H2O.TimelineOutput = (_, _go, _timeline) ->
+{ defer, tail, head, delay } = require('lodash')
+
+{ act, react, lift, link, signal, signals } = require("../../core/modules/dataflow")
+
+html = require('../../core/modules/html')
+failure = require('../../core/components/failure')
+FlowError = require('../../core/modules/flow-error')
+
+module.exports = (_, _go, _timeline) ->
   _isLive = signal no
   _isBusy = signal no
 
   _headers = [
-    'HH:MM:SS:MS'
-    'nanosec'
-    'Who'
-    'I/O Type'
-    'Event'
-    'Bytes'
+    '时间'
+    'Unix时间戳（毫秒）'
+    '参与方'
+    'I/O 类型'
+    '事件'
+    '类型'
+    '字节'
   ]
 
   _data = signal null
@@ -23,6 +32,7 @@ H2O.TimelineOutput = (_, _go, _timeline) ->
           event.node
           event.io_flavor or '-'
           'I/O'
+          '-'
           event.data
         ]
 
@@ -32,7 +42,8 @@ H2O.TimelineOutput = (_, _go, _timeline) ->
           event.nanos
           'many &#8594;  many'
           'UDP'
-          'heartbeat'
+          event.type
+          '-'
           "#{event.sends} sent #{event.recvs} received"
         ]
 
@@ -43,18 +54,19 @@ H2O.TimelineOutput = (_, _go, _timeline) ->
           "#{event.from} &#8594; #{event.to}"
           event.protocol
           event.msg_type
+          if event.is_send then 'send' else 'receive'
           event.data
         ]
 
   updateTimeline = (timeline) ->
-    [ grid, table, thead, tbody, tr, th, td ] = Flow.HTML.template '.grid', 'table', 'thead', 'tbody', 'tr', 'th', 'td'
+    [ grid, table, thead, tbody, tr, th, td ] = html.template '.grid', 'table', 'thead', 'tbody', 'tr', 'th', 'td'
 
     ths = (th header for header in _headers)
 
     trs = for event in timeline.events
       tr (td cell for cell in createEvent event)
 
-    _data Flow.HTML.render 'div',
+    _data html.render 'div',
       grid [
         table [
           thead tr ths
@@ -70,7 +82,7 @@ H2O.TimelineOutput = (_, _go, _timeline) ->
     _.requestTimeline (error, timeline) ->
       _isBusy no
       if error
-        _exception Flow.Failure _, new Flow.Error 'Error fetching timeline', error
+        _exception failure() _, new FlowError 'Error fetching timeline', error
         _isLive no
       else
         updateTimeline timeline

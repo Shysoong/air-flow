@@ -1,0 +1,50 @@
+.flow-widget
+  +subtitle('合并数据帧', 'link')
+
+  table.flow-form
+    tbody
+      tr
+        th(width='170')
+          label 保存合并后的数据帧为：
+        td
+          input(data-bind="value:destinationKey" style='width:250px')
+      tr
+        th
+          label 左侧数据帧：
+        td
+          select(data-bind="options:frames, value:selectedLeftFrame, optionsCaption:'(Select)'")
+      tr
+        th
+          label 左侧列：
+        td
+          select(data-bind="options:leftColumns, optionsText:'label', value:selectedLeftColumn, optionsCaption:'(Select)'")
+      tr
+        th
+          label 包含所有左侧的行：
+        td
+          input(type='checkbox' data-bind="checked:includeAllLeftRows")
+      tr
+        th
+          label 右侧数据帧：
+        td
+          select(data-bind="options:frames, value:selectedRightFrame, optionsCaption:'(Select)'")
+      tr
+        th
+          label 右侧列：
+        td
+          select(data-bind="options:rightColumns, optionsText:'label', value:selectedRightColumn, optionsCaption:'(Select)'")
+      tr
+        th
+          label 包含所有右侧的行：
+        td
+          input(type='checkbox' data-bind="checked:includeAllRightRows")
+      tr
+        th
+          label 操作：
+        td
+          button.flow-button(type='button' data-bind='click:merge, enable:canMerge')
+            i.fa.fa-link
+            span 合并
+
+
+

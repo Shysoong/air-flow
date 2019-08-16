@@ -29,8 +29,15 @@
 #     }
 # };
 # 
+ko = require('knockout')
+{ defer, isFunction } = require('lodash')
+require('typeahead.js')
 
-return unless window?.ko?
+CodeMirror = require('codemirror')
+require('codemirror/mode/clike/clike')
+require('codemirror/addon/edit/matchbrackets')
+
+marked = require('./marked')
 
 ko.bindingHandlers.raw =
   update: (element, valueAccessor, allBindings, viewModel, bindingContext) ->
@@ -184,4 +191,46 @@ ko.bindingHandlers.file =
       $file.change -> file @files[0]
     return
 
+ko.bindingHandlers.codemirror =
+  init:  (element, valueAccessor,  allBindings, viewModel, bindingContext) ->
+    # get the code mirror options
+    options = ko.unwrap(valueAccessor()).options
+    cell = ko.unwrap(valueAccessor()).cell
+    # created editor replaces the textarea on which it was created
+    editor = CodeMirror.fromTextArea element, options
 
+    editor.on 'change', (cm) ->
+      allBindings().value(cm.getValue())
+
+    editor.on 'mousedown', (cm) ->
+      cell.activate()
+
+    editor.on 'blur', (cm) ->
+      cell.isActive no
+
+    element.editor = editor
+    if(allBindings().value())
+      editor.setValue(allBindings().value())
+
+    internalTextArea = $(editor.getWrapperElement()).find("div textarea")
+    internalTextArea.attr('rows','1')
+    internalTextArea.attr('spellcheck','false')
+    internalTextArea.removeAttr("wrap")
+
+    editor.refresh()
+
+
+  update: (element, valueAccessor) ->
+    if element.editor
+        active = ko.unwrap(valueAccessor().active)
+        cell = ko.unwrap(valueAccessor()).cell
+        if active
+            element.editor.focus()
+        else
+            # Focus on root element so codemirror can cleanly loose focus
+            $(":root").focus()
+
+        element.editor.refresh()
+
+
+module.exports = ko

@@ -1,0 +1,47 @@
+.flow-widget
+  +subtitle('任务', 'tasks')
+
+  // ko if:exception
+  div(data-bind="template: { name:'flow-failure', data:exception }")
+  // /ko
+  // ko if:hasJobViews
+  table.flow-form
+    thead
+      tr
+        th &nbsp;
+        th 类型
+        th 最终产物
+        th 描述说明
+        th 开始时间
+        th 结束时间
+        th 运行时间
+        th 状态
+    tbody
+      // ko foreach:jobViews
+      tr
+        td
+          +fa('tasks')
+        td(data-bind='text:type')
+        td
+          a(href='#' data-bind='text:destination, click:view')
+        td(data-bind='text:description')
+        td(data-bind='text:startTime')
+        td(data-bind='text:endTime')
+        td(data-bind='text:elapsedTime')
+        td(data-bind='text:status')
+      // /ko
+  // /ko
+  // ko ifnot:hasJobViews
+  blockquote 您的AIR上没有任务。
+  // /ko
+  .flow-panel
+    button.flow-button(type='button' data-bind="click:toggleRefresh, css:{ 'flow-button-toggle':isLive }")
+      // ko if:isLive
+      i.fa.fa-refresh.fa-spin
+      | 结束
+      // /ko
+      // ko ifnot:isLive
+      i.fa.fa-refresh
+      | 刷新
+      // /ko
+

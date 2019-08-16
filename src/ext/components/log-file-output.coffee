@@ -1,5 +1,9 @@
-H2O.LogFileOutput = (_, _go, _cloud, _nodeIndex, _fileType, _logFile) ->
-  _exception = signal null #TODO Display in .jade
+{ defer } = require('lodash')
+
+{ react, lift, link, signal, signals } = require("../../core/modules/dataflow")
+
+module.exports = (_, _go, _cloud, _nodeIpPort, _fileType, _logFile) ->
+  _exception = signal null #TODO Display in .pug.
 
   _contents = signal ''
   _nodes = signal []
@@ -13,7 +17,7 @@ H2O.LogFileOutput = (_, _go, _cloud, _nodeIndex, _fileType, _logFile) ->
 
   refreshActiveView = (node, fileType) ->
     if node
-      _.requestLogFile node.index, fileType, (error, logFile) ->
+      _.requestLogFile node.name, fileType, (error, logFile) ->
         if error
           _contents "Error fetching log file: #{error.message}"
         else
@@ -24,15 +28,22 @@ H2O.LogFileOutput = (_, _go, _cloud, _nodeIndex, _fileType, _logFile) ->
   refresh = ->
     refreshActiveView _activeNode(), _activeFileType()
 
-  initialize = (cloud, nodeIndex, fileType, logFile) ->
+  initialize = (cloud, nodeIpPort, fileType, logFile) ->
     _activeFileType fileType
     _contents logFile.log
-    _nodes nodes = (createNode node, i for node, i in cloud.nodes)
-    _activeNode nodes[nodeIndex] if nodeIndex < nodes.length
+    nodes = []
+    if cloud.is_client
+      clientNode = ip_port: "self"
+      NODE_INDEX_SELF = -1
+      nodes.push createNode(clientNode, NODE_INDEX_SELF)
+    for n, i in cloud.nodes
+      nodes.push createNode(n, i)
+    _nodes nodes
+    _activeNode (n for n in nodes when n.name is nodeIpPort)[0]
     react _activeNode, _activeFileType, refreshActiveView
     defer _go
 
-  initialize _cloud, _nodeIndex, _fileType, _logFile
+  initialize _cloud, _nodeIpPort, _fileType, _logFile
 
   nodes: _nodes
   activeNode: _activeNode

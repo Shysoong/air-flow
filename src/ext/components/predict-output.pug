@@ -1,0 +1,20 @@
+.flow-widget
+  +subtitle('预测', 'bolt')
+
+  // ko if:canInspect
+  table.flow-form
+    tbody
+      tr
+        th(width='1' style="white-space:nowrap;")
+          label 操作:
+        td
+          +button('检查', 'list', 'inspect')
+  // /ko
+
+  // ko foreach:plots
+  h4(data-bind='text:title, collapse:false')
+  .flow-plot(data-bind='raw:plot')
+  // ko if:canCombineWithFrame
+  +button('结合数据帧和预测', 'table', 'combineWithFrame')
+  // /ko
+  // /ko

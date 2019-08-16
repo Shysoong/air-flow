@@ -1,0 +1,29 @@
+.flow-widget
+  +subtitle('Grids', 'th')
+  
+  // ko ifnot:hasGrids
+  blockquote 您的AIR上没有网格搜索结果。
+  .flow-panel
+    +button('构建模型&hellip;', 'cube', 'buildModel')
+  // /ko
+
+  // ko if:hasGrids
+  table.flow-form
+    thead
+      tr
+        th(width='1') &nbsp;
+        th 键
+        th 模型
+    tbody
+      // ko foreach:gridViews
+      tr
+        td
+          i.fa.fa-th
+        td
+          +link('@key', 'view')
+        td(data-bind="text:size")
+      // /ko
+
+  // /ko
+
+

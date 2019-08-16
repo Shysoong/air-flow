@@ -1,5 +1,16 @@
-H2O.CloudOutput = (_, _go, _cloud) ->
-  _exception = signal null #TODO Display in .jade
+{ defer, delay, map } = require('lodash')
+d3 = require('d3')
+moment = require('moment')
+
+{ signal, signals, act, react } = require('../../core/modules/dataflow')
+
+html = require('../../core/modules/html')
+failure = require('../../core/components/failure')
+FlowError = require('../../core/modules/flow-error')
+util = require('../../core/modules/util')
+
+module.exports = (_, _go, _cloud) ->
+  _exception = signal null #TODO Display in .pug
   _isLive = signal no
   _isBusy = signal no
 
@@ -16,7 +27,7 @@ H2O.CloudOutput = (_, _go, _cloud) ->
   _nodes = do signals
   
   formatMilliseconds = (ms) ->
-    Flow.Util.fromNow new Date (new Date()).getTime() - ms
+    util.fromNow new Date (new Date()).getTime() - ms
 
   format3f = d3.format '.3f' # precision = 3
 
@@ -56,17 +67,18 @@ H2O.CloudOutput = (_, _go, _cloud) ->
   _headers = [
     # [ Caption, show_always? ]
     [ "&nbsp;", yes ]
-    [ "Name", yes ]
+    [ "名称", yes ]
     [ "Ping", yes ]
-    [ "Cores", yes ]
-    [ "Load", yes ]
-    [ "My CPU %", yes ]
-    [ "Sys CPU %", yes ]
-    [ "Data (Used/Total)", yes ]
-    [ "Data (% Cached)", yes ]
-    [ "GC (Free / Total / Max)", yes ]
-    [ "Disk (Free / Max)", yes ]
-    [ "Disk (% Free)", yes ]
+    [ "核心数", yes ]
+    [ "负载", yes ]
+    [ "节点服务CPU %", yes ]
+    [ "系统CPU %", yes ]
+    [ "每秒浮点运算次数（十亿）", yes ]
+    [ "内存带宽", yes ]
+    [ "数据", yes ]
+    [ "垃圾回收 (可用 / 最大)", yes ]
+    [ "磁盘 (可用 / 最大)", yes ]
+    [ "磁盘 (% 可用)", yes ]
     [ "PID", no ]
     [ "Keys", no ]
     [ "TCP", no ]
@@ -85,9 +97,10 @@ H2O.CloudOutput = (_, _go, _cloud) ->
       format3f node.sys_load
       node.my_cpu_pct
       node.sys_cpu_pct
-      "#{prettyPrintBytes node.mem_value_size} / #{prettyPrintBytes node.total_value_size}"
-      "#{Math.floor node.mem_value_size * 100 / node.total_value_size}%"
-      "#{prettyPrintBytes node.free_mem} / #{prettyPrintBytes node.tot_mem} / #{prettyPrintBytes node.max_mem}"
+      format3f node.gflops
+      "#{prettyPrintBytes node.mem_bw} / s"
+      "#{prettyPrintBytes node.mem_value_size}"
+      "#{prettyPrintBytes node.free_mem} / #{prettyPrintBytes node.max_mem}"
       "#{prettyPrintBytes node.free_disk} / #{prettyPrintBytes node.max_disk}"
       "#{Math.floor node.free_disk * 100 / node.max_disk}%"
       node.pid
@@ -109,9 +122,10 @@ H2O.CloudOutput = (_, _go, _cloud) ->
       format3f sum nodes, (node) -> node.sys_load
       '-'
       '-'
-      "#{prettyPrintBytes (sum nodes, (node) -> node.mem_value_size)} / #{prettyPrintBytes (sum nodes, (node) -> node.total_value_size)}"
-      "#{Math.floor (avg nodes, (node) -> node.mem_value_size * 100 / node.total_value_size)}%"
-      "#{prettyPrintBytes (sum nodes, (node) -> node.free_mem)} / #{prettyPrintBytes (sum nodes, (node) -> node.tot_mem)} / #{prettyPrintBytes (sum nodes, (node) -> node.max_mem)}"
+      "#{(format3f sum nodes, (node) -> node.gflops)}"
+      "#{prettyPrintBytes (sum nodes, (node) -> node.mem_bw)} / s"
+      "#{prettyPrintBytes (sum nodes, (node) -> node.mem_value_size)}"
+      "#{prettyPrintBytes (sum nodes, (node) -> node.free_mem)} / #{prettyPrintBytes (sum nodes, (node) -> node.max_mem)}"
       "#{prettyPrintBytes (sum nodes, (node) -> node.free_disk)} / #{prettyPrintBytes (sum nodes, (node) -> node.max_disk)}"
       "#{Math.floor (avg nodes, (node) -> node.free_disk * 100 / node.max_disk)}%"
       '-'
@@ -124,7 +138,7 @@ H2O.CloudOutput = (_, _go, _cloud) ->
     ]
 
   createGrid = (cloud, isExpanded) ->
-    [ grid, table, thead, tbody, tr, th, td, success, danger] = Flow.HTML.template '.grid', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'i.fa.fa-check-circle.text-success', 'i.fa.fa-exclamation-circle.text-danger'
+    [ grid, table, thead, tbody, tr, th, td, success, danger] = html.template '.grid', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'i.fa.fa-check-circle.text-success', 'i.fa.fa-exclamation-circle.text-danger'
     nodeRows = map cloud.nodes, createNodeRow
     nodeRows.push createTotalRow cloud
 
@@ -139,7 +153,7 @@ H2O.CloudOutput = (_, _go, _cloud) ->
           td cell
       tr tds
 
-    Flow.HTML.render 'div',
+    html.render 'div',
       grid [
         table [
           thead tr ths
@@ -165,7 +179,7 @@ H2O.CloudOutput = (_, _go, _cloud) ->
     _.requestCloud (error, cloud) ->
       _isBusy no
       if error
-        _exception Flow.Failure _, new Flow.Error 'Error fetching cloud status', error
+        _exception failure _, new FlowError 'Error fetching cloud status', error
         _isLive no
       else
         updateCloud (_cloud = cloud), _isExpanded()

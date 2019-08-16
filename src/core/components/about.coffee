@@ -1,11 +1,12 @@
-Flow.Version = '999.999.999'
+{ link, signal, signals } = require("../modules/dataflow")
 
-Flow.About = (_) ->
+exports.init = (_) ->
+  _.Version = FLOW_VERSION # global provided by webpack
   _properties = signals []
 
   link _.ready, ->
-    if Flow.BuildProperties
-      _properties Flow.BuildProperties
+    if _.BuildProperties
+      _properties _.BuildProperties
     else
       _.requestAbout (error, response) ->
         properties = []
@@ -13,14 +14,14 @@ Flow.About = (_) ->
         unless error
           for { name, value } in response.entries
             properties.push
-              caption: 'H2O ' + name
+              caption: 'AIR ' + name
               value: value
 
         properties.push
-          caption: 'Flow version'
-          value: Flow.Version
+          caption: 'Flow 版本'
+          value: _.Version
 
-        _properties Flow.BuildProperties = properties
+        _properties _.BuildProperties = properties
 
   properties: _properties
 

@@ -1,0 +1,19 @@
+.flow-widget
+  +subtitle('拆分数据帧', 'table')
+
+  table.flow-form
+    thead
+      tr
+        th(width='1' style="white-space:nowrap;") 类型
+        th 键
+        th.flow-right(width='1') 比例
+    tbody
+      // ko foreach:frames
+      tr
+        td
+          i.fa.fa-table
+        td
+          a(href='#' data-bind='text:key, click:view')
+        td.flow-right(data-bind='text:ratio')
+      // /ko
+

@@ -1,13 +1,40 @@
-H2O.Proxy = (_) ->
+{ isArray, map, filter, head } = require('lodash')
+{ isObject, isNumber } = require('../../core/modules/prelude')
+
+{ lift, link, signal, signals } = require("../../core/modules/dataflow")
+{ stringify } = require('../../core/modules/prelude')
+{ iterate } = require('../../core/modules/async')
+JSONbig = require('json-bigint')
+FlowError = require('../../core/modules/flow-error')
+util = require('./util')
+
+exports.init = (_) ->
 
   download = (type, url, go) ->
+    if url.substring(0,1) == "/"
+        url = _.ContextPath + url.substring(1)
     $.ajax
       dataType: type
       url: url
       success: (data, status, xhr) -> go null, data
-      error: (xhr, status, error) -> go new Flow.Error error
-  
+      error: (xhr, status, error) -> go new FlowError error
+
+  optsToString = (opts) ->
+    if opts?
+      str = " with opts #{ stringify opts }"
+      if str.length > 50
+        "#{ str.substr 0, 50 }..."
+      else
+        str
+    else
+      ''
+
+  $.ajaxSetup converters: { "text json": JSONbig.parse }
+
   http = (method, path, opts, go) ->
+    if path.substring(0,1) == "/"
+      path = _.ContextPath + path.substring(1)
+
     _.status 'server', 'request', path
 
     trackPath path
@@ -17,6 +44,13 @@ H2O.Proxy = (_) ->
         $.getJSON path
       when 'POST'
         $.post path, opts
+      when 'POSTJSON'
+        $.ajax
+          url: path
+          type: 'POST'
+          contentType: 'application/json'
+          cache: no
+          data: stringify opts
       when 'PUT'
         $.ajax url: path, type: method, data: opts
       when 'DELETE'
@@ -36,30 +70,32 @@ H2O.Proxy = (_) ->
       try
         go null, data
       catch error
-        go new Flow.Error "Error processing #{method} #{path}", error
+        console.debug(error)
+        go new FlowError "Error processing #{method} #{path}", error
 
     req.fail (xhr, status, error) ->
       _.status 'server', 'error', path
 
       response = xhr.responseJSON
-      
+
       cause = if (meta = response?.__meta) and (meta.schema_type is 'H2OError' or meta.schema_type is 'H2OModelBuilderError')
-        serverError = new Flow.Error response.exception_msg
+        serverError = new FlowError response.exception_msg
         serverError.stack = "#{response.dev_msg} (#{response.exception_type})" + "\n  " + response.stacktrace.join "\n  "
         serverError
       else if error?.message
-        new Flow.Error error.message
-      else if status is 0
-        new Flow.Error 'Could not connect to H2O'
-      else if isString error
-        new Flow.Error error
+        new FlowError error.message
       else
-        new Flow.Error 'Unknown error'
+        # special-case net::ERR_CONNECTION_REFUSED
+        if status is 'error' and xhr.status is 0
+          new FlowError "Could not connect to H2O. Your H2O cloud is currently unresponsive."
+        else
+          new FlowError "HTTP connection failure: status=#{status}, code=#{xhr.status}, error=#{error or '?'}"
 
-      go new Flow.Error "Error calling #{method} #{path} with opts #{JSON.stringify opts}", cause
+      go new FlowError "Error calling #{method} #{path}#{optsToString opts}", cause
 
   doGet = (path, go) -> http 'GET', path, null, go
   doPost = (path, opts, go) -> http 'POST', path, opts, go
+  doPostJSON = (path, opts, go) -> http 'POSTJSON', path, opts, go
   doPut = (path, opts, go) -> http 'PUT', path, opts, go
   doUpload = (path, formData, go) -> http 'UPLOAD', path, formData, go
   doDelete = (path, go) -> http 'DELETE', path, null, go
@@ -83,19 +119,25 @@ H2O.Proxy = (_) ->
   composePath = (path, opts) ->
     if opts
       params = mapWithKey opts, (v, k) -> "#{k}=#{v}"
-      path + '?' + join params, '&'
+      path + '?' + params.join '&'
     else
       path
 
   requestWithOpts = (path, opts, go) ->
     doGet (composePath path, opts), go
 
-  encodeArrayForPost = (array) -> 
+  encodeArrayForPost = (array) ->
     if array
       if array.length is 0
-        null 
-      else 
-        "[#{join (map array, (element) -> if isNumber element then element else "\"#{element}\""), ','}]"
+        null
+      else
+        mappedArray = map array, (element) ->
+          if isNumber element
+            return element
+          if isObject element
+            return stringify element
+          return "\"#{element}\""
+        "[#{mappedArray.join ','}]"
     else
       null
 
@@ -119,13 +161,13 @@ H2O.Proxy = (_) ->
         go null, transform result
 
   requestExec = (ast, go) ->
-    doPost '/3/Rapids', { ast: ast }, (error, result) ->
+    doPost '/99/Rapids', { ast: ast }, (error, result) ->
       if error
         go error
       else
         #TODO HACK - this api returns a 200 OK on failures
         if result.error
-          go new Flow.Error result.error
+          go new FlowError result.error
         else
           go null, result
 
@@ -150,15 +192,26 @@ H2O.Proxy = (_) ->
       else
         go null, result.frames
 
-  requestFrame = (key, go) ->
-    doGet "/3/Frames/#{encodeURIComponent key}", (error, result) ->
+  requestFrame = (key, go, opts) ->
+    requestWithOpts "/3/Frames/#{encodeURIComponent key}", opts, (error, result) ->
       if error
         go error
       else
         go null, head result.frames
 
+  requestFrameSlice = (key, searchTerm, offset, count, go) ->
+    #TODO send search term
+    doGet "/3/Frames/#{encodeURIComponent key}?column_offset=#{offset}&column_count=#{count}", unwrap go, (result) -> head result.frames
+
   requestFrameSummary = (key, go) ->
-    doGet "/3/Frames/#{encodeURIComponent key}/summary", (error, result) ->
+    doGet "/3/Frames/#{encodeURIComponent key}/summary", unwrap go, (result) -> head result.frames
+
+  requestFrameSummarySlice = (key, searchTerm, offset, count, go) ->
+    #TODO send search term
+    doGet "/3/Frames/#{encodeURIComponent key}/summary?column_offset=#{offset}&column_count=#{count}&_exclude_fields=frames/columns/data,frames/columns/domain,frames/columns/histogram_bins,frames/columns/percentiles", unwrap go, (result) -> head result.frames
+
+  requestFrameSummaryWithoutData = (key, go) ->
+    doGet "/3/Frames/#{encodeURIComponent key}/summary?_exclude_fields=frames/chunk_summary,frames/distribution_summary,frames/columns/data,frames/columns/domain,frames/columns/histogram_bins,frames/columns/percentiles", (error, result) ->
       if error
         go error
       else
@@ -167,12 +220,11 @@ H2O.Proxy = (_) ->
   requestDeleteFrame = (key, go) ->
     doDelete "/3/Frames/#{encodeURIComponent key}", go
 
-  requestRDDs = (go) ->
-    doGet '/3/RDDs', (error, result) ->
-      if error
-        go error
-      else
-        go null, result.rdds
+  requestExportFrame = (key, path, overwrite, go) ->
+    params =
+      path: path
+      force: if overwrite then 'true' else 'false'
+    doPost "/3/Frames/#{encodeURIComponent key}/export", params, go
 
   requestColumnSummary = (frameKey, column, go) ->
     doGet "/3/Frames/#{encodeURIComponent frameKey}/columns/#{encodeURIComponent column}/summary", unwrap go, (result) -> head result.frames
@@ -180,21 +232,21 @@ H2O.Proxy = (_) ->
   requestJobs = (go) ->
     doGet '/3/Jobs', (error, result) ->
       if error
-        go new Flow.Error 'Error fetching jobs', error
+        go new FlowError 'Error fetching jobs', error
       else
-        go null, result.jobs 
+        go null, result.jobs
 
   requestJob = (key, go) ->
     doGet "/3/Jobs/#{encodeURIComponent key}", (error, result) ->
       if error
-        go new Flow.Error "Error fetching job '#{key}'", error
+        go new FlowError "Error fetching job '#{key}'", error
       else
         go null, head result.jobs
 
   requestCancelJob = (key, go) ->
     doPost "/3/Jobs/#{encodeURIComponent key}/cancel", {}, (error, result) ->
       if error
-        go new Flow.Error "Error canceling job '#{key}'", error
+        go new FlowError "Error canceling job '#{key}'", error
       else
         go null
 
@@ -208,11 +260,22 @@ H2O.Proxy = (_) ->
     tasks = map paths, (path) ->
       (go) ->
         requestImportFile path, go
-    (Flow.Async.iterate tasks) go
+    (iterate tasks) go
 
   requestImportFile = (path, go) ->
     opts = path: encodeURIComponent path
     requestWithOpts '/3/ImportFiles', opts, go
+
+  requestImportSqlTable = (args, go) ->
+    decryptedPassword = util.decryptPassword args.password
+    opts =
+      connection_url: args.connection_url
+      table: args.table
+      username: args.username
+      password: decryptedPassword
+    if args.columns != ''
+      opts.columns = args.columns
+    doPost '/99/ImportSQLTable', opts, go
 
   requestParseSetup = (sourceKeys, go) ->
     opts =
@@ -220,7 +283,7 @@ H2O.Proxy = (_) ->
     doPost '/3/ParseSetup', opts, go
 
   requestParseSetupPreview = (sourceKeys, parseType, separator, useSingleQuotes, checkHeader, columnTypes, go) ->
-    opts = 
+    opts =
       source_frames: encodeArrayForPost sourceKeys
       parse_type: parseType
       separator: separator
@@ -244,12 +307,61 @@ H2O.Proxy = (_) ->
       chunk_size: chunkSize
     doPost '/3/Parse', opts, go
 
+  # Create data for partial dependence plot(s)
+  # for the specified model and frame.
+  #
+  # make a post request to h2o-3 to do request
+  # the data about the specified model and frame
+  # subject to the other options `opts`
+  #
+  # returns a job
+  requestPartialDependence = (opts, go) ->
+    doPost '/3/PartialDependence/', opts, go
+
+
+  # make a post request to h2o-3 to do request
+  # the data about the specified model and frame
+  # subject to the other options `opts`
+  #
+  # returns a json response that contains
+  #
+  requestPartialDependenceData = (key, go) ->
+    doGet "/3/PartialDependence/#{encodeURIComponent key}", (error, result) ->
+      if error
+        go error, result
+      else go error, result
+
+  requestGrids = (go) ->
+    doGet "/99/Grids", (error, result) ->
+      if error
+        go error, result
+      else
+        go error, result.grids
+
+  requestLeaderboard = (key, go) ->
+    doGet "/99/AutoML/#{encodeURIComponent key}", (error, result) ->
+      if error
+        go error, result
+      else
+        go error, result
+
+
   requestModels = (go, opts) ->
     requestWithOpts '/3/Models', opts, (error, result) ->
       if error
         go error, result
       else
         go error, result.models
+
+  requestGrid = (key, opts, go) ->
+    params = undefined
+    if opts
+      params = {}
+      if opts.sort_by
+        params.sort_by = encodeURIComponent opts.sort_by
+      if (opts.decreasing is yes) or (opts.decreasing is no)
+        params.decreasing = opts.decreasing
+    doGet (composePath "/99/Grids/#{encodeURIComponent key}", params), go
 
   requestModel = (key, go) ->
     doGet "/3/Models/#{encodeURIComponent key}", (error, result) ->
@@ -264,15 +376,46 @@ H2O.Proxy = (_) ->
   requestDeleteModel = (key, go) ->
     doDelete "/3/Models/#{encodeURIComponent key}", go
 
+  requestImportModel = (path, overwrite, go) ->
+    opts =
+      dir: path
+      force: overwrite
+    doPost "/99/Models.bin/not_in_use", opts, go
+
+  requestExportModel = (format, key, path, overwrite, go) ->
+    doGet "/99/Models.#{format}/#{encodeURIComponent key}?dir=#{encodeURIComponent path}&force=#{overwrite}", go
+
+  # TODO Obsolete
   requestModelBuildersVisibility = (go) ->
     doGet '/3/Configuration/ModelBuilders/visibility', unwrap go, (result) -> result.value
 
+  __modelBuilders = null
+  __modelBuilderEndpoints = null
+  __gridModelBuilderEndpoints = null
+  cacheModelBuilders = (modelBuilders) ->
+    modelBuilderEndpoints = {}
+    gridModelBuilderEndpoints = {}
+    for modelBuilder in modelBuilders
+      modelBuilderEndpoints[modelBuilder.algo] = "/#{modelBuilder.__meta.schema_version}/ModelBuilders/#{modelBuilder.algo}"
+      gridModelBuilderEndpoints[modelBuilder.algo] = "/99/Grid/#{modelBuilder.algo}"
+    __modelBuilderEndpoints = modelBuilderEndpoints
+    __gridModelBuilderEndpoints = gridModelBuilderEndpoints
+    __modelBuilders = modelBuilders
+
+  getModelBuilders = -> __modelBuilders
+  getModelBuilderEndpoint = (algo) -> __modelBuilderEndpoints[algo]
+  getGridModelBuilderEndpoint = (algo) -> __gridModelBuilderEndpoints[algo]
+
   requestModelBuilders = (go) ->
-    requestModelBuildersVisibility (error, visibility) ->
-      visibility = if error then 'Stable' else visibility
+    if modelBuilders = getModelBuilders()
+      go null, modelBuilders
+    else
+      # requestModelBuildersVisibility (error, visibility) ->
+      #  visibility = if error then 'Stable' else visibility
+      visibility = 'Stable'
       doGet "/3/ModelBuilders", unwrap go, (result) ->
         builders = (builder for algo, builder of result.model_builders)
-        switch visibility
+        availableBuilders = switch visibility
           when 'Stable'
             for builder in builders when builder.visibility is visibility
               builder
@@ -281,16 +424,27 @@ H2O.Proxy = (_) ->
               builder
           else
             builders
+        cacheModelBuilders availableBuilders
 
   requestModelBuilder = (algo, go) ->
-    doGet "/3/ModelBuilders/#{algo}", go
+    doGet getModelBuilderEndpoint(algo), go
 
   requestModelInputValidation = (algo, parameters, go) ->
-    doPost "/3/ModelBuilders/#{algo}/parameters", (encodeObjectForPost parameters), go
+    doPost "#{getModelBuilderEndpoint(algo)}/parameters", (encodeObjectForPost parameters), go
 
   requestModelBuild = (algo, parameters, go) ->
     _.trackEvent 'model', algo
-    doPost "/3/ModelBuilders/#{algo}", (encodeObjectForPost parameters), go
+    if parameters.hyper_parameters
+      # super-hack: nest this object as stringified json
+      parameters.hyper_parameters = stringify parameters.hyper_parameters
+      if parameters.search_criteria
+        parameters.search_criteria = stringify parameters.search_criteria
+      doPost getGridModelBuilderEndpoint(algo), (encodeObjectForPost parameters), go
+    else
+      doPost getModelBuilderEndpoint(algo), (encodeObjectForPost parameters), go
+
+  requestAutoModelBuild = (parameters, go) ->
+    doPostJSON "/99/AutoMLBuilder", parameters, go
 
   requestPredict = (destinationKey, modelKey, frameKey, options, go) ->
     opts = {}
@@ -299,6 +453,10 @@ H2O.Proxy = (_) ->
       opts.reconstruction_error = opt
     unless undefined is (opt = options.deep_features_hidden_layer)
       opts.deep_features_hidden_layer = opt
+    unless undefined is (opt = options.leaf_node_assignment)
+      opts.leaf_node_assignment = opt
+    unless undefined is (opt = options.exemplar_index)
+      opts.exemplar_index = opt
 
     doPost "/3/Predictions/models/#{encodeURIComponent modelKey}/frames/#{encodeURIComponent frameKey}", opts, (error, result) ->
       if error
@@ -320,7 +478,7 @@ H2O.Proxy = (_) ->
       else
         #
         # TODO workaround for a filtering bug in the API
-        # 
+        #
         predictions = for prediction in result.model_metrics
           if modelKey and prediction.model.name isnt modelKey
             null
@@ -377,10 +535,10 @@ H2O.Proxy = (_) ->
   requestPutObject = (type, name, value, go) ->
     uri = "/3/NodePersistentStorage/#{encodeURIComponent type}"
     uri += "/#{encodeURIComponent name}" if name
-    doPost uri, { value: JSON.stringify value, null, 2 }, unwrap go, (result) -> result.name
+    doPost uri, { value: stringify value, null, 2 }, unwrap go, (result) -> result.name
 
   requestUploadObject = (type, name, formData, go) ->
-    uri = "/3/NodePersistentStorage/#{encodeURIComponent type}"
+    uri = "/3/NodePersistentStorage.bin/#{encodeURIComponent type}"
     uri += "/#{encodeURIComponent name}" if name
     doUpload uri, formData, unwrap go, (result) -> result.name
 
@@ -405,8 +563,8 @@ H2O.Proxy = (_) ->
   requestEcho = (message, go) ->
     doPost '/3/LogAndEcho', { message: message }, go
 
-  requestLogFile = (nodeIndex, fileType, go) ->
-    doGet "/3/Logs/nodes/#{nodeIndex}/files/#{fileType}", go
+  requestLogFile = (nodeIpPort, fileType, go) ->
+    doGet "/3/Logs/nodes/#{nodeIpPort}/files/#{fileType}", go
 
   requestNetworkTest = (go) ->
     doGet '/3/NetworkTest', go
@@ -430,7 +588,7 @@ H2O.Proxy = (_) ->
     doGet "/3/Metadata/schemas/#{encodeURIComponent name}", go
 
   getLines = (data) ->
-    filter (split data, '\n'), (line) -> if line.trim() then yes else no
+    filter (data.split '\n'), (line) -> if line.trim() then yes else no
 
   requestPacks = (go) ->
     download 'text', '/flow/packs/index.list', unwrap go, getLines
@@ -447,14 +605,50 @@ H2O.Proxy = (_) ->
   requestHelpContent = (name, go) ->
     download 'text', "/flow/help/#{name}.html", go
 
+  requestRDDs = (go) ->
+    doGet '/3/RDDs', go
+
+  requestDataFrames = (go) ->
+    doGet '/3/dataframes', go
+
+  requestScalaIntp = (go) ->
+    doPost '/3/scalaint', {}, go
+
+  requestScalaCode = (session_id, code, go) ->
+    doPost "/3/scalaint/#{session_id}", {code: code}, go
+
+  requestAsH2OFrameFromRDD = (rdd_id, name, go) ->
+    if name==undefined
+      doPost "/3/RDDs/#{rdd_id}/h2oframe", {}, go
+    else
+      doPost "/3/RDDs/#{rdd_id}/h2oframe", {h2oframe_id: name}, go
+
+  requestAsH2OFrameFromDF = (df_id, name, go) ->
+    if name==undefined
+      doPost "/3/dataframes/#{df_id}/h2oframe", {}, go
+    else
+      doPost "/3/dataframes/#{df_id}/h2oframe", {h2oframe_id: name}, go
+
+  requestAsDataFrame = (hf_id, name, go) ->
+    if name==undefined
+      doPost "/3/h2oframes/#{hf_id}/dataframe", {}, go
+    else
+      doPost "/3/h2oframes/#{hf_id}/dataframe", {dataframe_id: name}, go
+
+  requestScalaCodeExecutionResult = (key, go) ->
+    doPost "/3/scalaint/result/#{key}", {result_key: key}, go
+
   link _.requestInspect, requestInspect
   link _.requestCreateFrame, requestCreateFrame
   link _.requestSplitFrame, requestSplitFrame
   link _.requestFrames, requestFrames
   link _.requestFrame, requestFrame
+  link _.requestFrameSlice, requestFrameSlice
   link _.requestFrameSummary, requestFrameSummary
+  link _.requestFrameSummaryWithoutData, requestFrameSummaryWithoutData
+  link _.requestFrameSummarySlice, requestFrameSummarySlice
   link _.requestDeleteFrame, requestDeleteFrame
-  link _.requestRDDs, requestRDDs
+  link _.requestExportFrame, requestExportFrame
   link _.requestColumnSummary, requestColumnSummary
   link _.requestJobs, requestJobs
   link _.requestJob, requestJob
@@ -462,17 +656,26 @@ H2O.Proxy = (_) ->
   link _.requestFileGlob, requestFileGlob
   link _.requestImportFiles, requestImportFiles
   link _.requestImportFile, requestImportFile
+  link _.requestImportSqlTable, requestImportSqlTable
   link _.requestParseSetup, requestParseSetup
   link _.requestParseSetupPreview, requestParseSetupPreview
   link _.requestParseFiles, requestParseFiles
+  link _.requestPartialDependence, requestPartialDependence
+  link _.requestPartialDependenceData, requestPartialDependenceData
+  link _.requestGrids, requestGrids
+  link _.requestLeaderboard, requestLeaderboard
   link _.requestModels, requestModels
+  link _.requestGrid, requestGrid
   link _.requestModel, requestModel
   link _.requestPojoPreview, requestPojoPreview
   link _.requestDeleteModel, requestDeleteModel
+  link _.requestImportModel, requestImportModel
+  link _.requestExportModel, requestExportModel
   link _.requestModelBuilder, requestModelBuilder
   link _.requestModelBuilders, requestModelBuilders
   link _.requestModelBuild, requestModelBuild
   link _.requestModelInputValidation, requestModelInputValidation
+  link _.requestAutoModelBuild, requestAutoModelBuild
   link _.requestPredict, requestPredict
   link _.requestPrediction, requestPrediction
   link _.requestPredictions, requestPredictions
@@ -503,5 +706,15 @@ H2O.Proxy = (_) ->
   link _.requestHelpIndex, requestHelpIndex
   link _.requestHelpContent, requestHelpContent
   link _.requestExec, requestExec
+  #
+  # Sparkling-Water
+  link _.requestRDDs, requestRDDs
+  link _.requestDataFrames, requestDataFrames
+  link _.requestScalaIntp, requestScalaIntp
+  link _.requestScalaCode, requestScalaCode
+  link _.requestAsH2OFrameFromDF, requestAsH2OFrameFromDF
+  link _.requestAsH2OFrameFromRDD, requestAsH2OFrameFromRDD
+  link _.requestAsDataFrame, requestAsDataFrame
+  link _.requestScalaCodeExecutionResult, requestScalaCodeExecutionResult
 
 

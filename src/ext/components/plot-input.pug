@@ -1,0 +1,29 @@
+.flow-widget
+  +subtitle('绘图', 'bar-chart')
+
+  table.flow-form
+    tr
+      th(width='1' style="white-space:nowrap;")
+        label 类型：
+      td
+        select(data-bind="options:types, value:type, optionsCaption:'(Select)'")
+    tr
+      th
+        label X轴：
+      td
+        select(data-bind="options:vectors, value:x, optionsCaption:'(Select)'")
+    tr
+      th
+        label Y轴：
+      td
+        select(data-bind="options:vectors, value:y, optionsCaption:'(Select)'")
+    tr
+      th
+        label 颜色：
+      td
+        select(data-bind="options:vectors, value:color, optionsCaption:'(Select)'")
+    tr
+      th
+        label 操作：
+      td
+        +button('绘图', 'bar-chart', 'plot', 'canPlot')

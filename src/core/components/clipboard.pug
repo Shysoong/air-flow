@@ -1,0 +1,38 @@
+h4.flow-hint
+  i.fa.fa-clipboard
+  | 剪贴板
+
+.flow-sidebar-content
+  .flow-clipboard
+    h6
+      | 我的收藏夹 
+      span(data-bind='text:userClipCount')
+    // ko if:hasUserClips
+    div(data-bind="template:{ name:'flow-clips', data:userClips }")
+    // /ko
+    // ko ifnot:hasUserClips
+    p
+      | 您的收藏夹内目前还没有内容剪辑（代码片段）。 若要将剪辑保存到此列表中，请单击单元格旁边的 
+      i.fa.fa-paperclip
+      | &nbsp; 回形针图标。
+      br
+      br
+      | 在代码片段上点击可以把它插入的代码笔记本中。 点击 
+      i.fa.fa-play-circle
+      | &nbsp;按钮可以插入并运行代码片段。
+    // /ko
+    h6
+      | 系统内置 
+      span(data-bind='text:systemClipCount')
+    div(data-bind="template:{ name:'flow-clips', data:systemClips }")
+    h6
+      | 回收站 
+      span(data-bind='text:trashClipCount')
+    // ko if:hasTrashClips
+    div(data-bind="template:{ name:'flow-clips', data:trashClips }")
+    div(style='margin-top:10px')
+      +button('清空回收站', 'trash', 'emptyTrash')
+    // /ko
+    // ko ifnot:hasTrashClips
+    p 回收站目前是空的。从你的notebook中剪切或者删除的单元格将会出现在这里。
+    // /ko

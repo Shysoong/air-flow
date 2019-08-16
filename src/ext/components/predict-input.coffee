@@ -1,5 +1,12 @@
-H2O.PredictInput = (_, _go, opt) ->
-  _destinationKey = signal opt.predictions_frame ? "prediction-#{Flow.Util.uuid()}"
+{ defer, map, isString, head } = require('lodash')
+
+{ stringify } = require('../../core/modules/prelude')
+{ react, lift, link, signal, signals } = require("../../core/modules/dataflow")
+util = require('../../core/modules/util')
+FlowError = require('../../core/modules/flow-error')
+
+module.exports = (_, _go, opt) ->
+  _destinationKey = signal opt.predictions_frame ? "prediction-#{util.uuid()}"
 
   _selectedModels = if opt.models
     opt.models
@@ -17,8 +24,8 @@ H2O.PredictInput = (_, _go, opt) ->
     else
       []
 
-  _selectedModelsCaption = join _selectedModels, ', '
-  _selectedFramesCaption = join _selectedFrames, ', '
+  _selectedModelsCaption = _selectedModels.join ', '
+  _selectedFramesCaption = _selectedFrames.join ', '
   _exception = signal null
   _selectedFrame = signal null
   _selectedModel = signal null
@@ -27,20 +34,40 @@ H2O.PredictInput = (_, _go, opt) ->
 
   _frames = signals []
   _models = signals []
-  _hasAdditionalOptions = lift _selectedModel, (model) ->
+  _isDeepLearning = lift _selectedModel, (model) -> model and model.algo is 'deeplearning'
+  _hasReconError = lift _selectedModel, (model) ->
     if model
       if model.algo is 'deeplearning'
         for parameter in model.parameters when parameter.name is 'autoencoder' and parameter.actual_value is yes
           return yes
     return no
-          
+
+  _hasLeafNodeAssignment = lift _selectedModel, (model) ->
+    if model
+      switch model.algo
+        when 'gbm', 'drf'
+          yes
+        else
+          no
+
+  _hasExemplarIndex = lift _selectedModel, (model) ->
+    if model
+      switch model.algo
+        when 'aggregator'
+          yes
+        else
+          no
+
   _computeReconstructionError = signal no
   _computeDeepFeaturesHiddenLayer = signal no
+  _computeLeafNodeAssignment = signal no
   _deepFeaturesHiddenLayer = signal 0
   _deepFeaturesHiddenLayerValue = lift _deepFeaturesHiddenLayer, (text) -> parseInt text, 10
-  _canPredict = lift _selectedFrame, _selectedModel, _hasAdditionalOptions, _computeReconstructionError, _computeDeepFeaturesHiddenLayer, _deepFeaturesHiddenLayerValue, (frame, model, hasAdditionalOptions, computeReconstructionError, computeDeepFeaturesHiddenLayer, deepFeaturesHiddenLayerValue) ->
-    hasFrameAndModel = frame and model or _hasFrames and model or _hasModels and frame
-    hasValidOptions = if hasAdditionalOptions
+  _exemplarIndex = signal 0
+  _exemplarIndexValue = lift _exemplarIndex, (text) -> parseInt text, 10
+  _canPredict = lift _selectedFrame, _selectedModel, _hasReconError, _computeReconstructionError, _computeDeepFeaturesHiddenLayer, _deepFeaturesHiddenLayerValue, _exemplarIndexValue, _hasExemplarIndex, (frame, model, hasReconError, computeReconstructionError, computeDeepFeaturesHiddenLayer, deepFeaturesHiddenLayerValue, exemplarIndexValue, hasExemplarIndex) ->
+    hasFrameAndModel = frame and model or _hasFrames and model or _hasModels and frame or (_hasModels and hasExemplarIndex)
+    hasValidOptions = if hasReconError
       if computeReconstructionError
         yes
       else if computeDeepFeaturesHiddenLayer
@@ -55,14 +82,14 @@ H2O.PredictInput = (_, _go, opt) ->
   unless _hasFrames
     _.requestFrames (error, frames) ->
       if error
-        _exception new Flow.Error 'Error fetching frame list.', error
+        _exception new FlowError 'Error fetching frame list.', error
       else
         _frames (frame.frame_id.name for frame in frames when not frame.is_text)
 
   unless _hasModels
     _.requestModels (error, models) ->
       if error
-        _exception new Flow.Error 'Error fetching model list.', error
+        _exception new FlowError 'Error fetching model list.', error
       else
         #TODO use models directly
         _models (model.model_id.name for model in models)
@@ -88,11 +115,19 @@ H2O.PredictInput = (_, _go, opt) ->
     if destinationKey
       cs += ", predictions_frame: #{stringify destinationKey}"
 
-    if _hasAdditionalOptions()
+    if _hasReconError()
       if _computeReconstructionError()
         cs += ', reconstruction_error: true'
-      else if _computeDeepFeaturesHiddenLayer()
-        cs += ", deep_features_hidden_layer: #{_deepFeaturesHiddenLayerValue()}"
+
+    if _computeDeepFeaturesHiddenLayer()
+      cs += ", deep_features_hidden_layer: #{_deepFeaturesHiddenLayerValue()}"
+
+    if _hasLeafNodeAssignment()
+      if _computeLeafNodeAssignment()
+        cs += ', leaf_node_assignment: true'
+
+    if _hasExemplarIndex()
+      cs += ", exemplar_index: #{_exemplarIndexValue()}"
 
     _.insertAndExecuteCell 'cs', cs
 
@@ -110,9 +145,14 @@ H2O.PredictInput = (_, _go, opt) ->
   frames: _frames
   models: _models
   predict: predict
-  hasAdditionalOptions: _hasAdditionalOptions
+  isDeepLearning: _isDeepLearning
+  hasReconError: _hasReconError
+  hasLeafNodeAssignment: _hasLeafNodeAssignment
+  hasExemplarIndex: _hasExemplarIndex
   computeReconstructionError: _computeReconstructionError
   computeDeepFeaturesHiddenLayer: _computeDeepFeaturesHiddenLayer
+  computeLeafNodeAssignment: _computeLeafNodeAssignment
   deepFeaturesHiddenLayer: _deepFeaturesHiddenLayer
+  exemplarIndex: _exemplarIndex
   template: 'flow-predict-input'
 

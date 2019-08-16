@@ -1,0 +1,21 @@
+#aboutDialog.modal.fade(tabindex='-1', role='dialog', aria-labelledby='aboutDialogLabel', aria-hidden='true')
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal')
+          span(aria-hidden='true') ×
+          span.sr-only 关闭
+        h4#aboutDialogLabel.modal-title 关于 AIR Flow 
+      .modal-body
+        // ko with:about
+        table.flow-form
+          tbody
+            // ko foreach:properties
+            tr
+              th(data-bind='text:caption')
+              td(data-bind='text:value')
+            // /ko
+        // /ko
+      .modal-footer
+        button.btn.btn-default(type='button', data-dismiss='modal') 关闭
+

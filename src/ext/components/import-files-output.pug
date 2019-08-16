@@ -1,0 +1,18 @@
+.flow-widget
+  h3.flow-hint
+    i.fa.fa-cloud-upload
+    span(data-bind='text:title')
+  table.flow-form
+    tbody
+      tr
+        th.flow-narrow 文件
+        td.flow-wide
+          div(data-bind="template: { name:templateOf, foreach:importViews }")
+      // ko if:canParse
+      tr.flow-actions
+        th.flow-narrow 操作
+        td.flow-wide
+          +button('解析这些文件&hellip;', 'cog', 'parse', 'canParse')
+      // /ko
+
+

@@ -1,4 +1,8 @@
+@import '../fonts/lato/fonts.css'
+@import '../fonts/source-code-pro/fonts.css'
+
 @import 'nib'
+
 // @require 'variables'
 tomorrow-current-line = #efefef
 tomorrow-selection = #d6d6d6
@@ -17,9 +21,8 @@ flow-color-yellow-lt = #FBF3B5
 flow-color-orange = #F5A623
 flow-color-link = #428bca
 
-
 normal()
-  font-weight 300
+  font-weight normal !important
 
 monospace()
   font-family 'Source Code Pro', Menlo, Monaco, Consolas, "Courier New", monospace !important
@@ -118,13 +121,13 @@ flow-sidebar-header-height = 31px
 //TODO table.table is used in frame output
 //TODO alert is used in flow-failure
 
-// 
+//
 // Bootstrap overrides
-// 
+//
 
 body
-  font-family Roboto, 'Source Sans Pro', Lato, 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif
-  color #666
+  font-family Lato, 'Source Sans Pro', 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif
+  color #000
   normal()
 
 
@@ -161,9 +164,13 @@ label
   input[type="checkbox"]
     margin-right 6px
 
+.flow-print-title
+  display none
+
 .container-fluid
   padding-left 0
   padding-right 0
+
 .flow-box-notebook
   .container-fluid
     padding 10px 20px 10px flow-box-padding-left
@@ -179,6 +186,9 @@ label
     > .open
       > a, > a:hover, > a:focus
         background-color flow-color-yellow
+
+.dropdown-menu
+  min-width 230px
 
 .flow-box
   dock()
@@ -240,12 +250,12 @@ label
   border-radius 10px
 
 .navbar-brand
-  background url('../img/h2o-flow.png') 15px center no-repeat
+  background url('h2o-flow.png') 15px center no-repeat
   width 160px
   margin-left -15px
 
 .h2o-logo
-  background url('../img/h2o.png') right 9px no-repeat
+  background url('h2o.png') right 9px no-repeat
   width 40px
 
 .table
@@ -267,6 +277,12 @@ th
 .orange
   color: tomorrow-orange
 
+.strong
+  font-weight bold
+
+.bg-yellow
+  background-color flow-color-yellow
+
 //
 //
 //
@@ -276,12 +292,16 @@ th
 
 .flow-header
   border-top 5px solid flow-color-yellow
-  padding 20px 0  
+  padding 20px 0
 
 .flow-cell
   position relative
   padding-left 5px
   border-left 3px solid transparent
+  .flow-cell-time
+    color #999
+    font-size 80%
+    text-align right
   .flow-cell-type
     display none
     position absolute
@@ -347,10 +367,10 @@ th
 .flow-cell-code
   .flow-hide-output
     display none
-  
-// 
-// Styles that apply only to html cells 
-// 
+
+//
+// Styles that apply only to html cells
+//
 
 .flow-html-output
   h1, h2, h3, blockquote
@@ -402,6 +422,11 @@ th
 .flow-monospace
   monospace()
 
+.flow-monospace-label
+  font-size 85%
+  font-weight bold
+  monospace()
+
 .flow-pointer
   cursor pointer
 
@@ -424,7 +449,6 @@ table
       border-bottom 1px solid #eee
     tr:first-child
       border-top 1px solid #eee
-      
 
 .flow-narrow
   white-space nowrap
@@ -526,7 +550,7 @@ table
       color flow-color-link
     .fa-pencil
       display inline
-  
+
 
 
 //TODO move to failure.styl
@@ -545,12 +569,24 @@ table
   overflow visible
   margin-bottom 20px
   table
-    margin 10px 0 20px 0
+    display: block
+    max-height: 500px
+    overflow: auto
+    // margin 10px 0 20px 0
     font-size 85%
     tr:nth-child(odd)
       background-color #eee
     td, th
       padding 2px 5px
+
+    &.flow-confusion-matrix
+      th
+        font-style normal
+        font-weight bold
+      tr:nth-child(odd)
+        background-color inherit
+      td
+        border 1px dotted #999
 
   .lz-table > thead > tr
     border-bottom 1px solid #ccc
@@ -563,6 +599,7 @@ table
 
   // Nasty hacks - FIXME
   .lz-tooltip
+    z-index 1
     table
       margin 0 !important
       font-size 100% !important
@@ -576,6 +613,7 @@ table
     tr
       background-color inherit !important
     td
+      white-space nowrap
       border-left 1px solid #aaa
       border-top 1px solid #aaa
       &:first-child
@@ -683,6 +721,12 @@ table
   .fa-trash-o:hover
     color red
 
+.flow-aside
+  font-size 80%
+  text-transform uppercase
+  color #999
+  border-left 1px dotted #ccc
+
 .flow-help
   mark
     display inline-block
@@ -750,7 +794,7 @@ table
 .twitter-typeahead
   width 97%
 
-.tt-dropdown-menu
+.tt-menu
   background #fff
   border 1px solid #ccc
   width 100%
@@ -764,3 +808,98 @@ table
     background-color flow-color-yellow
   p
     margin 0
+
+@media print
+  .flow-print-title
+    display block
+  .flow-box
+    position static
+    .flow-box-body
+      position static
+      .flow-box-notebook
+        position static
+        .flow-cell-input
+          display none
+      .flow-box-sidebar
+        display none
+    .flow-box-header
+      display none
+    .flow-box-footer
+      display none
+
+.intercom-launcher-preview
+  display none !important
+
+
+.tooltip-tooltip
+  position: relative
+  display: inline-block
+
+.tooltip-tooltip .tooltip-text
+  visibility: hidden
+  background-color: #2c2c2c
+  color: #ffffff
+  padding: 2px 3px
+  white-space: pre
+
+  /* Position the tooltip */
+  position: absolute
+  z-index: 1
+  top: 130%
+  left: 50%
+
+.tooltip-tooltip:hover > .tooltip-text
+  visibility: visible
+
+td:hover > .tooltip-tooltip > .tooltip-text
+  visibility: visible
+
+.gh-btn,
+.gh-ico {
+  float: left;
+  font: bold 11px/14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  overflow: hidden;
+}
+.gh-btn {
+  padding: 2px 5px 2px 4px;
+  color: #333;
+  text-decoration: none;
+  border-radius: 3px;
+}
+.gh-btn {
+  background-color: #eee;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fcfcfc), color-stop(100%, #eee));
+  background-image: -webkit-linear-gradient(top, #fcfcfc 0, #eee 100%);
+  background-image: -moz-linear-gradient(top, #fcfcfc 0, #eee 100%);
+  background-image: -ms-linear-gradient(top, #fcfcfc 0, #eee 100%);
+  background-image: -o-linear-gradient(top, #fcfcfc 0, #eee 100%);
+  background-image: linear-gradient(to bottom, #fcfcfc 0, #eee 100%);
+  background-repeat: no-repeat;
+  border: 1px solid #d5d5d5;
+}
+.gh-btn:hover,
+.gh-btn:focus {
+  text-decoration: none;
+  background-color: #ddd;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #eee), color-stop(100%, #ddd));
+  background-image: -webkit-linear-gradient(top, #eee 0, #ddd 100%);
+  background-image: -moz-linear-gradient(top, #eee 0, #ddd 100%);
+  background-image: -ms-linear-gradient(top, #eee 0, #ddd 100%);
+  background-image: -o-linear-gradient(top, #eee 0, #ddd 100%);
+  background-image: linear-gradient(to bottom, #eee 0, #ddd 100%);
+  border-color: #ccc;
+}
+.gh-btn:active {
+  background-image: none;
+  background-color: #dcdcdc;
+  border-color: #b5b5b5;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+.gh-ico {
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjQwcHgiIGhlaWdodD0iNDBweCIgdmlld0JveD0iMTIgMTIgNDAgNDAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMTIgMTIgNDAgNDAiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwYXRoIGZpbGw9IiMzMzMzMzMiIGQ9Ik0zMiAxMy40Yy0xMC41IDAtMTkgOC41LTE5IDE5YzAgOC40IDUuNSAxNS41IDEzIDE4YzEgMC4yIDEuMy0wLjQgMS4zLTAuOWMwLTAuNSAwLTEuNyAwLTMuMiBjLTUuMyAxLjEtNi40LTIuNi02LjQtMi42QzIwIDQxLjYgMTguOCA0MSAxOC44IDQxYy0xLjctMS4yIDAuMS0xLjEgMC4xLTEuMWMxLjkgMC4xIDIuOSAyIDIuOSAyYzEuNyAyLjkgNC41IDIuMSA1LjUgMS42IGMwLjItMS4yIDAuNy0yLjEgMS4yLTIuNmMtNC4yLTAuNS04LjctMi4xLTguNy05LjRjMC0yLjEgMC43LTMuNyAyLTUuMWMtMC4yLTAuNS0wLjgtMi40IDAuMi01YzAgMCAxLjYtMC41IDUuMiAyIGMxLjUtMC40IDMuMS0wLjcgNC44LTAuN2MxLjYgMCAzLjMgMC4yIDQuNyAwLjdjMy42LTIuNCA1LjItMiA1LjItMmMxIDIuNiAwLjQgNC42IDAuMiA1YzEuMiAxLjMgMiAzIDIgNS4xYzAgNy4zLTQuNSA4LjktOC43IDkuNCBjMC43IDAuNiAxLjMgMS43IDEuMyAzLjVjMCAyLjYgMCA0LjYgMCA1LjJjMCAwLjUgMC40IDEuMSAxLjMgMC45YzcuNS0yLjYgMTMtOS43IDEzLTE4LjFDNTEgMjEuOSA0Mi41IDEzLjQgMzIgMTMuNHoiLz48L3N2Zz4=');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}

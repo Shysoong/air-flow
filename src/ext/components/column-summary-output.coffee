@@ -1,4 +1,9 @@
-H2O.ColumnSummaryOutput = (_, _go, frameKey, frame, columnName) ->
+{ defer, head } = require('lodash')
+
+{ react, lift, link, signal, signals } = require("../../core/modules/dataflow")
+{ stringify } = require('../../core/modules/prelude')
+
+module.exports = (_, _go, frameKey, frame, columnName) ->
   column = head frame.columns
 
   _characteristicsPlot = signal null
@@ -9,7 +14,7 @@ H2O.ColumnSummaryOutput = (_, _go, frameKey, frame, columnName) ->
   renderPlot = (target, render) ->
     render (error, vis) ->
       if error
-        debug error
+        console.debug error
       else
         target vis.element
 
@@ -53,8 +58,12 @@ H2O.ColumnSummaryOutput = (_, _go, frameKey, frame, columnName) ->
         g.limit 1000
       )
 
+  impute = ->
+    _.insertAndExecuteCell 'cs', "imputeColumn frame: #{stringify frameKey}, column: #{stringify columnName}"
+
   inspect = ->
     _.insertAndExecuteCell 'cs', "inspect getColumnSummary #{stringify frameKey}, #{stringify columnName}"
+
 
   defer _go
 
@@ -63,5 +72,6 @@ H2O.ColumnSummaryOutput = (_, _go, frameKey, frame, columnName) ->
   summaryPlot: _summaryPlot
   distributionPlot: _distributionPlot
   domainPlot: _domainPlot
+  impute: impute
   inspect: inspect
   template: 'flow-column-summary-output'

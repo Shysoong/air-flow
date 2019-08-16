@@ -1,0 +1,37 @@
+.flow-widget
+  h3.flow-hint
+    i.fa.fa-info-circle
+    | 数据
+
+  // ko ifnot:hasTables
+  blockquote 没有数据。
+  // /ko
+
+  // ko if:hasTables
+  h4 表格
+  table.flow-form
+    thead
+      tr
+        th(width='1') &nbsp;
+        th 名称
+        th 操作
+    tbody
+      // ko foreach:tables
+      tr
+        td
+          i.fa.fa-info-circle
+        td
+          a(href='#' data-bind='text:label, click:grid')
+        td
+          button.flow-button(type='button' data-bind='click:inspect')
+            i.fa.fa-list
+            span 检查
+          // ko if:canPlot
+          button.flow-button(type='button' data-bind='click:plot')
+            i.fa.fa-bar-chart
+            span 绘图
+          // /ko
+      // /ko
+  // /ko
+  
+

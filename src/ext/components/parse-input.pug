@@ -1,0 +1,91 @@
+.flow-widget
+  h3.flow-hint
+    i.fa.fa-cog
+    | 设置解析
+
+  h4 解析配置
+  table.flow-form
+    tbody
+      tr
+        th.flow-narrow 源
+        td.flow-wide
+          // ko foreach:sourceKeys
+          .flow-hint
+            i.fa.fa-key
+            span(data-bind='text:$data')
+          // /ko
+
+      tr
+        th.flow-narrow ID
+        td.flow-wide
+          input.flow-textbox(type='text' data-bind="value:destinationKey")
+      // ko if:canReconfigure
+      tr
+        th.flow-narrow 解析器
+        td.flow-wide
+          select(data-bind="options:parseTypes, optionsText:'caption', value:parseType")
+      tr
+        th.flow-narrow 分隔符
+        td.flow-wide
+          select(data-bind="options:delimiters, optionsText:'caption', value:delimiter")
+      tr
+        th.flow-narrow 列头
+        td.flow-wide
+          div
+            label
+              input(type='radio' name='hasHeader' value='auto' data-bind='checked:headerOption')
+              span 自动
+          div
+            label
+              input(type='radio' name='hasHeader' value='header' data-bind='checked:headerOption')
+              span 首行包含列名
+          div
+            label
+              input(type='radio' name='hasHeader' value='data' data-bind='checked:headerOption')
+              span 首行包含数据
+      tr
+        th.flow-narrow 选项
+        td.flow-wide
+          div
+            label
+              input(type='checkbox' data-bind='checked:useSingleQuotes')
+              span 启用单引号作为字段引号字符
+          div
+            label
+              input(type='checkbox' data-bind='checked:deleteOnDone')
+              span 完成后删除
+      // /ko
+
+  h4 编辑列名和类型
+  div
+    // ko if:canReconfigure
+    input.flow-textbox(type='text' placeholder='通过列名查找...' data-bind="value:columnNameSearchTerm, valueUpdate:'afterkeydown'")
+    // /ko
+    table.flow-form.flow-monospace
+      tbody
+        // ko foreach:columns
+        tr
+          td(data-bind='text:index')
+          // ko if:$parent.canReconfigure
+          td(style='min-width:100px')
+            input.flow-textbox(type='textbox' data-bind="value:name, attr:{'title':name}")
+          td
+            select(data-bind="options:$parent.dataTypes, value:type")
+          // /ko
+          // ko foreach:data
+          td(data-bind="text:$data")
+          // /ko
+        // /ko
+    div
+      button.flow-button(type='button' data-bind="click:goToPreviousPage, enable:canGoToPreviousPage")
+        i.fa.fa-arrow-left
+        span 前一页
+      button.flow-button(type='button' data-bind="click:goToNextPage, enable:canGoToNextPage")
+        i.fa.fa-arrow-right
+        span 后一页
+
+  .flow-panel
+    button.flow-button(type='button' data-bind='click:parseFiles')
+      i.fa.fa-indent
+      | 解析
+

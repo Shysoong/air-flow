@@ -1,16 +1,28 @@
-H2O.PredictOutput = (_, _go, prediction) ->
+{ defer, map } = require('lodash')
+
+{ stringify } = require('../../core/modules/prelude')
+{ react, lift, link, signal, signals } = require("../../core/modules/dataflow")
+util = require('../../core/modules/util')
+
+module.exports = (_, _go, modelKey, frameKey, predictionFrame, prediction) ->
   if prediction
     { frame, model } = prediction
 
+  predictionFrameKey = predictionFrame.name
   _plots = signals []
   _canInspect = if prediction.__meta then yes else no
 
-  renderPlot = (title, render) ->
+  renderPlot = (title, prediction, render) ->
     container = signal null
+
+    combineWithFrame = ->
+      targetFrameName = "combined-#{predictionFrameKey}"
+
+      _.insertAndExecuteCell 'cs', "bindFrames #{stringify targetFrameName}, [ #{stringify predictionFrameKey}, #{stringify frameKey} ]"
 
     render (error, vis) ->
       if error
-        debug error
+        console.debug error
       else
         $('a', vis.element).on 'click', (e) ->
           $a = $ e.target
@@ -21,13 +33,17 @@ H2O.PredictOutput = (_, _go, prediction) ->
               _.insertAndExecuteCell 'cs', "getModel #{stringify $a.attr 'data-key'}"
         container vis.element
 
-    _plots.push title: title, plot: container
+    _plots.push
+      title: title
+      plot: container
+      combineWithFrame: combineWithFrame
+      canCombineWithFrame: title is 'Prediction'
 
   if prediction
     switch prediction.__meta?.schema_type
-      when 'ModelMetricsBinomial'
+      when 'ModelMetricsBinomial', 'ModelMetricsBinomialGLM'
         if table = _.inspect 'Prediction - Metrics for Thresholds', prediction
-          renderPlot 'ROC Curve', _.plot (g) ->
+          renderPlot 'ROC Curve', prediction, _.plot (g) ->
             g(
               g.path g.position 'fpr', 'tpr'
               g.line(
@@ -40,19 +56,25 @@ H2O.PredictOutput = (_, _go, prediction) ->
             )
 
     for tableName in _.ls prediction
-      if table = _.inspect tableName, prediction
-        if table.indices.length > 1
-          renderPlot tableName, _.plot (g) ->
-            g(
-              g.select()
-              g.from table
-            )
-        else
-          renderPlot tableName, _.plot (g) ->
-            g(
-              g.select 0
-              g.from table
-            )
+      cmTableName = prediction?.cm?.table?.name
+      if tableName is 'Prediction - cm' # Skip the empty section
+          continue
+      else if cmTableName? and tableName? and tableName.indexOf(cmTableName, tableName.length - cmTableName.length) != -1
+        _plots.push util.renderMultinomialConfusionMatrix("Prediction - Confusion Matrix", prediction.cm.table)
+      else
+        if table = _.inspect tableName, prediction
+            if table.indices.length > 1
+              renderPlot tableName, prediction, _.plot (g) ->
+                g(
+                  g.select()
+                  g.from table
+                )
+            else
+              renderPlot tableName, prediction, _.plot (g) ->
+                g(
+                  g.select 0
+                  g.from table
+                )
 
   inspect = ->
     #XXX get this from prediction table

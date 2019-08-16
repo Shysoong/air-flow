@@ -1,4 +1,11 @@
-Flow.Cell = (_, _renderers, type='cs', input='') ->
+{ uniqueId, escape } = require('lodash')
+
+{ act, react, lift, merge, isSignal, signal, signals } = require("../../core/modules/dataflow")
+{ stringify } = require('../../core/modules/prelude')
+util = require('../modules/util')
+failure = require('./failure')
+
+module.exports = (_, _renderers, type='cs', input='') ->
   _guid = do uniqueId
   _type = signal type
   _render = lift _type, (type) -> _renderers[type] _guid
@@ -8,6 +15,7 @@ Flow.Cell = (_, _renderers, type='cs', input='') ->
   _hasError = signal no
   _isBusy = signal no
   _isReady = lift _isBusy, (isBusy) -> not isBusy
+  _time = signal ''
   _hasInput = signal yes
   _input = signal input
   _outputs = signals []
@@ -18,7 +26,7 @@ Flow.Cell = (_, _renderers, type='cs', input='') ->
   _isOutputHidden = signal no
 
   # This is a shim for ko binding handlers to attach methods to
-  # The ko 'cursorPosition' custom binding attaches a getCursortPosition() method to this.
+  # The ko 'cursorPosition' custom binding attaches a getCursorPosition() method to this.
   # The ko 'autoResize' custom binding attaches an autoResize() method to this.
   _actions = {}
 
@@ -66,6 +74,8 @@ Flow.Cell = (_, _renderers, type='cs', input='') ->
     _hasInput yes unless _isCode()
 
   execute = (go) ->
+    startTime = Date.now()
+    _time "Started at #{util.formatClockTime startTime}"
     input = _input().trim()
     unless input
       return if go then go null else undefined 
@@ -74,6 +84,16 @@ Flow.Cell = (_, _renderers, type='cs', input='') ->
     _isBusy yes
 
     clear()
+
+    if _type() == 'sca'
+      # escape backslashes
+      input = input.replace(/\\/g,'\\\\')
+      # escape quotes
+      input = input.replace(/'/g,'\\\'')
+      # escape new-lines
+      input = input.replace(/\n/g, '\\n')
+      # pass the cell body as an argument, representing the scala code, to the appropriate function
+      input = 'runScalaCode ' + _.scalaIntpId() + ', ' + _.scalaIntpAsync() + ', \'' + input + '\''
 
     render input,
       data: (result) ->
@@ -84,16 +104,18 @@ Flow.Cell = (_, _renderers, type='cs', input='') ->
       error: (error) ->
         _hasError yes
         #XXX review
+        console.debug error.cause
         if error.name is 'FlowError'
-          _outputs.push Flow.Failure _, error
+          _outputs.push failure _, error
         else
           _outputs.push
-            text: JSON.stringify error, null, 2
+            text: stringify error, null, 2
             template: 'flow-raw'
         _errors.push error # Only for headless use
       end: ->
         _hasInput _isCode()
         _isBusy no
+        _time util.formatElapsedTime Date.now() - startTime
         if go
           go if _hasError() then _errors.slice 0 else null
         return
@@ -109,6 +131,7 @@ Flow.Cell = (_, _renderers, type='cs', input='') ->
     hasError: _hasError
     isBusy: _isBusy
     isReady: _isReady
+    time: _time
     input: _input
     hasInput: _hasInput
     outputs: _outputs

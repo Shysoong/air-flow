@@ -1,4 +1,14 @@
-H2O.JobsOutput = (_, _go, jobs) ->
+{ defer, map, delay } = require('lodash')
+
+{ stringify } = require('../../core/modules/prelude')
+{ act, react, lift, link, signal, signals } = require("../../core/modules/dataflow")
+
+failure = require('../../core/components/failure')
+FlowError = require('../../core/modules/flow-error')
+util = require('../../core/modules/util')
+format = require('../../core/modules/format')
+
+module.exports = (_, _go, jobs) ->
   _jobViews = signals []
   _hasJobViews = lift _jobViews, (jobViews) -> jobViews.length > 0
   _isLive = signal no
@@ -11,18 +21,28 @@ H2O.JobsOutput = (_, _go, jobs) ->
 
     type = switch job.dest.type
       when 'Key<Frame>'
-        'Frame'
+        '数据帧'
       when 'Key<Model>'
-        'Model'
+        '模型'
+      when 'Key<Grid>'
+        '网格搜索'
+      when 'Key<PartialDependence>'
+        '部分依赖'
+      when 'Key<AutoML>'
+        '自动化建模'
+      when 'Key<ScalaCodeResult>'
+        'Scala代码执行'
+      when 'Key<KeyedVoid>'
+        'Void'
       else
-        'Unknown'
+        '未知'
 
     destination: job.dest.name
     type: type
     description: job.description
-    startTime: Flow.Format.Time new Date job.start_time
-    endTime: Flow.Format.Time new Date job.start_time + job.msec
-    elapsedTime: Flow.Util.formatMilliseconds job.msec
+    startTime: format.Time new Date job.start_time
+    endTime: format.Time new Date job.start_time + job.msec
+    elapsedTime: util.formatMilliseconds job.msec
     status: job.status
     view: view
 
@@ -34,7 +54,7 @@ H2O.JobsOutput = (_, _go, jobs) ->
     _.requestJobs (error, jobs) ->
       _isBusy no
       if error
-        _exception Flow.Failure _, new Flow.Error 'Error fetching jobs', error
+        _exception failure _, new FlowError '抓取任务出错', error
         _isLive no
       else
         _jobViews map jobs, createJobView

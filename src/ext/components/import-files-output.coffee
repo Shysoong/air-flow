@@ -1,7 +1,12 @@
-H2O.ImportFilesOutput = (_, _go, _importResults) ->
-  _allPaths = flatten compact map _importResults, (result) -> result.files
-  _canParse = _allPaths.length > 0
-  _title = "#{_allPaths.length} / #{_importResults.length} files imported."
+{ flatten, compact, defer, map } = require('lodash')
+
+{ stringify } = require('../../core/modules/prelude')
+{ react, lift, link, signal, signals } = require("../../core/modules/dataflow")
+
+module.exports = (_, _go, _importResults) ->
+  _allFrames = flatten compact map _importResults, (result) -> result.destination_frames
+  _canParse = _allFrames.length > 0
+  _title = "#{_allFrames.length} / #{_importResults.length} 个文件被导入。"
 
   createImportView = (result) ->
     #TODO dels?
@@ -13,8 +18,8 @@ H2O.ImportFilesOutput = (_, _go, _importResults) ->
   _importViews = map _importResults, createImportView
 
   parse = ->
-    paths = map _allPaths, stringify
-    _.insertAndExecuteCell 'cs', "setupParse paths: [ #{paths.join ','} ]"
+    paths = map _allFrames, stringify
+    _.insertAndExecuteCell 'cs', "setupParse source_frames: [ #{paths.join ','} ]"
 
   defer _go
 

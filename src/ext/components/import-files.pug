@@ -1,0 +1,74 @@
+.flow-widget
+  h3.flow-hint
+    i.fa.fa-files-o
+    | 导入文件
+  table.flow-form
+    tbody
+      tr
+        th(width='125') 查找：
+        td
+          table(width='100%')
+            tbody
+              tr
+                td.flow-wide
+                  input.flow-textbox(type='text' style='width:100%' data-bind="value:specifiedPath, valueUpdate:'keydown', enterKey:tryImportFiles, typeahead:listPathHints" placeholder='输入一个文件或者目录的路径然后按回车键')
+                td.flow-narrow(style='padding:0')
+                  button.flow-button(type='button' data-bind='click:tryImportFiles' title='查找文件')
+                    i.fa.fa-search
+
+      // ko if:hasErrorMessage
+      tr
+        th &nbsp;
+        td(data-bind='text:exception')
+      // /ko
+
+      // ko if:hasImportedFiles
+      tr
+        th 查找结果：
+        // ko if:hasUnselectedFiles
+        td
+          div
+            span(data-bind='text:importedFileCount')
+            |   
+            // ko if:hasUnselectedFiles
+            a(href='#' data-bind='click:selectAllFiles') 添加所有
+            // /ko
+          div.flow-well
+            // ko foreach:importedFiles
+            // ko ifnot:isSelected
+            .flow-hint.flow-pointer(data-bind='click:select')
+              i.fa.fa-plus(title='Select file')
+              span(data-bind="text:path")
+            // /ko
+            // /ko
+        // /ko
+        // ko ifnot:hasUnselectedFiles
+        td (所有文件都已被添加)
+        // /ko
+      // /ko
+      tr
+        th 选中的文件：
+        td
+          div
+            span(data-bind='text:selectedFileCount')
+            |    
+            // ko if:hasSelectedFiles
+            a(href='#' data-bind='click:deselectAllFiles') 清除所有
+            // /ko
+
+          // ko if:hasSelectedFiles
+          div.flow-well
+            // ko foreach:selectedFiles
+            .flow-hint.flow-pointer(data-bind='click:deselect')
+              i.fa.fa-remove(title='Deselect file')
+              span(data-bind='text:path')
+            // /ko
+          // /ko
+      tr.flow-actions
+        th 操作：
+        td
+          button.flow-button(type='button' data-bind='click:importSelectedFiles, enable:hasSelectedFiles')
+            i.fa.fa-cloud-upload
+            | 导入
+// /ko
+

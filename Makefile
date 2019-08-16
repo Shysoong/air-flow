@@ -1,8 +1,9 @@
-B=node_modules/.bin
-O=src/main/resources/www/steam
+default:
+	npm run build
+	cp -r build/* ../h2o-3/h2o-web/src/main/resources/www/flow/
 
-default: 
-	npm run build --output=../h2o-dev/h2o-web/src/main/resources/www/flow
+install:
+	npm install
 
 build:
 	npm run build
@@ -13,23 +14,19 @@ clean:
 watch:
 	npm run watch
 
-check:
+start:
+	npm run start
 
 launch:
-	java -Dwebdev=1 -Xmx4g -jar ../h2o-app/build/libs/h2o-app.jar
+	java -Dwebdev=1 -Xmx4g -jar ../h2o-3/build/h2o.jar
 
 unit-test:
-	$B/gulp build-test-script && node $O/js/steam-tests.js -u | $B/faucet 
+	npm run test
 
 test-raw:
-	$B/gulp build-test-script && node $O/js/steam-tests.js -s
+	npm run test-raw
 
 test:
-	$B/gulp build-test-script && node $O/js/steam-tests.js -s | $B/faucet
+	npm run headless
 
-coverage:
-	@mkdir -p $O/coverage
-	$B/gulp build-test-script && $B/istanbul cover --dir $O/coverage -x "**/lib/**" $O/js/steam-tests.js && $B/istanbul report --dir $O/coverage cobertura
-
-.PHONY: default watch clean unit-test test-raw test coverage launch 
-
+.PHONY: default install build watch start clean unit-test test-raw test launch

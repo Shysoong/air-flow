@@ -1,0 +1,93 @@
+.flow-widget
+  +subtitle('Partial Dependence', 'link')
+
+  // ko if:exception
+  div(data-bind="template: { name:'flow-failure', data:exception }")
+  // /ko
+
+  table.flow-form
+    tbody
+      tr
+        th(width='170')
+          label 将目标PDP保存为：
+        td
+          input(data-bind="value:destinationKey" style='width:250px')
+      tr
+        th
+          label 模型：
+        td(colspan='2')
+          select(data-bind="options:models, value:selectedModel, optionsCaption:'(Select)'")
+      tr
+        th
+          label 数据集：
+        td(colspan='2')
+          select(data-bind="options:frames, value:selectedFrame, optionsCaption:'(Select)', event:{ change:updateColumns}")
+      tr
+        th row_index
+        td
+          input.flow-textbox(type='text' data-bind="value:row_index")
+        td Row for which partial dependence will be calculated instead of the whole input frame (-1 for all).
+      tr
+        th nbins
+        td
+          input.flow-textbox(type='text' data-bind="value:nbins")
+        td PDP应该计算多少层。层数越高，速度越慢。
+      tr
+        th
+          label 选择列？
+        td 
+          input(type='checkbox' data-bind='checked:useCustomColumns')
+        td Checking this will allow you to select custom columns for PDP. By default, the top 10 features are used. Those features are sorted by variable importance.
+      tr(data-bind='visible:useCustomColumns')
+        th 
+          label 可用列：
+        td(colspan='2')
+          div(style='height:25px')
+            input.flow-textbox(type='text' placeholder='查找...' data-bind="value:searchTerm, valueUpdate:'afterkeydown'")
+          div(style='font-size:80%' data-bind='text:searchCaption')
+          div(style='margin-bottom:5px;height:300px;overflow:auto;border:1px dotted #ccc')
+            table
+              tbody
+                // ko foreach:visibleItems
+                tr
+                  td
+                    label
+                      input(type='checkbox' data-bind='checked:isSelected')
+                      span(data-bind='text:value')
+                  td.flow-narrow.flow-aside(data-bind='text:type')
+                  td.flow-narrow.flow-aside(data-bind='text:missingLabel')
+                // /ko
+
+          table(style='margin-bottom:10px;width:100%')
+            tbody
+              tr
+                td
+                  +button('全选', 'check-square-o', 'selectFiltered', 'hasFilteredItems')
+                  +button('全不选', 'square-o', 'deselectFiltered', 'hasFilteredItems')
+                td(style='text-align:right')
+                  +button('前 100 列', 'arrow-left', 'goToPreviousPage', 'canGoToPreviousPage')
+                  +button('后 100 列', 'arrow-right', 'goToNextPage', 'canGoToNextPage')
+      tr
+        th
+          label 2D PDP列：
+        td
+          div
+            // ko foreach:colums2d
+            div
+              select(data-bind="options:columnValues, value:firstColumn")
+              select(data-bind="options:columnValues, value:secondColumn")
+              +button('Remove', 'trash', 'removeSelf', true)
+            // /ko
+          div(style='height:25px')
+            +button('Add', 'plus', 'addColumns2d', 'selectedFrame')
+        td 选择列名对列表以绘制2D部分依赖关系图。
+      tr
+        th
+          label 操作：
+        td
+          button.flow-button(type='button' data-bind='click:compute, enable:canCompute')
+            i.fa.fa-link
+            span 计算
+
+
+

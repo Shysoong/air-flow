@@ -1,0 +1,45 @@
+.flow-widget
+  +subtitle('预测列表', 'bolt')
+
+  // ko ifnot:hasPredictions
+  blockquote 您的AIR云端还没有预测信息。
+  .flow-panel
+    +button('进行预测&hellip;', 'bolt', 'predict')
+  // /ko
+  
+  // ko if:hasPredictions
+  table.flow-form
+    tbody
+      tr
+        th(width='1' style='font-size:inherit')
+          input(type='checkbox' title='全选或全不选' data-bind="checked:checkAllPredictions")
+        th(width='1') &nbsp;
+        th 模型
+        th 数据帧
+        th.flow-right 操作
+    tbody
+      // ko foreach:predictionViews
+      tr
+        td
+          input(type='checkbox' data-bind="checked:isChecked")
+        td
+          +fa('bolt')
+        td(data-bind='text:modelKey')
+        td(data-bind='text:frameKey')
+        td.flow-right 
+          // ko if:hasFrame
+          +button('查看详情', 'bolt', 'view')
+          // /ko
+          //- +button('Inspect', 'list', 'inspect')
+      // /ko
+  .flow-panel
+    //- +button('Compare selected predictions&hellip;', 'area-chart', 'comparePredictions', 'canComparePredictions')
+    //- +button('Plot predictions', 'bar-chart', 'plotPredictions')
+    //- TODO handle non-binomial models
+    //- +button('Plot scores', 'bar-chart', 'plotScores')
+    //- +button('Plot metrics', 'bar-chart', 'plotMetrics')
+    //- +button('Inspect', 'list', 'inspect')
+
+  //- h4 ROC Curve
+  //- .flow-plot(data-bind='raw:rocCurve')
+  // /ko

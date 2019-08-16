@@ -1,0 +1,35 @@
+h4.flow-hint
+  i.fa.fa-files-o
+  | 流程
+
+.flow-sidebar-content
+  .flow-browser
+    // ko ifnot:hasDocs
+    p
+      | 您还没有流程笔记。要保存一个笔记，点击
+      i.fa.fa-save
+      | &nbsp;图标，或者从菜单中选择 流程 
+      i.fa.fa-angle-right
+      | &nbsp;保存流程。
+
+    // /ko
+
+    // ko if:hasDocs
+    table
+      tbody
+        // ko foreach:docs
+        tr
+          td
+            i.fa.fa-file-o
+          td
+            div
+              +link('@name', 'load')
+            .flow-small(data-bind='text:fromNow, attr:{title:date}')
+          td
+            i.fa.fa-trash-o.flow-pointer(data-bind='click:purge')
+        // /ko
+    // /ko
+
+    div(style='margin-top:10px')
+      +button('刷新', 'refresh', 'loadNotebooks')
+
