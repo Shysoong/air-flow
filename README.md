@@ -41,12 +41,12 @@ Flow是用CoffeeScript编写的，有一堆真正的嵌入式
 
 2. 在IDE中不运行gradle启动air-3 （这会覆盖本地flow构建）
 
-### Testing a new Flow Feature with Sparkling Water  
+### 在Sparkling Water中测试Flow的新特性  
 
 Flow也可以和[Sparkling Water](https://github.com/h2oai/sparkling-water)一起使用。 
 遵循本指南在Flow中开发和测试新的Sparkling Water特性。
 
-##### 复制构建好的js到另外一 
+##### 复制构建好的js到另外一处
 在 `air-3` 目录下运行：  
 `cp h2o-web/src/main/resources/www/flow/js/* h2o-web/lib/h2o-flow/build/js/`  
 
