@@ -687,8 +687,8 @@ exports.init = (_, _renderers) ->
         menuDivider
         createMenuItem '文档', displayDocumentation
         createMenuItem '常见问题', displayFAQ
-        createMenuItem 'Air.ai', goToUrl 'http://www.skyease.io/'
-        createMenuItem 'Air on Github', goToUrl 'https://github.com/Shysoong/air-flow'
+        createMenuItem '官网', goToUrl 'http://www.skyease.io/'
+        createMenuItem 'Air Github 地址', goToUrl 'https://github.com/Shysoong/air-flow'
         createMenuItem '报告问题', goToUrl 'http://jira.h2o.ai'
         createMenuItem '论坛 / 提问', goToUrl 'https://groups.google.com/d/forum/h2ostream'
         menuDivider

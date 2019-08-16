@@ -24,7 +24,7 @@ _homeMarkdown = """
 ###### 在Github上给AIR点个星星吧 !
 
 <span class="github-btn">
-    <a class="gh-btn" href="https://github.com/h2oai/h2o-3/" target="_blank">
+    <a class="gh-btn" href="https://github.com/Shysoong/air-3" target="_blank">
       <span class="gh-ico"></span><span class="gh-text">Star</span>
     </a>
 </span>

@@ -13,45 +13,44 @@ Flow是用CoffeeScript编写的，有一堆真正的嵌入式
 
 ## 文档
 
-在[h2o-3](https://github.com/h2oai/h2o-3)代码库中又一个关于*AIR Flow*很好的用户指南[user guide](https://github.com/h2oai/h2o-3/blob/8858aac90dce771f9025b16948b675f92b542715/h2o-docs/src/product/flow/README.md) 。
+在[air-3](https://github.com/Shysoong/air-3)代码库中又一个关于*AIR Flow*很好的用户指南[user guide](https://github.com/Shysoong/air-3/blob/8858aac90dce771f9025b16948b675f92b542715/h2o-docs/src/product/flow/README.md) 。
 
 ## 开发环境配置
 
-强烈推荐您 clone [h2o-3](https://github.com/h2oai/h2o-3) 和 air-flow 在同一个目录中。 
+强烈推荐您 clone [air-3](https://github.com/Shysoong/air-3) 和 air-flow 在同一个目录中。 
 
-如果你还没有，按照这些说明为[h2o-3](https://github.com/h2oai/h2o-3)开发[set up your preferred IDE environment](https://github.com/h2oai/h2o-3#47-setting-up-your-preferred-ide-environment) 。
+如果你还没有，按照这些说明为[air-3](https://github.com/Shysoong/air-3)开发[设置您喜欢的IDE环境](https://github.com/Shysoong/air-3#47-setting-up-your-preferred-ide-environment) 。
     
-1. 首先构建 H2O-3  `cd h2o-3 && ./gradlew build -x test` (在 h2o-E 目录下)
+1. 首先构建 AIR-3  `cd air-3 && ./gradlew build -x test` (在 air-3 目录下)
 
-2. 为h2o-flow安装npm依赖 `npm i` (在 h2o-flow 目录下)
+2. 为air-flow安装npm依赖 `npm i` (在 air-flow 目录下)
 
 ### 使用浏览器自动实时刷新开发
 
 1. 以关闭跨域资源共享检查的方式启动H2O-3 `java -Dsys.ai.h2o.disable.cors=true -jar build/h2o.jar` (在 h2o-3 目录下)
 
-2. 启动 webpack dev-server `npm run start` (在 h2o-flow 目录下)
+2. 启动 webpack dev-server `npm run start` (在 air-flow 目录下)
 
 这将打开一个带有自动刷新开发服务器的浏览器窗口。
 
 
-### h2o-3 实例中开发
+### air-3 实例中开发
 
-1. 运行 `make` 命令。这将复制构建资源到紧邻的h2o-3目录中。
+1. 运行 `make` 命令。这将复制构建资源到紧邻的air-3目录中。
 
-2. 在IDE中不运行gradle启动h2o-3 （这会覆盖本地flow构建）
+2. 在IDE中不运行gradle启动air-3 （这会覆盖本地flow构建）
 
 ### Testing a new Flow Feature with Sparkling Water  
 
-Flow can also be used with [Sparkling Water](https://github.com/h2oai/sparkling-water)  
-Follow this guide develop and test new Sparkling Water features in Flow.  
-adapted from the comments on this PR https://github.com/h2oai/h2o-flow/pull/13  
+Flow也可以和[Sparkling Water](https://github.com/h2oai/sparkling-water)一起使用。 
+遵循本指南在Flow中开发和测试新的Sparkling Water特性。
 
-##### copy built js files from one place to another  
-in the `h2o-3` directory run:  
+##### 复制构建好的js到另外一 
+在 `air-3` 目录下运行：  
 `cp h2o-web/src/main/resources/www/flow/js/* h2o-web/lib/h2o-flow/build/js/`  
 
-##### 构建 h2o-3  
-在 `h2o-3` 目录下运行：
+##### 构建 air-3  
+在 `air-3` 目录下运行：
 `./gradlew publishToMavenLocal -x test`  
 
 ##### 构建 sparkling water  
