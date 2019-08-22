@@ -4,13 +4,13 @@
       .modal-header
         button.close(type='button', data-dismiss='modal')
           span ×
-          span.sr-only Close
-        h4.modal-title Upload Dataset...
+          span.sr-only 关闭
+        h4.modal-title 上传数据集...
       .modal-body
         form(enctype='multipart/form-data' data-bind='element:form')
           input(name='file' type='file' data-bind='file:file')
 
       .modal-footer
-        button.btn.btn-default(type='button' data-bind='click:decline') Cancel
-        button.btn.btn-primary(type='button' data-bind='click:accept') Upload
+        button.btn.btn-default(type='button' data-bind='click:decline') 取消
+        button.btn.btn-primary(type='button' data-bind='click:accept') 上传
 

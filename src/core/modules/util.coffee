@@ -185,6 +185,7 @@ renderMultinomialConfusionMatrix = (title, cm) ->
 
 module.exports =
   describeCount: describeCount
+  describeCount4Cn: describeCount4Cn
   fromNow: fromNow
   formatBytes: formatBytes
   formatMilliseconds: formatMilliseconds

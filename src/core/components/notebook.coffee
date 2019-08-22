@@ -616,7 +616,7 @@ exports.init = (_, _renderers) ->
         createMenuItem '生成拷贝...', duplicateNotebook
         menuDivider
         createMenuItem '运行所有单元格', runAllCells
-        createMenuItem '运行当前单元格下方的所有单元格', continueRunningAllCells
+        createMenuItem '运行后续所有单元格', continueRunningAllCells
         menuDivider
         createMenuItem '切换所有单元格可见性', toggleAllInputs
         createMenuItem '切换所有单元格输出可见性', toggleAllOutputs
@@ -749,15 +749,15 @@ exports.init = (_, _renderers) ->
     #[ 'shift+enter', 'run cell, select below', runCellAndSelectBelow ]
     #[ 'ctrl+enter', 'run cell', runCell ]
     #[ 'alt+enter', 'run cell, insert below', runCellAndInsertBelow ]
-    [ 'y', '转到代码形式', convertCellToCode ]
-    [ 'm', '转到markdown形式', convertCellToMarkdown ]
-    [ 'r', '转到原始形式', convertCellToRaw ]
-    [ '1', '转到一级标题形式', convertCellToHeading 1 ]
-    [ '2', '转到二级标题形式', convertCellToHeading 2 ]
-    [ '3', '转到三级标题形式', convertCellToHeading 3 ]
-    [ '4', '转到四级标题形式', convertCellToHeading 4 ]
-    [ '5', '转到五级标题形式', convertCellToHeading 5 ]
-    [ '6', '转到六级标题形式', convertCellToHeading 6 ]
+    [ 'y', '转到代码格式', convertCellToCode ]
+    [ 'm', '转到markdown格式', convertCellToMarkdown ]
+    [ 'r', '转到原始格式', convertCellToRaw ]
+    [ '1', '转到一级标题格式', convertCellToHeading 1 ]
+    [ '2', '转到二级标题格式', convertCellToHeading 2 ]
+    [ '3', '转到三级标题格式', convertCellToHeading 3 ]
+    [ '4', '转到四级标题格式', convertCellToHeading 4 ]
+    [ '5', '转到五级标题格式', convertCellToHeading 5 ]
+    [ '6', '转到六级标题格式', convertCellToHeading 6 ]
     [ 'up', '选择上一个单元格', selectPreviousCell ]
     [ 'down', '选择下一个单元格', selectNextCell ]
     [ 'k', '选择上一个单元格', selectPreviousCell ]
