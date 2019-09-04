@@ -11,3 +11,4 @@ lib
 *.sublime*project
 *.sublime*workspace
 sublime-projects
+air-flow.code-workspace

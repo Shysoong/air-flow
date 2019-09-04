@@ -1,6 +1,6 @@
 default:
 	npm run build
-	cp -r build/* ../h2o-3/h2o-web/src/main/resources/www/flow/
+	cp -r build/* ../air-3/h2o-web/src/main/resources/www/flow/
 
 install:
 	npm install
@@ -18,7 +18,7 @@ start:
 	npm run start
 
 launch:
-	java -Dwebdev=1 -Xmx4g -jar ../h2o-3/build/h2o.jar
+	java -Dwebdev=1 -Xmx4g -jar ../air-3/build/h2o.jar
 
 unit-test:
 	npm run test

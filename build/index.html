@@ -4,17 +4,16 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>H2O Flow</title>
-    <meta name="description" content="H2O Flow">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic|Source+Code+Pro:400,600" type="text/css"><!--[if lt IE 9]>
+    <title>AIR Flow</title>
+    <meta name="description" content="AIR Flow"><!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script><![endif]-->
   <link rel="shortcut icon" href="favicon.ico"><link href="css/flow.css" rel="stylesheet"></head>
   <body><!--[if lt IE 9]>
     <p class="browsehappy">
-      You are using an <strong>outdated</strong> browser.
-      Please <a href="http://browsehappy.com/">upgrade your browser</a>
-      to improve your experience.
+      您正在使用的是一个 <strong>过时</strong> 的浏览器。
+      请 <a href="http://browsehappy.com/">更新您的浏览器</a>
+      以提升您的体验。
     </p><![endif]-->
     <!-- ko with:view-->
     <h2 class="flow-print-title" data-bind="text:name"></h2>
@@ -27,7 +26,7 @@
           <!-- ko with:sidebar-->
 <div class="flow-sidebar">
   <div class="flow-sidebar-header">
-    <div class="flow-tabs flow-pointer"><span class="flow-tab" data-bind="css:{'active':isOutlineMode}, click:switchToOutline">Outline</span><span class="flow-tab" data-bind="css:{'active':isBrowserMode}, click:switchToBrowser">Flows</span><span class="flow-tab" data-bind="css:{'active':isClipboardMode}, click:switchToClipboard">Clips</span><span class="flow-tab" data-bind="css:{'active':isHelpMode}, click:switchToHelp">Help</span></div>
+    <div class="flow-tabs flow-pointer"><span class="flow-tab" data-bind="css:{'active':isOutlineMode}, click:switchToOutline">大纲</span><span class="flow-tab" data-bind="css:{'active':isBrowserMode}, click:switchToBrowser">流程</span><span class="flow-tab" data-bind="css:{'active':isClipboardMode}, click:switchToClipboard">收藏</span><span class="flow-tab" data-bind="css:{'active':isHelpMode}, click:switchToHelp">帮助</span></div>
   </div>
   <div class="flow-sidebar-body">
     <div data-bind="template:{ name:'flow-outline', data:outline}, visible:isOutlineMode"></div>
@@ -47,7 +46,7 @@
       <tr>
         <td width="1"><i class="fa fa-circle" style="color:#1d9d74"></i><i class="fa fa-cog fa-spin"></i></td>
         <td data-bind="text:message"></td>
-        <td width="1">Connections:</td>
+        <td width="1" style="white-space:nowrap;">链接数:</td>
         <td class="flow-right" width="1" data-bind="text:connections"></td>
         <td class="h2o-logo" width="1">&nbsp;</td>
       </tr>
@@ -78,7 +77,7 @@
       </div>
       <div class="flow-box-blocker" data-bind="visible:isRunningAll">
         <div class="flow-playbar">
-          <div><span data-bind="text:runningCaption"></span><span class="flow-playbar-stop" data-bind="click:stopRunningAll"><i class="fa fa-stop"></i><span>STOP</span></span></div>
+          <div><span data-bind="text:runningCaption"></span><span class="flow-playbar-stop" data-bind="click:stopRunningAll"><i class="fa fa-stop"></i><span>结束</span></span></div>
           <div class="flow-playbar-progress">
             <div class="flow-playbar-progress-bar" data-bind="style:{width:runningPercent}"></div>
           </div>
@@ -96,19 +95,19 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button class="close" type="button" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="keyboardHelpDialogLabel">Keyboard Shortcuts</h4>
+        <button class="close" type="button" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+        <h4 class="modal-title" id="keyboardHelpDialogLabel">键盘快捷键</h4>
       </div>
       <div class="modal-body">
         <table class="flow-form">
           <tbody>
             <tr>
               <td width="50%">
-                <h5>Command Mode</h5>
+                <h5>命令行模式</h5>
                 <div data-bind="template:{ name:'flow-keyboard-shortcut-table', data:normalMode}"></div>
               </td>
               <td width="50%">
-                <h5>Edit Mode</h5>
+                <h5>编辑模式</h5>
                 <div data-bind="template:{ name:'flow-keyboard-shortcut-table', data:editMode}"></div>
               </td>
             </tr>
@@ -116,7 +115,7 @@
         </table>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+        <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
       </div>
     </div>
   </div>
@@ -126,8 +125,8 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button class="close" type="button" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="aboutDialogLabel">About H<sub>2</sub>O Flow </h4>
+        <button class="close" type="button" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+        <h4 class="modal-title" id="aboutDialogLabel">关于 AIR Flow </h4>
       </div>
       <div class="modal-body">
         <!-- ko with:about-->
@@ -144,7 +143,7 @@
         <!-- /ko-->
       </div>
       <div class="modal-footer">
-        <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+        <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
       </div>
     </div>
   </div>
@@ -185,7 +184,7 @@
     </script>
     <script type="text/html" id="flow-navbar">
 <div class="navbar-header">
-  <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#flow-compass"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><span class="navbar-brand flow-logo"></span>
+  <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#flow-compass"><span class="sr-only">切换导航</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><span class="navbar-brand flow-logo"></span>
 </div>
 <!-- ko if:menus-->
 <div class="collapse navbar-collapse" id="flow-compass">
@@ -220,7 +219,7 @@
       <tr>
         <td width="1"><i class="fa fa-circle" style="color:#1d9d74"></i><i class="fa fa-cog fa-spin"></i></td>
         <td data-bind="text:message"></td>
-        <td width="1">Connections:</td>
+        <td width="1" style="white-space:nowrap;">链接数:</td>
         <td class="flow-right" width="1" data-bind="text:connections"></td>
         <td class="h2o-logo" width="1">&nbsp;</td>
       </tr>
@@ -231,7 +230,7 @@
     <script type="text/html" id="flow-sidebar">
 <div class="flow-sidebar">
   <div class="flow-sidebar-header">
-    <div class="flow-tabs flow-pointer"><span class="flow-tab" data-bind="css:{'active':isOutlineMode}, click:switchToOutline">Outline</span><span class="flow-tab" data-bind="css:{'active':isBrowserMode}, click:switchToBrowser">Flows</span><span class="flow-tab" data-bind="css:{'active':isClipboardMode}, click:switchToClipboard">Clips</span><span class="flow-tab" data-bind="css:{'active':isHelpMode}, click:switchToHelp">Help</span></div>
+    <div class="flow-tabs flow-pointer"><span class="flow-tab" data-bind="css:{'active':isOutlineMode}, click:switchToOutline">大纲</span><span class="flow-tab" data-bind="css:{'active':isBrowserMode}, click:switchToBrowser">流程</span><span class="flow-tab" data-bind="css:{'active':isClipboardMode}, click:switchToClipboard">收藏</span><span class="flow-tab" data-bind="css:{'active':isHelpMode}, click:switchToHelp">帮助</span></div>
   </div>
   <div class="flow-sidebar-body">
     <div data-bind="template:{ name:'flow-outline', data:outline}, visible:isOutlineMode"></div>
@@ -242,7 +241,7 @@
 </div>
     </script>
     <script type="text/html" id="flow-help">
-<h4 class="flow-hint"><i class="fa fa-lightbulb-o"></i>Help</h4>
+<h4 class="flow-hint"><i class="fa fa-lightbulb-o"></i>帮助</h4>
 <div class="flow-help-toolbar"><a class="flow-help-toolbar-button" href="#" data-bind="click:goHome"><i class="fa fa-home"></i></a>
   <!-- ko if:canGoBack--><a class="flow-help-toolbar-button" href="#" data-bind="click:goBack"><i class="fa fa-arrow-left"></i></a>
   <!-- /ko-->
@@ -260,7 +259,7 @@
 </div>
     </script>
     <script type="text/html" id="flow-outline">
-<h4 class="flow-hint"><i class="fa fa-list"></i>Outline</h4>
+<h4 class="flow-hint"><i class="fa fa-list"></i>大纲视图</h4>
 <div class="flow-sidebar-content">
   <div class="flow-outline">
     <table>
@@ -279,11 +278,11 @@
 </div>
     </script>
     <script type="text/html" id="flow-browser">
-      <h4 class="flow-hint"><i class="fa fa-files-o"></i>Flows</h4>
+      <h4 class="flow-hint"><i class="fa fa-files-o"></i>流程</h4>
       <div class="flow-sidebar-content">
         <div class="flow-browser">
           <!-- ko ifnot:hasDocs-->
-          <p>You have no saved notebooks. To save a notebook, click the <i class="fa fa-save"></i>&nbsp;icon, or choose File <i class="fa fa-angle-right"></i>&nbsp;Save from the application menu.</p>
+          <p>您还没有流程笔记。要保存一个笔记，点击<i class="fa fa-save"></i>&nbsp;图标，或者从菜单中选择 流程 <i class="fa fa-angle-right"></i>&nbsp;保存流程。</p>
           <!-- /ko-->
           <!-- ko if:hasDocs-->
           <table>
@@ -303,35 +302,35 @@
           </table>
           <!-- /ko-->
           <div style="margin-top:10px">
-                <button class="flow-button" type="button" data-bind="click:loadNotebooks"><i class="fa fa-refresh"></i><span>Refresh</span>
+                <button class="flow-button" type="button" data-bind="click:loadNotebooks"><i class="fa fa-refresh"></i><span>刷新</span>
                 </button>
           </div>
         </div>
       </div>
     </script>
     <script type="text/html" id="flow-clipboard">
-      <h4 class="flow-hint"><i class="fa fa-clipboard"></i>Clipboard</h4>
+      <h4 class="flow-hint"><i class="fa fa-clipboard"></i>剪贴板</h4>
       <div class="flow-sidebar-content">
         <div class="flow-clipboard">
-          <h6>My Clips <span data-bind="text:userClipCount"></span></h6>
+          <h6>我的收藏夹 <span data-bind="text:userClipCount"></span></h6>
           <!-- ko if:hasUserClips-->
           <div data-bind="template:{ name:'flow-clips', data:userClips }"></div>
           <!-- /ko-->
           <!-- ko ifnot:hasUserClips-->
-          <p>You have no clips. To save a clip into this list, click the <i class="fa fa-paperclip"></i>&nbsp; paperclip next to the cell.<br><br>Click on a clip to insert it into your notebook. Click the <i class="fa fa-play-circle"></i>&nbsp;button to insert and execute the clip.</p>
+          <p>您的收藏夹内目前还没有内容剪辑（代码片段）。 若要将剪辑保存到此列表中，请单击单元格旁边的 <i class="fa fa-paperclip"></i>&nbsp; 回形针图标。<br><br>在代码片段上点击可以把它插入的代码笔记本中。 点击 <i class="fa fa-play-circle"></i>&nbsp;按钮可以插入并运行代码片段。</p>
           <!-- /ko-->
-          <h6>System <span data-bind="text:systemClipCount"></span></h6>
+          <h6>系统内置 <span data-bind="text:systemClipCount"></span></h6>
           <div data-bind="template:{ name:'flow-clips', data:systemClips }"></div>
-          <h6>Trash <span data-bind="text:trashClipCount"></span></h6>
+          <h6>回收站 <span data-bind="text:trashClipCount"></span></h6>
           <!-- ko if:hasTrashClips-->
           <div data-bind="template:{ name:'flow-clips', data:trashClips }"></div>
           <div style="margin-top:10px">
-                <button class="flow-button" type="button" data-bind="click:emptyTrash"><i class="fa fa-trash"></i><span>Empty Trash</span>
+                <button class="flow-button" type="button" data-bind="click:emptyTrash"><i class="fa fa-trash"></i><span>清空回收站</span>
                 </button>
           </div>
           <!-- /ko-->
           <!-- ko ifnot:hasTrashClips-->
-          <p>Trash is empty. Cells that you cut or delete from your notebook appear here.</p>
+          <p>回收站目前是空的。从你的notebook中剪切或者删除的单元格将会出现在这里。</p>
           <!-- /ko-->
         </div>
       </div>
@@ -569,14 +568,14 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button class="close" type="button" data-dismiss="modal"><span>×</span><span class="sr-only">Close</span></button>
+        <button class="close" type="button" data-dismiss="modal"><span>×</span><span class="sr-only">关闭</span></button>
         <h4 class="modal-title" data-bind="html:title"></h4>
       </div>
       <div class="modal-body">
         <div data-bind="text:message"></div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" type="button" data-bind="click:accept">OK</button>
+        <button class="btn btn-primary" type="button" data-bind="click:accept">确认</button>
       </div>
     </div>
   </div>
@@ -587,7 +586,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button class="close" type="button" data-dismiss="modal"><span>×</span><span class="sr-only">Close</span></button>
+        <button class="close" type="button" data-dismiss="modal"><span>×</span><span class="sr-only">关闭</span></button>
         <h4 class="modal-title" data-bind="text:title"></h4>
       </div>
       <div class="modal-body">
@@ -603,20 +602,20 @@
     </script>
     <script type="text/html" id="flow-assist">
 <div class="flow-widget">
-  <h3 class="flow-hint"><i class="fa fa-question-circle"></i>Assistance</h3>
+  <h3 class="flow-hint"><i class="fa fa-question-circle"></i>建模助手</h3>
   <table class="flow-form">
     <thead>
       <tr>
         <th width="1">&nbsp;</th>
-        <th class="flow-narrow">Routine</th>
-        <th class="flow-wide">Description</th>
+        <th class="flow-narrow">常 用 的 建 模 步 骤</th>
+        <th class="flow-wide">说 明 描 述</th>
       </tr>
     </thead>
     <tbody>
       <!-- ko foreach:routines  -->
       <tr>
         <td><i data-bind="attr:{'class':icon}"></i></td>
-        <td><a class="flow-monospace" href="#" data-bind="click:execute, text:name"></a></td>
+        <td><a class="flow-monospace" href="#" data-bind="click:execute, text:cnName"></a></td>
         <td data-bind="html:description"></td>
       </tr>
       <!-- /ko-->
@@ -635,18 +634,18 @@
     </script>
     <script type="text/html" id="flow-inspects-output">
 <div class="flow-widget">
-  <h3 class="flow-hint"><i class="fa fa-info-circle"></i>Data</h3>
+  <h3 class="flow-hint"><i class="fa fa-info-circle"></i>数据</h3>
   <!-- ko ifnot:hasTables-->
-  <blockquote>No data found.</blockquote>
+  <blockquote>没有数据。</blockquote>
   <!-- /ko-->
   <!-- ko if:hasTables-->
-  <h4>Tables</h4>
+  <h4>表格</h4>
   <table class="flow-form">
     <thead>
       <tr>
         <th width="1">&nbsp;</th>
-        <th>Name</th>
-        <th>Actions</th>
+        <th>名称</th>
+        <th>操作</th>
       </tr>
     </thead>
     <tbody>
@@ -655,9 +654,9 @@
         <td><i class="fa fa-info-circle"></i></td>
         <td><a href="#" data-bind="text:label, click:grid"></a></td>
         <td>
-          <button class="flow-button" type="button" data-bind="click:inspect"><i class="fa fa-list"></i><span>Inspect</span></button>
+          <button class="flow-button" type="button" data-bind="click:inspect"><i class="fa fa-list"></i><span>检查</span></button>
           <!-- ko if:canPlot-->
-          <button class="flow-button" type="button" data-bind="click:plot"><i class="fa fa-bar-chart"></i><span>Plot</span></button>
+          <button class="flow-button" type="button" data-bind="click:plot"><i class="fa fa-bar-chart"></i><span>绘图</span></button>
           <!-- /ko-->
         </td>
       </tr>
@@ -707,12 +706,12 @@
     </script>
     <script type="text/html" id="flow-plot-input">
       <div class="flow-widget">
-            <h3 class="flow-hint"><i class="fa fa-bar-chart"></i>Plot
+            <h3 class="flow-hint"><i class="fa fa-bar-chart"></i>绘图
             </h3>
         <table class="flow-form">
           <tr>
-            <th width="1">
-              <label>Type:</label>
+            <th width="1" style="white-space:nowrap;">
+              <label>类型：</label>
             </th>
             <td>
               <select data-bind="options:types, value:type, optionsCaption:'(Select)'"></select>
@@ -720,7 +719,7 @@
           </tr>
           <tr>
             <th>
-              <label>X-Axis:</label>
+              <label>X轴：</label>
             </th>
             <td>
               <select data-bind="options:vectors, value:x, optionsCaption:'(Select)'"></select>
@@ -728,7 +727,7 @@
           </tr>
           <tr>
             <th>
-              <label>Y-Axis:</label>
+              <label>Y轴：</label>
             </th>
             <td>
               <select data-bind="options:vectors, value:y, optionsCaption:'(Select)'"></select>
@@ -736,7 +735,7 @@
           </tr>
           <tr>
             <th>
-              <label>Color:</label>
+              <label>颜色：</label>
             </th>
             <td>
               <select data-bind="options:vectors, value:color, optionsCaption:'(Select)'"></select>
@@ -744,10 +743,10 @@
           </tr>
           <tr>
             <th>
-              <label>Actions:</label>
+              <label>操作：</label>
             </th>
             <td>
-                  <button class="flow-button" type="button" data-bind="click:plot, enable:canPlot"><i class="fa fa-bar-chart"></i><span>Plot</span>
+                  <button class="flow-button" type="button" data-bind="click:plot, enable:canPlot"><i class="fa fa-bar-chart"></i><span>绘图</span>
                   </button>
             </td>
           </tr>
@@ -759,196 +758,196 @@
     </script>
     <script type="text/html" id="flow-create-frame-input">
       <div class="flow-widget">
-        <h3 class="flow-hint"><i class="fa fa-table"></i>Create a Frame</h3>
+        <h3 class="flow-hint"><i class="fa fa-table"></i>创建一个数据帧</h3>
         <table class="flow-form">
           <tbody>
             <tr>
               <th>
-                <label>Name</label>
+                <label>名称</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:key">
               </td>
-              <td>The name of the frame.</td>
+              <td>数据帧的名称</td>
             </tr>
             <tr>
               <th>
-                <label>Rows</label>
+                <label>行数</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:rows">
               </td>
-              <td>Number of rows</td>
+              <td>数据记录的行数</td>
             </tr>
             <tr>
               <th>
-                <label>Columns</label>
+                <label>列数</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:columns">
               </td>
-              <td>Number of data columns (in addition to the first response column)</td>
+              <td>数据列数（除第一个响应列外）</td>
             </tr>
             <tr>
               <th>
-                <label>Randomize</label>
+                <label>随机化</label>
               </th>
               <td>
                 <input type="checkbox" data-bind="checked:randomize">
               </td>
-              <td>Whether frame should be randomized</td>
+              <td>是否随机化数据帧</td>
             </tr>
             <tr>
               <th>
-                <label>Seed</label>
+                <label>随机种子</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:seed">
               </td>
-              <td>Random number seed</td>
+              <td>随机数种子</td>
             </tr>
             <tr>
               <th>
-                <label>Seed for Column Types</label>
+                <label>列类型随机种子</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:seed_for_column_types">
               </td>
-              <td>Random number seed for column types (-1 to use the main seed)</td>
+              <td>列类型的随机数种子 （-1 表示使用主随机种子）</td>
             </tr>
             <tr>
               <th>
-                <label>Value</label>
+                <label>值</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:value">
               </td>
-              <td>Constant value (for randomize=false)</td>
+              <td>常量值 (不随机化时此选项设置有效)</td>
             </tr>
             <tr>
               <th>
-                <label>Factors</label>
+                <label>因子</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:factors">
               </td>
-              <td>Factor levels for categorical variables</td>
+              <td>分类变量的因子水平</td>
             </tr>
             <tr>
               <th>
-                <label>Categorical Fraction</label>
+                <label>分类列占比</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:categoricalFraction">
               </td>
-              <td>Fraction of categorical columns (for randomize=true)</td>
+              <td>分类列占总列的比例分数（随机化时此选项有效）</td>
             </tr>
             <tr>
               <th>
-                <label>Integer Fraction</label>
+                <label>整形列占比</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:integerFraction">
               </td>
-              <td>Fraction of integer columns (for randomize=true)</td>
+              <td>整形列占总列的比例分数（随机化时此选项有效）</td>
             </tr>
             <tr>
               <th>
-                <label>Binary Fraction</label>
+                <label>二项列占比</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:binaryFraction">
               </td>
-              <td>Fraction of binary columns (for randomize=true)</td>
+              <td>二项列占总列的比例分数 （随机化时此选项有效）</td>
             </tr>
             <tr>
               <th>
-                <label>Binary Ones Fraction</label>
+                <label>二项列中1的占比</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:binaryOnesFraction">
               </td>
-              <td>Fraction of 1's in binary columns</td>
+              <td>在二项列中值为1的数据占二项列总数据的比例分数</td>
             </tr>
             <tr>
               <th>
-                <label>Time Fraction</label>
+                <label>时间类型列占比</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:timeFraction">
               </td>
-              <td>Fraction of date/time columns (for randomize=true)</td>
+              <td>日期/时间列占总列的比例分数（随机化时此选项有效）</td>
             </tr>
             <tr>
               <th>
-                <label>String Fraction</label>
+                <label>字符串类型列占比</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:stringFraction">
               </td>
-              <td>Fraction of string columns (for randomize=true)</td>
+              <td>字符串类型列占总列的比例分数（随机化时此选项有效）</td>
             </tr>
             <tr>
               <th>
-                <label>Missing Fraction</label>
+                <label>缺失数据占比</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:missingFraction">
               </td>
-              <td>Fraction of missing values</td>
+              <td>缺失数据占总数据的比例分数</td>
             </tr>
             <tr>
               <th>
-                <label>Response Factors</label>
+                <label>响应因子</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:responseFactors">
               </td>
-              <td>Number of factor levels of the first column (1=real, 2=binomial, N=multinomial)</td>
+              <td>首列因子个数（1=实数，2=二项式，N=多项）</td>
             </tr>
             <tr>
               <th>
-                <label>Real Range</label>
+                <label>实数范围</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:realRange">
               </td>
-              <td>Range for real variables (-range ... range)</td>
+              <td>实数变量范围range(-range ... range)</td>
             </tr>
             <tr>
               <th>
-                <label>Integer Range</label>
+                <label>整数范围</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:integerRange">
               </td>
-              <td>Range for integer variables (-range ... range)</td>
+              <td>整数变量范围range(-range ... range)</td>
             </tr>
             <tr>
               <th>
-                <label>Has Response?</label>
+                <label>有无响应列？</label>
               </th>
               <td>
                 <input type="checkbox" data-bind="checked:hasResponse">
               </td>
-              <td>Whether an additional response column should be generated</td>
+              <td>是否应该生成额外的响应列</td>
             </tr>
           </tbody>
         </table>
         <div class="flow-panel">
-              <button class="flow-button" type="button" data-bind="click:createFrame"><i class="fa fa-table"></i><span>Create</span>
+              <button class="flow-button" type="button" data-bind="click:createFrame"><i class="fa fa-table"></i><span>创建</span>
               </button>
         </div>
       </div>
     </script>
     <script type="text/html" id="flow-split-frame-input">
       <div class="flow-widget">
-        <h3 class="flow-hint"><i class="fa fa-scissors"></i>Split Frame</h3>
+        <h3 class="flow-hint"><i class="fa fa-scissors"></i>拆分数据帧</h3>
         <table class="flow-form">
           <tbody>
             <tr>
               <th>
-                <label>Frame:</label>
+                <label>数据帧：</label>
               </th>
               <td>
                 <select data-bind="options:frames, value:frame, optionsCaption:'(Select)'"></select>
@@ -956,14 +955,14 @@
             </tr>
             <tr>
               <th>
-                <label>Splits:</label>
+                <label>拆分：</label>
               </th>
               <td>
                 <table>
                   <thead>
                     <tr>
-                      <th style="text-align:left">Ratio</th>
-                      <th>Key</th>
+                      <th style="text-align:left">比例</th>
+                      <th>键</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -987,12 +986,12 @@
                     </tr>
                   </tbody>
                 </table>
-                <div><a class="flow-pointer" data-bind="click:addSplit">Add a new split</a></div>
+                <div><a class="flow-pointer" data-bind="click:addSplit">再拆分一次</a></div>
               </td>
             </tr>
             <tr>
               <th>
-                <label>Seed:</label>
+                <label>随机种子：</label>
               </th>
               <td>
                 <input class="flow-textbox" type="text" style="width:100px" data-bind="value:seed">
@@ -1001,7 +1000,7 @@
           </tbody>
         </table>
         <div class="flow-panel">
-              <button class="flow-button" type="button" data-bind="click:splitFrame"><i class="fa fa-scissors"></i><span>Create</span>
+              <button class="flow-button" type="button" data-bind="click:splitFrame"><i class="fa fa-scissors"></i><span>创建拆分</span>
               </button>
           <div style="color:red" data-bind="text:validationMessage"></div>
         </div>
@@ -1009,14 +1008,14 @@
     </script>
     <script type="text/html" id="flow-split-frame-output">
       <div class="flow-widget">
-            <h3 class="flow-hint"><i class="fa fa-table"></i>Split Frames
+            <h3 class="flow-hint"><i class="fa fa-table"></i>拆分数据帧
             </h3>
         <table class="flow-form">
           <thead>
             <tr>
-              <th width="1">Type</th>
-              <th>Key</th>
-              <th class="flow-right" width="1">Ratio</th>
+              <th width="1" style="white-space:nowrap;">类型</th>
+              <th>键</th>
+              <th class="flow-right" width="1">比例</th>
             </tr>
           </thead>
           <tbody>
@@ -1033,13 +1032,13 @@
     </script>
     <script type="text/html" id="flow-merge-frames-input">
       <div class="flow-widget">
-            <h3 class="flow-hint"><i class="fa fa-link"></i>Merge Frames
+            <h3 class="flow-hint"><i class="fa fa-link"></i>合并数据帧
             </h3>
         <table class="flow-form">
           <tbody>
             <tr>
-              <th width="150">
-                <label>Save merged frame as:</label>
+              <th width="170">
+                <label>保存合并后的数据帧为：</label>
               </th>
               <td>
                 <input data-bind="value:destinationKey" style="width:250px">
@@ -1047,7 +1046,7 @@
             </tr>
             <tr>
               <th>
-                <label>Left frame:</label>
+                <label>左侧数据帧：</label>
               </th>
               <td>
                 <select data-bind="options:frames, value:selectedLeftFrame, optionsCaption:'(Select)'"></select>
@@ -1055,7 +1054,7 @@
             </tr>
             <tr>
               <th>
-                <label>Left column:</label>
+                <label>左侧列：</label>
               </th>
               <td>
                 <select data-bind="options:leftColumns, optionsText:'label', value:selectedLeftColumn, optionsCaption:'(Select)'"></select>
@@ -1063,7 +1062,7 @@
             </tr>
             <tr>
               <th>
-                <label>Include all left rows</label>
+                <label>包含所有左侧的行：</label>
               </th>
               <td>
                 <input type="checkbox" data-bind="checked:includeAllLeftRows">
@@ -1071,7 +1070,7 @@
             </tr>
             <tr>
               <th>
-                <label>Right frame:</label>
+                <label>右侧数据帧：</label>
               </th>
               <td>
                 <select data-bind="options:frames, value:selectedRightFrame, optionsCaption:'(Select)'"></select>
@@ -1079,7 +1078,7 @@
             </tr>
             <tr>
               <th>
-                <label>Right column:</label>
+                <label>右侧列：</label>
               </th>
               <td>
                 <select data-bind="options:rightColumns, optionsText:'label', value:selectedRightColumn, optionsCaption:'(Select)'"></select>
@@ -1087,7 +1086,7 @@
             </tr>
             <tr>
               <th>
-                <label>Include all right rows</label>
+                <label>包含所有右侧的行：</label>
               </th>
               <td>
                 <input type="checkbox" data-bind="checked:includeAllRightRows">
@@ -1095,10 +1094,10 @@
             </tr>
             <tr>
               <th>
-                <label>Actions:</label>
+                <label>操作：</label>
               </th>
               <td>
-                <button class="flow-button" type="button" data-bind="click:merge, enable:canMerge"><i class="fa fa-link"></i><span>Merge</span></button>
+                <button class="flow-button" type="button" data-bind="click:merge, enable:canMerge"><i class="fa fa-link"></i><span>合并</span></button>
               </td>
             </tr>
           </tbody>
@@ -1135,8 +1134,8 @@
         <table class="flow-form">
           <tbody>
             <tr>
-              <th width="150">
-                <label>Save Destination PDP as:</label>
+              <th width="170">
+                <label>将目标PDP保存为：</label>
               </th>
               <td>
                 <input data-bind="value:destinationKey" style="width:250px">
@@ -1144,7 +1143,7 @@
             </tr>
             <tr>
               <th>
-                <label>Model:</label>
+                <label>模型：</label>
               </th>
               <td colspan="2">
                 <select data-bind="options:models, value:selectedModel, optionsCaption:'(Select)'"></select>
@@ -1152,7 +1151,7 @@
             </tr>
             <tr>
               <th>
-                <label>Frame:</label>
+                <label>数据集：</label>
               </th>
               <td colspan="2">
                 <select data-bind="options:frames, value:selectedFrame, optionsCaption:'(Select)', event:{ change:updateColumns}"></select>
@@ -1170,11 +1169,11 @@
               <td>
                 <input class="flow-textbox" type="text" data-bind="value:nbins">
               </td>
-              <td>How many levels should PDP compute. More levels will make it slower.</td>
+              <td>PDP应该计算多少层。层数越高，速度越慢。</td>
             </tr>
             <tr>
               <th>
-                <label>Select columns?</label>
+                <label>选择列？</label>
               </th>
               <td> 
                 <input type="checkbox" data-bind="checked:useCustomColumns">
@@ -1183,11 +1182,11 @@
             </tr>
             <tr data-bind="visible:useCustomColumns">
               <th> 
-                <label>Available columns:</label>
+                <label>可用列：</label>
               </th>
               <td colspan="2">
                 <div style="height:25px">
-                  <input class="flow-textbox" type="text" placeholder="Search..." data-bind="value:searchTerm, valueUpdate:'afterkeydown'">
+                  <input class="flow-textbox" type="text" placeholder="查找..." data-bind="value:searchTerm, valueUpdate:'afterkeydown'">
                 </div>
                 <div style="font-size:80%" data-bind="text:searchCaption"></div>
                 <div style="margin-bottom:5px;height:300px;overflow:auto;border:1px dotted #ccc">
@@ -1211,15 +1210,15 @@
                   <tbody>
                     <tr>
                       <td>
-                            <button class="flow-button" type="button" data-bind="click:selectFiltered, enable:hasFilteredItems"><i class="fa fa-check-square-o"></i><span>All</span>
+                            <button class="flow-button" type="button" data-bind="click:selectFiltered, enable:hasFilteredItems"><i class="fa fa-check-square-o"></i><span>全选</span>
                             </button>
-                            <button class="flow-button" type="button" data-bind="click:deselectFiltered, enable:hasFilteredItems"><i class="fa fa-square-o"></i><span>None</span>
+                            <button class="flow-button" type="button" data-bind="click:deselectFiltered, enable:hasFilteredItems"><i class="fa fa-square-o"></i><span>全不选</span>
                             </button>
                       </td>
                       <td style="text-align:right">
-                            <button class="flow-button" type="button" data-bind="click:goToPreviousPage, enable:canGoToPreviousPage"><i class="fa fa-arrow-left"></i><span>Previous 100</span>
+                            <button class="flow-button" type="button" data-bind="click:goToPreviousPage, enable:canGoToPreviousPage"><i class="fa fa-arrow-left"></i><span>前 100 列</span>
                             </button>
-                            <button class="flow-button" type="button" data-bind="click:goToNextPage, enable:canGoToNextPage"><i class="fa fa-arrow-right"></i><span>Next 100</span>
+                            <button class="flow-button" type="button" data-bind="click:goToNextPage, enable:canGoToNextPage"><i class="fa fa-arrow-right"></i><span>后 100 列</span>
                             </button>
                       </td>
                     </tr>
@@ -1229,7 +1228,7 @@
             </tr>
             <tr>
               <th>
-                <label>2D PDP Columns:</label>
+                <label>2D PDP列：</label>
               </th>
               <td>
                 <div>
@@ -1247,14 +1246,14 @@
                       </button>
                 </div>
               </td>
-              <td>Select lists of column name pairs to plot 2D partial dependence plot for.</td>
+              <td>选择列名对列表以绘制2D部分依赖关系图。</td>
             </tr>
             <tr>
               <th>
-                <label>Actions:</label>
+                <label>操作：</label>
               </th>
               <td>
-                <button class="flow-button" type="button" data-bind="click:compute, enable:canCompute"><i class="fa fa-link"></i><span>Compute</span></button>
+                <button class="flow-button" type="button" data-bind="click:compute, enable:canCompute"><i class="fa fa-link"></i><span>计算</span></button>
               </td>
             </tr>
           </tbody>
@@ -1269,15 +1268,15 @@
           <table class="flow-form">
             <tbody>
               <tr>
-                <th class="flow-narrow">Model ID:</th>
+                <th class="flow-narrow">模型 ID:</th>
                 <td class="flow-wide" data-bind="text:modelId"></td>
               </tr>
               <tr>
-                <th class="flow-narrow">Frame ID:</th>
+                <th class="flow-narrow">数据帧 ID:</th>
                 <td class="flow-wide" data-bind="text:frameId"></td>
               </tr>
               <tr>
-                <th class="flow-narrow">Show PDP Data Table?</th>
+                <th class="flow-narrow">展示 PDP 数据表？</th>
                 <td>
                   <input type="checkbox" data-bind="checked:isFrameShown">
                 </td>
@@ -1365,12 +1364,12 @@
     </script>
     <script type="text/html" id="flow-parse-raw-input">
 <div class="flow-widget">
-  <h3 class="flow-hint"><i class="fa fa-cog"></i>Setup Parse</h3>
-  <h4>Parse Configuration</h4>
+  <h3 class="flow-hint"><i class="fa fa-cog"></i>设置解析</h3>
+  <h4>解析配置</h4>
   <table class="flow-form">
     <tbody>
       <tr>
-        <th class="flow-narrow">Sources</th>
+        <th class="flow-narrow">源</th>
         <td class="flow-wide">
           <!-- ko foreach:sourceKeys-->
           <div class="flow-hint"><i class="fa fa-key"></i><span data-bind="text:$data"></span></div>
@@ -1385,48 +1384,48 @@
       </tr>
       <!-- ko if:canReconfigure-->
       <tr>
-        <th class="flow-narrow">Parser</th>
+        <th class="flow-narrow">解析器</th>
         <td class="flow-wide">
           <select data-bind="options:parseTypes, optionsText:'caption', value:parseType"></select>
         </td>
       </tr>
       <tr>
-        <th class="flow-narrow">Separator</th>
+        <th class="flow-narrow">分隔符</th>
         <td class="flow-wide">
           <select data-bind="options:delimiters, optionsText:'caption', value:delimiter"></select>
         </td>
       </tr>
       <tr>
-        <th class="flow-narrow">Column Headers</th>
+        <th class="flow-narrow">列头</th>
         <td class="flow-wide">
           <div>
             <label>
-              <input type="radio" name="hasHeader" value="auto" data-bind="checked:headerOption"><span>Auto</span>
+              <input type="radio" name="hasHeader" value="auto" data-bind="checked:headerOption"><span>自动</span>
             </label>
           </div>
           <div>
             <label>
-              <input type="radio" name="hasHeader" value="header" data-bind="checked:headerOption"><span>First row contains column names</span>
+              <input type="radio" name="hasHeader" value="header" data-bind="checked:headerOption"><span>首行包含列名</span>
             </label>
           </div>
           <div>
             <label>
-              <input type="radio" name="hasHeader" value="data" data-bind="checked:headerOption"><span>First row contains data</span>
+              <input type="radio" name="hasHeader" value="data" data-bind="checked:headerOption"><span>首行包含数据</span>
             </label>
           </div>
         </td>
       </tr>
       <tr>
-        <th class="flow-narrow">Options</th>
+        <th class="flow-narrow">选项</th>
         <td class="flow-wide">
           <div>
             <label>
-              <input type="checkbox" data-bind="checked:useSingleQuotes"><span>Enable single quotes as a field quotation character</span>
+              <input type="checkbox" data-bind="checked:useSingleQuotes"><span>启用单引号作为字段引号字符</span>
             </label>
           </div>
           <div>
             <label>
-              <input type="checkbox" data-bind="checked:deleteOnDone"><span>Delete on done</span>
+              <input type="checkbox" data-bind="checked:deleteOnDone"><span>完成后删除</span>
             </label>
           </div>
         </td>
@@ -1434,10 +1433,10 @@
       <!-- /ko-->
     </tbody>
   </table>
-  <h4>Edit Column Names and Types</h4>
+  <h4>编辑列名和类型</h4>
   <div>
     <!-- ko if:canReconfigure-->
-    <input class="flow-textbox" type="text" placeholder="Search by column name..." data-bind="value:columnNameSearchTerm, valueUpdate:'afterkeydown'">
+    <input class="flow-textbox" type="text" placeholder="通过列名查找..." data-bind="value:columnNameSearchTerm, valueUpdate:'afterkeydown'">
     <!-- /ko-->
     <table class="flow-form flow-monospace">
       <tbody>
@@ -1460,12 +1459,12 @@
       </tbody>
     </table>
     <div>
-      <button class="flow-button" type="button" data-bind="click:goToPreviousPage, enable:canGoToPreviousPage"><i class="fa fa-arrow-left"></i><span>Previous page</span></button>
-      <button class="flow-button" type="button" data-bind="click:goToNextPage, enable:canGoToNextPage"><i class="fa fa-arrow-right"></i><span>Next page</span></button>
+      <button class="flow-button" type="button" data-bind="click:goToPreviousPage, enable:canGoToPreviousPage"><i class="fa fa-arrow-left"></i><span>前一页</span></button>
+      <button class="flow-button" type="button" data-bind="click:goToNextPage, enable:canGoToNextPage"><i class="fa fa-arrow-right"></i><span>后一页</span></button>
     </div>
   </div>
   <div class="flow-panel">
-    <button class="flow-button" type="button" data-bind="click:parseFiles"><i class="fa fa-indent"></i>Parse</button>
+    <button class="flow-button" type="button" data-bind="click:parseFiles"><i class="fa fa-indent"></i>解析</button>
   </div>
 </div>
     </script>
@@ -1476,63 +1475,63 @@
     </script>
     <script type="text/html" id="flow-model-output">
       <div class="flow-widget">
-        <h3 class="flow-hint"><i class="fa fa-cube"></i>Model</h3>
+        <h3 class="flow-hint"><i class="fa fa-cube"></i>模型</h3>
         <!-- ko with:output-->
         <div class="flow-margin-after">
           <table class="flow-form">
             <tbody>
               <tr>
-                <th class="flow-narrow">Model ID:</th>
+                <th class="flow-narrow">模型 ID：</th>
                 <td class="flow-wide" data-bind="text:key.name"></td>
               </tr>
               <tr>
-                <th class="flow-narrow">Algorithm:</th>
+                <th class="flow-narrow">算法：</th>
                 <td class="flow-wide" data-bind="text:algo"></td>
               </tr>
               <tr> 
-                <th width="1">Actions:</th>
+                <th width="1">操作：</th>
                 <td>
                   <button class="flow-button" type="button" data-bind="click:$parent.toggleRefresh, css:{ 'flow-button-toggle':$parent.isLive }">
-                    <!-- ko if:$parent.isLive--><i class="fa fa-refresh fa-spin"></i>Stop
+                    <!-- ko if:$parent.isLive--><i class="fa fa-refresh fa-spin"></i>结束
                     <!-- /ko-->
-                    <!-- ko ifnot:$parent.isLive--><i class="fa fa-refresh"></i>Refresh
+                    <!-- ko ifnot:$parent.isLive--><i class="fa fa-refresh"></i>刷新
                     <!-- /ko-->
                   </button>
-                      <button class="flow-button" type="button" data-bind="click:predict"><i class="fa fa-bolt"></i><span>Predict&hellip;</span>
+                      <button class="flow-button" type="button" data-bind="click:predict"><i class="fa fa-bolt"></i><span>预测&hellip;</span>
                       </button>
-                  <button class="flow-button" type="button" data-bind="click: downloadPojo, enable: $data.havePojo"><i class="fa fa-download"></i><span></span>Download POJO</button>
-                  <button class="flow-button" type="button" data-bind="click: downloadMojo, enable: $data.haveMojo"><i class="fa fa-download"></i><span></span>Download Model Deployment Package (MOJO)</button>
-                      <button class="flow-button" type="button" data-bind="click:exportModel"><i class="fa fa-save"></i><span>Export</span>
+                  <button class="flow-button" type="button" data-bind="click: downloadPojo, enable: $data.havePojo"><i class="fa fa-download"></i><span></span>下载 POJO</button>
+                  <button class="flow-button" type="button" data-bind="click: downloadMojo, enable: $data.haveMojo"><i class="fa fa-download"></i><span></span>下载模型部署包 (MOJO)</button>
+                      <button class="flow-button" type="button" data-bind="click:exportModel"><i class="fa fa-save"></i><span>导出</span>
                       </button>
-                      <button class="flow-button" type="button" data-bind="click:inspect"><i class="fa fa-list"></i><span>Inspect</span>
+                      <button class="flow-button" type="button" data-bind="click:inspect"><i class="fa fa-list"></i><span>检查</span>
                       </button>
-                      <button class="flow-button" type="button" data-bind="click:deleteModel"><i class="fa fa-trash-o"></i><span>Delete</span>
+                      <button class="flow-button" type="button" data-bind="click:deleteModel"><i class="fa fa-trash-o"></i><span>删除</span>
                       </button>
-                      <button class="flow-button" type="button" data-bind="click:downloadGenJar"><i class="fa fa-download"></i><span>Download Gen Model</span>
+                      <button class="flow-button" type="button" data-bind="click:downloadGenJar"><i class="fa fa-download"></i><span>下载h2o-genmodel.jar</span>
                       </button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <h4 data-bind="collapse:true">Model Parameters</h4>
+        <h4 data-bind="collapse:true">模型参数</h4>
         <div data-bind="css:{ 'flow-unhide':isExpanded }">
           <div class="flow-right flow-margin-after"> 
             <!-- ko ifnot:isExpanded-->
-                <button class="flow-button" type="button" data-bind="click:toggle"><i class="fa fa-angle-double-down"></i><span>Show all parameters</span>
+                <button class="flow-button" type="button" data-bind="click:toggle"><i class="fa fa-angle-double-down"></i><span>显示所有参数</span>
                 </button>
             <!-- /ko-->
             <!-- ko if:isExpanded-->
-                <button class="flow-button" type="button" data-bind="click:toggle"><i class="fa fa-angle-double-up"></i><span>Show modified parameters</span>
+                <button class="flow-button" type="button" data-bind="click:toggle"><i class="fa fa-angle-double-up"></i><span>显示更改过的参数</span>
                 </button>
             <!-- /ko-->
           </div>
           <table class="flow-form flow-form-ruled">
             <thead>
               <tr>
-                <th>Parameter</th>
-                <th>Value</th>
-                <th>Description</th>
+                <th>参数名</th>
+                <th>值</th>
+                <th>说明</th>
               </tr>
             </thead>
             <tbody>
@@ -1591,10 +1590,10 @@
         </div>
         <!-- /ko-->
         <div data-bind="visible: $data.havePojo">
-          <h4 data-bind="collapse:false">Preview POJO</h4>
+          <h4 data-bind="collapse:false">预览POJO</h4>
           <div>
             <!-- ko ifnot:isPojoLoaded-->
-            <button class="flow-button" type="button" data-bind="click: previewPojo, enable: $data.havePojo"><i class="fa fa-code"></i><span></span>Preview POJO</button>
+            <button class="flow-button" type="button" data-bind="click: previewPojo, enable: $data.havePojo"><i class="fa fa-code"></i><span></span>预览 POJO</button>
             <!-- /ko-->
             <!-- ko if:isPojoLoaded-->
             <div data-bind="html:pojoPreview"></div>
@@ -1610,16 +1609,16 @@
         <table class="flow-form">
           <tbody>
             <tr>
-              <th class="flow-narrow">Files</th>
+              <th class="flow-narrow">文件</th>
               <td class="flow-wide">
                 <div data-bind="template: { name:templateOf, foreach:importViews }"></div>
               </td>
             </tr>
             <!-- ko if:canParse-->
             <tr class="flow-actions">
-              <th class="flow-narrow">Actions</th>
+              <th class="flow-narrow">操作</th>
               <td class="flow-wide">
-                    <button class="flow-button" type="button" data-bind="click:parse, enable:canParse"><i class="fa fa-cog"></i><span>Parse these files&hellip;</span>
+                    <button class="flow-button" type="button" data-bind="click:parse, enable:canParse"><i class="fa fa-cog"></i><span>解析这些文件&hellip;</span>
                     </button>
               </td>
             </tr>
@@ -1630,20 +1629,20 @@
     </script>
     <script type="text/html" id="flow-import-files">
 <div class="flow-widget">
-  <h3 class="flow-hint"><i class="fa fa-files-o"></i>Import Files</h3>
+  <h3 class="flow-hint"><i class="fa fa-files-o"></i>导入文件</h3>
   <table class="flow-form">
     <tbody>
       <tr>
-        <th width="125">Search:</th>
+        <th width="125">查找：</th>
         <td>
           <table width="100%">
             <tbody>
               <tr>
                 <td class="flow-wide">
-                  <input class="flow-textbox" type="text" style="width:100%" data-bind="value:specifiedPath, valueUpdate:'keydown', enterKey:tryImportFiles, typeahead:listPathHints" placeholder="Enter a file or directory path and press the Enter key">
+                  <input class="flow-textbox" type="text" style="width:100%" data-bind="value:specifiedPath, valueUpdate:'keydown', enterKey:tryImportFiles, typeahead:listPathHints" placeholder="输入一个文件或者目录的路径然后按回车键">
                 </td>
                 <td class="flow-narrow" style="padding:0">
-                  <button class="flow-button" type="button" data-bind="click:tryImportFiles" title="Search for files"><i class="fa fa-search"></i></button>
+                  <button class="flow-button" type="button" data-bind="click:tryImportFiles" title="查找文件"><i class="fa fa-search"></i></button>
                 </td>
               </tr>
             </tbody>
@@ -1658,11 +1657,11 @@
       <!-- /ko-->
       <!-- ko if:hasImportedFiles-->
       <tr>
-        <th>Search Results:</th>
+        <th>查找结果：</th>
         <!-- ko if:hasUnselectedFiles-->
         <td>
           <div><span data-bind="text:importedFileCount"></span>  
-            <!-- ko if:hasUnselectedFiles--><a href="#" data-bind="click:selectAllFiles">Add all</a>
+            <!-- ko if:hasUnselectedFiles--><a href="#" data-bind="click:selectAllFiles">添加所有</a>
             <!-- /ko-->
           </div>
           <div class="flow-well">
@@ -1675,15 +1674,15 @@
         </td>
         <!-- /ko-->
         <!-- ko ifnot:hasUnselectedFiles-->
-        <td>(All files added)</td>
+        <td>(所有文件都已被添加)</td>
         <!-- /ko-->
       </tr>
       <!-- /ko-->
       <tr>
-        <th>Selected Files:</th>
+        <th>选中的文件：</th>
         <td>
           <div><span data-bind="text:selectedFileCount"></span>   
-            <!-- ko if:hasSelectedFiles--><a href="#" data-bind="click:deselectAllFiles">Clear All</a>
+            <!-- ko if:hasSelectedFiles--><a href="#" data-bind="click:deselectAllFiles">移除所有</a>
             <!-- /ko-->
           </div>
           <!-- ko if:hasSelectedFiles-->
@@ -1696,9 +1695,9 @@
         </td>
       </tr>
       <tr class="flow-actions">
-        <th>Actions:</th>
+        <th>操作：</th>
         <td>
-          <button class="flow-button" type="button" data-bind="click:importSelectedFiles, enable:hasSelectedFiles"><i class="fa fa-cloud-upload"></i>Import</button>
+          <button class="flow-button" type="button" data-bind="click:importSelectedFiles, enable:hasSelectedFiles"><i class="fa fa-cloud-upload"></i>导入</button>
         </td>
       </tr>
     </tbody>
@@ -1708,17 +1707,17 @@
     </script>
     <script type="text/html" id="flow-import-sql-table-input">
 <div class="flow-widget">
-  <h3 class="flow-hint"><i class="fa fa-table"></i>Import SQL Table</h3>
+  <h3 class="flow-hint"><i class="fa fa-table"></i>导入数据库表</h3>
   <table class="flow-form">
     <tbody>
       <tr>
-        <th width="125">Connection URL:</th>
+        <th width="125">数据库链接URL：</th>
         <td>
           <table width="100%">
             <tbody>
               <tr>
                 <td class="flow-wide">
-                  <input class="flow-textbox" type="text" style="width:100%" data-bind="value:specifiedUrl" placeholder="Enter URL of the SQL database as specified by the JDBC.">
+                  <input class="flow-textbox" type="text" style="width:100%" data-bind="value:specifiedUrl" placeholder="输入JDBC规范的数据库URL。">
                 </td>
               </tr>
             </tbody>
@@ -1726,13 +1725,13 @@
         </td>
       </tr>
       <tr>
-        <th width="125">Table:</th>
+        <th width="125">数据库表：</th>
         <td>
           <table width="100%">
             <tbody>
               <tr>
                 <td class="flow-wide">
-                  <input class="flow-textbox" type="text" style="width:100%" data-bind="value:specifiedTable" placeholder="Enter a name of SQL table.">
+                  <input class="flow-textbox" type="text" style="width:100%" data-bind="value:specifiedTable" placeholder="输入数据库中需要导入的表名。">
                 </td>
               </tr>
             </tbody>
@@ -1740,13 +1739,13 @@
         </td>
       </tr>
       <tr>
-        <th width="125">Columns:</th>
+        <th width="125">列：</th>
         <td>
           <table width="100%">
             <tbody>
               <tr>
                 <td class="flow-wide">
-                  <input class="flow-textbox" type="text" style="width:100%" data-bind="value:specifiedColumns" placeholder="Enter a comma-separated list of column names to import. Default is to import all columns.">
+                  <input class="flow-textbox" type="text" style="width:100%" data-bind="value:specifiedColumns" placeholder="输入一个要被导入的用逗号分割的列名列表。默认导入全部列。">
                 </td>
               </tr>
             </tbody>
@@ -1754,13 +1753,13 @@
         </td>
       </tr>
       <tr>
-        <th width="125">Username:</th>
+        <th width="125">用户名：</th>
         <td>
           <table width="100%">
             <tbody>
               <tr>
                 <td class="flow-wide">
-                  <input class="flow-textbox" type="text" style="width:100%" data-bind="value:specifiedUsername" placeholder="Enter a username for SQL server.">
+                  <input class="flow-textbox" type="text" style="width:100%" data-bind="value:specifiedUsername" placeholder="输入数据库的用户名。">
                 </td>
               </tr>
             </tbody>
@@ -1768,13 +1767,13 @@
         </td>
       </tr>
       <tr>
-        <th width="125">Password:</th>
+        <th width="125">密码：</th>
         <td>
           <table width="100%">
             <tbody>
               <tr>
                 <td class="flow-wide">
-                  <input class="flow-textbox" type="password" style="width:100%" data-bind="value:specifiedPassword" placeholder="Enter a password for SQL server.">
+                  <input class="flow-textbox" type="password" style="width:100%" data-bind="value:specifiedPassword" placeholder="输入上面数据库用户名对应的密码。">
                 </td>
               </tr>
             </tbody>
@@ -1788,9 +1787,9 @@
       </tr>
       <!-- /ko-->
       <tr class="flow-actions">
-        <th>Actions:</th>
+        <th>操作：</th>
         <td>
-          <button class="flow-button" type="button" data-bind="click:importSqlTableAction"><i class="fa fa-cloud-upload"></i>Import</button>
+          <button class="flow-button" type="button" data-bind="click:importSqlTableAction"><i class="fa fa-cloud-upload"></i>导入</button>
         </td>
       </tr>
     </tbody>
@@ -1878,10 +1877,10 @@
     </script>
     <script type="text/html" id="flow-import-sql-table-output">
       <div class="flow-widget">
-            <h3 class="flow-hint"><i class="fa fa-save"></i>Table Import
+            <h3 class="flow-hint"><i class="fa fa-save"></i>表格导入
             </h3>
-        <blockquote>The specified SQL Table is being imported.</blockquote>
-        <button class="flow-button" type="button" data-bind="click:viewData"><i class="fa fa-table"></i><span>View</span></button>
+        <blockquote>指定的数据库表正在被导入。</blockquote>
+        <button class="flow-button" type="button" data-bind="click:viewData"><i class="fa fa-table"></i><span>查看详情</span></button>
       </div>
     </script>
     <script type="text/html" id="flow-checkbox-model-parameter">
@@ -1964,7 +1963,7 @@
         </th>
         <td colspan="2">
           <div style="height:25px">
-            <input class="flow-textbox" type="text" placeholder="Search..." data-bind="value:searchTerm, valueUpdate:'afterkeydown'">
+            <input class="flow-textbox" type="text" placeholder="查找..." data-bind="value:searchTerm, valueUpdate:'afterkeydown'">
           </div>
           <div style="font-size:80%" data-bind="text:searchCaption"></div>
           <div style="margin-bottom:5px;height:300px;overflow:auto;border:1px dotted #ccc">
@@ -1988,22 +1987,22 @@
             <tbody>
               <tr>
                 <td>
-                      <button class="flow-button" type="button" data-bind="click:selectFiltered, enable:hasFilteredItems"><i class="fa fa-check-square-o"></i><span>All</span>
+                      <button class="flow-button" type="button" data-bind="click:selectFiltered, enable:hasFilteredItems"><i class="fa fa-check-square-o"></i><span>全选</span>
                       </button>
-                      <button class="flow-button" type="button" data-bind="click:deselectFiltered, enable:hasFilteredItems"><i class="fa fa-square-o"></i><span>None</span>
+                      <button class="flow-button" type="button" data-bind="click:deselectFiltered, enable:hasFilteredItems"><i class="fa fa-square-o"></i><span>全不选</span>
                       </button>
                 </td>
                 <td style="text-align:right">
-                      <button class="flow-button" type="button" data-bind="click:goToPreviousPage, enable:canGoToPreviousPage"><i class="fa fa-arrow-left"></i><span>Previous 100</span>
+                      <button class="flow-button" type="button" data-bind="click:goToPreviousPage, enable:canGoToPreviousPage"><i class="fa fa-arrow-left"></i><span>前 100 列</span>
                       </button>
-                      <button class="flow-button" type="button" data-bind="click:goToNextPage, enable:canGoToNextPage"><i class="fa fa-arrow-right"></i><span>Next 100</span>
+                      <button class="flow-button" type="button" data-bind="click:goToNextPage, enable:canGoToNextPage"><i class="fa fa-arrow-right"></i><span>后 100 列</span>
                       </button>
                 </td>
               </tr>
             </tbody>
           </table>
-          <div style="font-size:80%">Only show columns with more than&nbsp;
-            <input class="flow-textbox" type="text" style="width:30px" placeholder="0" data-bind="value:ignoreNATerm, valueUpdate:'afterkeydown'">% missing values.
+          <div style="font-size:80%">只展示缺失超过&nbsp;
+            <input class="flow-textbox" type="text" style="width:30px" placeholder="0" data-bind="value:ignoreNATerm, valueUpdate:'afterkeydown'">% 数据的列
           </div>
         </td>
         <td>
@@ -2021,7 +2020,7 @@
     <label data-bind="text:label"></label><span data-bind="visible:isRequired">*</span>
   </th>
   <td colspan="2">
-    <div>Show models compatible with frame:
+    <div>显示与数据集兼容的模型：
       <select data-bind="options:frames, value:selectedFrame"></select>
     </div>
     <table style="margin-top:10px;width:100%">
@@ -2029,7 +2028,7 @@
         <tr>
           <td>
             <label style="margin-left: 1px; font-style: italic;">
-              <input type="checkbox" title="Select or deselect all" data-bind="checked:checkAllModels">Select All
+              <input type="checkbox" title="Select or deselect all" data-bind="checked:checkAllModels">全选
             </label>
           </td>
         </tr>
@@ -2159,9 +2158,9 @@
             <h3 class="flow-hint"><i class="fa fa-th"></i>Grids
             </h3>
         <!-- ko ifnot:hasGrids-->
-        <blockquote>Your H<sub>2</sub>O cloud has no grid search results.</blockquote>
+        <blockquote>您的AIR上没有网格搜索结果。</blockquote>
         <div class="flow-panel">
-              <button class="flow-button" type="button" data-bind="click:buildModel"><i class="fa fa-cube"></i><span>Build a model&hellip;</span>
+              <button class="flow-button" type="button" data-bind="click:buildModel"><i class="fa fa-cube"></i><span>构建模型&hellip;</span>
               </button>
         </div>
         <!-- /ko-->
@@ -2170,8 +2169,8 @@
           <thead>
             <tr>
               <th width="1">&nbsp;</th>
-              <th>Key</th>
-              <th>Models</th>
+              <th>键</th>
+              <th>模型</th>
             </tr>
           </thead>
           <tbody>
@@ -2190,12 +2189,12 @@
     </script>
     <script type="text/html" id="flow-models-output">
       <div class="flow-widget">
-            <h3 class="flow-hint"><i class="fa fa-cubes"></i>Models
+            <h3 class="flow-hint"><i class="fa fa-cubes"></i>模型列表
             </h3>
         <!-- ko ifnot:hasModels-->
-        <blockquote>Your H<sub>2</sub>O cloud has no models.</blockquote>
+        <blockquote>您的AIR云端还没有模型。</blockquote>
         <div class="flow-panel">
-              <button class="flow-button" type="button" data-bind="click:buildModel"><i class="fa fa-cube"></i><span>Build a model&hellip;</span>
+              <button class="flow-button" type="button" data-bind="click:buildModel"><i class="fa fa-cube"></i><span>构建模型&hellip;</span>
               </button>
         </div>
         <!-- /ko-->
@@ -2204,12 +2203,12 @@
           <thead>
             <tr>
               <th width="1" style="font-size:inherit">
-                <input type="checkbox" title="Select or deselect all" data-bind="checked:checkAllModels">
+                <input type="checkbox" title="选择或反选所有" data-bind="checked:checkAllModels">
               </th>
               <th width="1">&nbsp;</th>
-              <th>Key</th>
-              <th>Algorithm</th>
-              <th class="flow-right">Actions</th>
+              <th>键</th>
+              <th>算法</th>
+              <th class="flow-right">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -2223,9 +2222,9 @@
               </td>
               <td data-bind="text:algo"></td>
               <td class="flow-right"> 
-                    <button class="flow-button" type="button" data-bind="click:predict"><i class="fa fa-bolt"></i><span>Predict&hellip;</span>
+                    <button class="flow-button" type="button" data-bind="click:predict"><i class="fa fa-bolt"></i><span>预测&hellip;</span>
                     </button>
-                    <button class="flow-button" type="button" data-bind="click:inspect"><i class="fa fa-list"></i><span>Inspect</span>
+                    <button class="flow-button" type="button" data-bind="click:inspect"><i class="fa fa-list"></i><span>检查</span>
                     </button>
               </td>
             </tr>
@@ -2233,9 +2232,9 @@
           </tbody>
         </table>
         <div class="flow-panel">
-              <button class="flow-button" type="button" data-bind="click:inspect"><i class="fa fa-list"></i><span>Inspect</span>
+              <button class="flow-button" type="button" data-bind="click:inspect"><i class="fa fa-list"></i><span>检查</span>
               </button>
-              <button class="flow-button" type="button" data-bind="click:deleteModels, enable:hasSelectedModels"><i class="fa fa-trash"></i><span>Delete selected</span>
+              <button class="flow-button" type="button" data-bind="click:deleteModels, enable:hasSelectedModels"><i class="fa fa-trash"></i><span>删除所选</span>
               </button>
         </div>
         <!-- /ko-->
@@ -2243,7 +2242,7 @@
     </script>
     <script type="text/html" id="flow-grid-output">
       <div class="flow-widget">
-            <h3 class="flow-hint"><i class="fa fa-cubes"></i>Grid Search
+            <h3 class="flow-hint"><i class="fa fa-cubes"></i>网格搜索
             </h3>
         <!-- ko if:hasModels-->
         <div class="flow-panel">
@@ -2263,8 +2262,8 @@
                 <input type="checkbox" title="Select or deselect all" data-bind="checked:checkAllModels">
               </th>
               <th width="1">&nbsp;</th>
-              <th>Key</th>
-              <th class="flow-right">Actions</th>
+              <th>键</th>
+              <th class="flow-right">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -2292,7 +2291,7 @@
         <h4 data-bind="collapse:false, text:title"></h4>
         <div>
           <p data-bind="text:detail" style="color:red"></p>
-          <p data-bind="text:params" style="color:red"></p><a class="flow-small-caps flow-small" href="#" data-bind="collapse:true">Stack trace</a>
+          <p data-bind="text:params" style="color:red"></p><a class="flow-small-caps flow-small" href="#" data-bind="collapse:true">堆栈信息</a>
           <pre data-bind="text:stacktrace"></pre>
         </div>
         <!-- /ko-->
@@ -2394,11 +2393,11 @@
     </script>
     <script type="text/html" id="flow-frames-output">
       <div class="flow-widget">
-        <h3 class="flow-hint"><i class="fa fa-table"></i>Frames</h3>
+        <h3 class="flow-hint"><i class="fa fa-table"></i>数据帧</h3>
         <!-- ko ifnot:hasFrames-->
-        <blockquote>Your H<sub>2</sub>O cloud has no frames.</blockquote>
+        <blockquote>您的AIR上没有数据帧。</blockquote>
         <div class="flow-panel">
-          <button class="flow-button" type="button" data-bind="click:importFiles"><i class="fa fa-files-o"></i>Import files&hellip;</button>
+          <button class="flow-button" type="button" data-bind="click:importFiles"><i class="fa fa-files-o"></i>导入文件&hellip;</button>
         </div>
         <!-- /ko-->
         <!-- ko if:hasFrames-->
@@ -2408,11 +2407,11 @@
               <th width="1" style="font-size:inherit">
                 <input type="checkbox" title="Select or deselect all" data-bind="checked:checkAllFrames">
               </th>
-              <th width="1">Type</th>
+              <th width="1" style="white-space:nowrap;">类型</th>
               <th>ID</th>
-              <th class="flow-right" width="1">Rows</th>
-              <th class="flow-right" width="1">Columns</th>
-              <th class="flow-right" width="1">Size</th>
+              <th class="flow-right" width="1" style="white-space:nowrap;">行数</th>
+              <th class="flow-right" width="1" style="white-space:nowrap;">列数</th>
+              <th class="flow-right" width="1" style="white-space:nowrap;">大小</th>
             </tr>
           </thead>
           <tbody>
@@ -2431,17 +2430,17 @@
                 <p><a href="#" data-bind="text:key, click:view"></a></p>
                 <!-- ko if:isText-->
                 <p>
-                      <button class="flow-button" type="button" data-bind="click:view"><i class="fa fa-cog"></i><span>Parse&hellip;</span>
+                      <button class="flow-button" type="button" data-bind="click:view"><i class="fa fa-cog"></i><span>解析&hellip;</span>
                       </button>
                 </p>
                 <!-- /ko-->
                 <!-- ko ifnot:isText-->
                 <p>
-                      <button class="flow-button" type="button" data-bind="click:createModel"><i class="fa fa-cube"></i><span>Build Model&hellip;</span>
+                      <button class="flow-button" type="button" data-bind="click:createModel"><i class="fa fa-cube"></i><span>构建模型&hellip;</span>
                       </button>
-                      <button class="flow-button" type="button" data-bind="click:predict"><i class="fa fa-bolt"></i><span>Predict&hellip;</span>
+                      <button class="flow-button" type="button" data-bind="click:predict"><i class="fa fa-bolt"></i><span>预测&hellip;</span>
                       </button>
-                      <button class="flow-button" type="button" data-bind="click:inspect"><i class="fa fa-list"></i><span>Inspect</span>
+                      <button class="flow-button" type="button" data-bind="click:inspect"><i class="fa fa-list"></i><span>检查</span>
                       </button>
                 </p>
                 <!-- /ko-->
@@ -2454,9 +2453,9 @@
           </tbody>
         </table>
         <div class="flow-panel">
-              <button class="flow-button" type="button" data-bind="click:predictOnFrames, enable:hasSelectedFrames"><i class="fa fa-bolt"></i><span>Predict on selected frames&hellip;</span>
+              <button class="flow-button" type="button" data-bind="click:predictOnFrames, enable:hasSelectedFrames"><i class="fa fa-bolt"></i><span>在所选数据帧上进行预测&hellip;</span>
               </button>
-              <button class="flow-button" type="button" data-bind="click:deleteFrames, enable:hasSelectedFrames"><i class="fa fa-trash-o"></i><span>Delete selected frames</span>
+              <button class="flow-button" type="button" data-bind="click:deleteFrames, enable:hasSelectedFrames"><i class="fa fa-trash-o"></i><span>删除所选数据帧</span>
               </button>
         </div>
         <!-- /ko-->
@@ -2553,11 +2552,11 @@
     </script>
     <script type="text/html" id="flow-model-input">
 <div class="flow-widget">
-  <h3 class="flow-hint"><i class="fa fa-cube"></i>Build a Model</h3>
+  <h3 class="flow-hint"><i class="fa fa-cube"></i>构建模型</h3>
   <!-- ko if:parentException-->
   <div data-bind="template: { name:'flow-failure', data:parentException }"></div>
   <!-- /ko-->
-  <div>Select an algorithm:
+  <div>选择一个算法：
     <select data-bind="options:algorithms, optionsText:'algo_full_name', value:algorithm, optionsCaption: '(Algorithm)'"></select>
   </div>
   <!-- ko with:modelForm-->
@@ -2629,7 +2628,7 @@
   <!-- /ko-->
   <!-- /ko-->
   <div class="flow-panel">
-    <button class="flow-button" type="button" data-bind="click:createModel, enable:canCreateModel"><i class="fa fa-tasks"></i>Build Model</button>
+    <button class="flow-button" type="button" data-bind="click:createModel, enable:canCreateModel"><i class="fa fa-tasks"></i>构建模型</button>
     <!-- ko with:modelForm--><span style="margin-left:10px; color:red" data-bind="visible:hasValidationFailures, text:validationFailureMessage"></span>
     <!-- /ko-->
   </div>
@@ -2637,13 +2636,13 @@
     </script>
     <script type="text/html" id="flow-automodel-input">
       <div class="flow-widget">
-            <h3 class="flow-hint"><i class="fa fa-sitemap"></i>Run AutoML
+            <h3 class="flow-hint"><i class="fa fa-sitemap"></i>运行自动机器学习
             </h3>
         <table class="flow-form">
           <tbody>
             <tr>
               <th>
-                <label>Project Name:</label>
+                <label>项目名称：</label>
               </th>
               <td>
                 <input data-bind="value:projectName">
@@ -2651,7 +2650,7 @@
             </tr>
             <tr>
               <th width="225">
-                <label>Training Frame:</label>
+                <label>训练集：</label>
               </th>
               <td>
                 <select data-bind="options:trainingFrames, value:trainingFrame, optionsCaption:'(Select)'"></select>
@@ -2660,7 +2659,7 @@
             <!-- ko if:hasTrainingFrame-->
             <tr>
               <th>
-                <label>Response Column:</label>
+                <label>响应列：</label>
               </th>
               <td>
                 <select data-bind="options:columns, value:column, optionsCaption:'(Select)'"></select>
@@ -2668,7 +2667,7 @@
             </tr>
             <tr>
               <th>
-                <label>Fold Column:</label>
+                <label>交叉验证折叠列：</label>
               </th>
               <td>
                 <select data-bind="options:columns, value:foldColumn, optionsCaption:'(Select)'"></select>
@@ -2676,7 +2675,7 @@
             </tr>
             <tr>
               <th>
-                <label>Weights Column:</label>
+                <label>权重列：</label>
               </th>
               <td>
                 <select data-bind="options:columns, value:weightsColumn, optionsCaption:'(Select)'"></select>
@@ -2689,7 +2688,7 @@
               </th>
               <td colspan="2">
                 <div style="height:25px">
-                  <input class="flow-textbox" type="text" placeholder="Search..." data-bind="value:searchTerm, valueUpdate:'afterkeydown'">
+                  <input class="flow-textbox" type="text" placeholder="查找..." data-bind="value:searchTerm, valueUpdate:'afterkeydown'">
                 </div>
                 <div style="font-size:80%" data-bind="text:searchCaption"></div>
                 <div style="margin-bottom:5px;height:300px;overflow:auto;border:1px dotted #ccc">
@@ -2713,29 +2712,29 @@
                   <tbody>
                     <tr>
                       <td>
-                            <button class="flow-button" type="button" data-bind="click:selectFiltered, enable:hasFilteredItems"><i class="fa fa-check-square-o"></i><span>All</span>
+                            <button class="flow-button" type="button" data-bind="click:selectFiltered, enable:hasFilteredItems"><i class="fa fa-check-square-o"></i><span>全选</span>
                             </button>
-                            <button class="flow-button" type="button" data-bind="click:deselectFiltered, enable:hasFilteredItems"><i class="fa fa-square-o"></i><span>None</span>
+                            <button class="flow-button" type="button" data-bind="click:deselectFiltered, enable:hasFilteredItems"><i class="fa fa-square-o"></i><span>全不选</span>
                             </button>
                       </td>
                       <td style="text-align:right">
-                            <button class="flow-button" type="button" data-bind="click:goToPreviousPage, enable:canGoToPreviousPage"><i class="fa fa-arrow-left"></i><span>Previous 100</span>
+                            <button class="flow-button" type="button" data-bind="click:goToPreviousPage, enable:canGoToPreviousPage"><i class="fa fa-arrow-left"></i><span>前100条</span>
                             </button>
-                            <button class="flow-button" type="button" data-bind="click:goToNextPage, enable:canGoToNextPage"><i class="fa fa-arrow-right"></i><span>Next 100</span>
+                            <button class="flow-button" type="button" data-bind="click:goToNextPage, enable:canGoToNextPage"><i class="fa fa-arrow-right"></i><span>后100条</span>
                             </button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
-                <div style="font-size:80%">Only show columns with more than&nbsp;
-                  <input class="flow-textbox" type="text" style="width:30px" placeholder="0" data-bind="value:ignoreNATerm, valueUpdate:'afterkeydown'">% missing values.
+                <div style="font-size:80%">只展示缺失超过&nbsp;
+                  <input class="flow-textbox" type="text" style="width:30px" placeholder="0" data-bind="value:ignoreNATerm, valueUpdate:'afterkeydown'">% 数据的列。
                 </div>
               </td>
               <!-- /ko-->
             </tr>
             <tr>
               <th>
-                <label>Validation Frame:</label>
+                <label>校验集：</label>
               </th>
               <td>
                 <select data-bind="options:validationFrames, value:validationFrame, optionsCaption:'(Select)'"></select>
@@ -2743,7 +2742,7 @@
             </tr>
             <tr>
               <th>
-                <label>Blending Frame:</label>
+                <label>（堆叠集成训练用）融合集：</label>
               </th>
               <td>
                 <select data-bind="options:blendingFrames, value:blendingFrame, optionsCaption:'(Select)'"></select>
@@ -2751,7 +2750,7 @@
             </tr>
             <tr>
               <th>
-                <label>Leaderboard Frame:</label>
+                <label>用于计算排行榜的数据集：</label>
               </th>
               <td>
                 <select data-bind="options:leaderboardFrames, value:leaderboardFrame, optionsCaption:'(Select)'"></select>
@@ -2760,7 +2759,7 @@
             <!-- /ko-->
             <tr>
               <th>
-                <label>Balance classes:</label>
+                <label>（是否过采样以）平衡类别分布：</label>
               </th>
               <td>
                 <input type="checkbox" data-bind="checked:balanceClasses">
@@ -2769,7 +2768,7 @@
             <!-- ko if:balanceClasses-->
             <tr>
               <th>
-                <label>Class sampling factors:</label>
+                <label>类别采样分布：</label>
               </th>
               <td>
                 <input data-bind="value:classSamplingFactors">
@@ -2777,7 +2776,7 @@
             </tr>
             <tr>
               <th>
-                <label>Maximum after-balance size:</label>
+                <label>类别平衡后最大训练集大小：</label>
               </th>
               <td>
                 <input data-bind="value:maxAfterBalanceSize">
@@ -2810,7 +2809,7 @@
             </tr>
             <tr>
               <th>
-                <label>Max models to build:</label>
+                <label>最多可构建模型数：</label>
               </th>
               <td>
                 <input data-bind="value:maxModels">
@@ -2818,7 +2817,7 @@
             </tr>
             <tr>
               <th>
-                <label>Max Run Time (sec):</label>
+                <label>最长可运行时间（秒）：</label>
               </th>
               <td>
                 <input data-bind="value:maxRuntimeSecs">
@@ -2826,7 +2825,7 @@
             </tr>
             <tr>
               <th>
-                <label>Max Run Time Per Model (sec):</label>
+                <label>每个模型最长可运行时间（秒）：</label>
               </th>
               <td>
                 <input data-bind="value:maxRuntimeSecsPerModel">
@@ -2834,7 +2833,7 @@
             </tr>
             <tr>
               <th>
-                <label>Early stopping metric:</label>
+                <label>提前结束度量标准：</label>
               </th>
               <td>
                 <select data-bind="options:stoppingMetrics, value:stoppingMetric"></select>
@@ -2842,7 +2841,7 @@
             </tr>
             <tr>
               <th>
-                <label>Leaderboard sort metric:</label>
+                <label>排行榜排序度量标准：</label>
               </th>
               <td>
                 <select data-bind="options:sortMetrics, value:sortMetric"></select>
@@ -2850,7 +2849,7 @@
             </tr>
             <tr>
               <th>
-                <label>Early stopping rounds:</label>
+                <label>提前停止轮数：</label>
               </th>
               <td>
                 <input data-bind="value:stoppingRounds">
@@ -2858,7 +2857,7 @@
             </tr>
             <tr>
               <th>
-                <label>Early stopping tolerance:</label>
+                <label>提前结束相对容忍度：</label>
               </th>
               <td>
                 <input data-bind="value:stoppingTolerance">
@@ -2866,7 +2865,7 @@
             </tr>
             <tr>
               <th>
-                <label>nfolds:</label>
+                <label>k-折交叉验证折叠次数：</label>
               </th>
               <td>
                 <input data-bind="value:nfolds">
@@ -2874,7 +2873,7 @@
             </tr>
             <tr>
               <th>
-                <label>Keep cross-validation predictions</label>
+                <label>是否保留交叉验证预测：</label>
               </th>
               <td>
                 <input data-bind="checked:keepCrossValidationPredictions" type="checkbox">
@@ -2882,7 +2881,7 @@
             </tr>
             <tr>
               <th>
-                <label>Keep cross-validation models</label>
+                <label>是否保留交叉验证模型：</label>
               </th>
               <td>
                 <input data-bind="checked:keepCrossValidationModels" type="checkbox">
@@ -2890,7 +2889,7 @@
             </tr>
             <tr>
               <th>
-                <label>Keep cross-validation fold assignment</label>
+                <label>是否保留交叉验证折叠赋值：</label>
               </th>
               <td>
                 <input data-bind="checked:keepCrossValidationFoldAssignment" type="checkbox">
@@ -2898,7 +2897,7 @@
             </tr>
             <tr>
               <th>
-                <label>Seed:</label>
+                <label>可重现性种子：</label>
               </th>
               <td>
                 <input data-bind="value:seed">
@@ -2906,7 +2905,7 @@
             </tr>
             <tr>
               <th>
-                <label>Checkpoints path:</label>
+                <label>检查点路径：</label>
               </th>
               <td>
                 <input data-bind="value:exportCheckpointsDir">
@@ -2915,31 +2914,31 @@
           </tbody>
         </table>
         <div class="flow-panel">
-              <button class="flow-button" type="button" data-bind="click:buildModel, enable:canBuildModel"><i class="fa fa-cube"></i><span>Build Model</span>
+              <button class="flow-button" type="button" data-bind="click:buildModel, enable:canBuildModel"><i class="fa fa-cube"></i><span>构建模型</span>
               </button>
         </div>
       </div>
     </script>
     <script type="text/html" id="flow-leaderboard-output">
 <div class="flow-widget">
-  <h3 class="flow-hint"><i class="fa fa-tasks"></i>Leaderboard</h3>
+  <h3 class="flow-hint"><i class="fa fa-tasks"></i>排行榜</h3>
   <div class="flow-panel">
     <button class="flow-button" type="button" data-bind="click:toggleRefresh, css:{ 'flow-button-toggle':isLive }">
-      <!-- ko if:isLive--><i class="fa fa-refresh fa-spin"></i>Stop Monitoring
+      <!-- ko if:isLive--><i class="fa fa-refresh fa-spin"></i>停止监控
       <!-- /ko-->
-      <!-- ko ifnot:isLive--><i class="fa fa-refresh"></i>Monitor Live
+      <!-- ko ifnot:isLive--><i class="fa fa-refresh"></i>实时监控
       <!-- /ko-->
     </button>
   </div>
   <!-- ko if:exception-->
   <div data-bind="template: { name:'flow-failure', data:exception }"></div>
   <!-- /ko-->
-  <h4 data-bind="collapse:false">Models</h4>
+  <h4 data-bind="collapse:false">模型</h4>
   <div>
     <div data-bind="text:leaderboardDescription"></div>
     <div class="flow-plot" data-bind="raw:leaderboard"></div>
   </div>
-  <h4 data-bind="collapse:false">Event Log</h4>
+  <h4 data-bind="collapse:false">事件日志</h4>
   <div>
     <div data-bind="text:eventLogDescription"></div>
     <div class="flow-plot" data-bind="raw:eventLog"></div>
@@ -2948,7 +2947,7 @@
     </script>
     <script type="text/html" id="flow-jobs-output">
       <div class="flow-widget">
-            <h3 class="flow-hint"><i class="fa fa-tasks"></i>Jobs
+            <h3 class="flow-hint"><i class="fa fa-tasks"></i>任务
             </h3>
         <!-- ko if:exception-->
         <div data-bind="template: { name:'flow-failure', data:exception }"></div>
@@ -2958,13 +2957,13 @@
           <thead>
             <tr>
               <th>&nbsp;</th>
-              <th>Type</th>
-              <th>Destination</th>
-              <th>Description</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Run Time</th>
-              <th>Status</th>
+              <th>类型</th>
+              <th>最终产物</th>
+              <th>描述说明</th>
+              <th>开始时间</th>
+              <th>结束时间</th>
+              <th>运行时间</th>
+              <th>状态</th>
             </tr>
           </thead>
           <tbody>
@@ -2985,13 +2984,13 @@
         </table>
         <!-- /ko-->
         <!-- ko ifnot:hasJobViews-->
-        <blockquote>Your H<sub>2</sub>O cloud has no jobs.</blockquote>
+        <blockquote>您的AIR上没有任务。</blockquote>
         <!-- /ko-->
         <div class="flow-panel">
           <button class="flow-button" type="button" data-bind="click:toggleRefresh, css:{ 'flow-button-toggle':isLive }">
-            <!-- ko if:isLive--><i class="fa fa-refresh fa-spin"></i>Stop
+            <!-- ko if:isLive--><i class="fa fa-refresh fa-spin"></i>结束
             <!-- /ko-->
-            <!-- ko ifnot:isLive--><i class="fa fa-refresh"></i>Refresh
+            <!-- ko ifnot:isLive--><i class="fa fa-refresh"></i>刷新
             <!-- /ko-->
           </button>
         </div>
@@ -3004,23 +3003,23 @@
           <table class="flow-form">
             <tbody>
               <tr> 
-                <th width="1">Actions:</th>
+                <th width="1" style="white-space:nowrap;">操作：</th>
                 <td>
-                      <button class="flow-button" type="button" data-bind="click:inspectData"><i class="fa fa-th"></i><span>View Data</span>
+                      <button class="flow-button" type="button" data-bind="click:inspectData"><i class="fa fa-th"></i><span>浏览数据</span>
                       </button>
-                      <button class="flow-button" type="button" data-bind="click:splitFrame"><i class="fa fa-scissors"></i><span>Split...</span>
+                      <button class="flow-button" type="button" data-bind="click:splitFrame"><i class="fa fa-scissors"></i><span>拆分数据...</span>
                       </button>
-                      <button class="flow-button" type="button" data-bind="click:createModel"><i class="fa fa-cube"></i><span>Build Model&hellip;</span>
+                      <button class="flow-button" type="button" data-bind="click:createModel"><i class="fa fa-cube"></i><span>构建模型&hellip;</span>
                       </button>
-                      <button class="flow-button" type="button" data-bind="click:predict"><i class="fa fa-bolt"></i><span>Predict</span>
+                      <button class="flow-button" type="button" data-bind="click:predict"><i class="fa fa-bolt"></i><span>预测</span>
                       </button>
-                      <button class="flow-button" type="button" data-bind="click:download"><i class="fa fa-cloud-download"></i><span>Download</span>
+                      <button class="flow-button" type="button" data-bind="click:download"><i class="fa fa-cloud-download"></i><span>下载</span>
                       </button>
-                      <button class="flow-button" type="button" data-bind="click:exportFrame"><i class="fa fa-save"></i><span>Export</span>
+                      <button class="flow-button" type="button" data-bind="click:exportFrame"><i class="fa fa-save"></i><span>导出</span>
                       </button>
                 </td>
                 <td class="flow-right">
-                      <button class="flow-button" type="button" data-bind="click:deleteFrame"><i class="fa fa-trash-o"></i><span>Delete</span>
+                      <button class="flow-button" type="button" data-bind="click:deleteFrame"><i class="fa fa-trash-o"></i><span>删除</span>
                       </button>
                 </td>
               </tr>
@@ -3032,9 +3031,9 @@
             <thead>
               <tr>
                 <th>&nbsp;</th>
-                <th>Rows</th>
-                <th>Columns</th>
-                <th>Compressed Size</th>
+                <th>行数</th>
+                <th>列数</th>
+                <th>压缩后大小</th>
               </tr>
             </thead>
             <tbody>
@@ -3047,18 +3046,18 @@
             </tbody>
           </table>
         </div>
-        <h4 data-bind="collapse:false">Column Summaries</h4>
+        <h4 data-bind="collapse:false">列摘要信息</h4>
         <div>
           <!-- input.flow-textbox(type='text' placeholder='Search by column name...' data-bind="value:columnNameSearchTerm, valueUpdate:'afterkeydown'")-->
           <div class="flow-plot" data-bind="raw:grid"></div>
           <div>
-            <button class="flow-button" type="button" data-bind="click:goToPreviousPage, enable:canGoToPreviousPage"><i class="fa fa-arrow-left"></i><span>Previous 20 Columns</span></button>
-            <button class="flow-button" type="button" data-bind="click:goToNextPage, enable:canGoToNextPage"><i class="fa fa-arrow-right"></i><span>Next 20 Columns</span></button>
+            <button class="flow-button" type="button" data-bind="click:goToPreviousPage, enable:canGoToPreviousPage"><i class="fa fa-arrow-left"></i><span>前 20 列</span></button>
+            <button class="flow-button" type="button" data-bind="click:goToNextPage, enable:canGoToNextPage"><i class="fa fa-arrow-right"></i><span>后 20 列</span></button>
           </div>
         </div>
-        <h4 data-bind="collapse:true">Chunk Compression Summary</h4>
+        <h4 data-bind="collapse:true">块压缩摘要</h4>
         <div class="flow-plot" data-bind="raw:chunkSummary"></div>
-        <h4 data-bind="collapse:true">Frame Distribution Summary</h4>
+        <h4 data-bind="collapse:true">数据帧分布摘要</h4>
         <div class="flow-plot" data-bind="raw:distributionSummary"></div>
       </div>
     </script>
@@ -3104,10 +3103,10 @@
     </script>
     <script type="text/html" id="flow-bind-frames-output">
       <div class="flow-widget">
-            <h3 class="flow-hint"><i class="fa fa-table"></i>Frames Combined
+            <h3 class="flow-hint"><i class="fa fa-table"></i>数据帧整合
             </h3>
-        <blockquote>The specified frames were combined successfully.</blockquote>
-            <button class="flow-button" type="button" data-bind="click:viewFrame"><i class="fa fa-table"></i><span>View Frame</span>
+        <blockquote>指定的帧被成功整合。</blockquote>
+            <button class="flow-button" type="button" data-bind="click:viewFrame"><i class="fa fa-table"></i><span>查看数据帧详情</span>
             </button>
       </div>
     </script>
@@ -3121,17 +3120,17 @@
     <script type="text/html" id="flow-frame-data-output">
 <div class="flow-widget flow-frame-data-output">
   <h3 class="flow-hint"><i class="fa fa-table"></i><span data-bind="text:key"></span></h3>
-  <h4 data-bind="collapse:false">Data</h4>
+  <h4 data-bind="collapse:false">数据</h4>
   <div>
     <!-- input.flow-textbox(type='text' placeholder='Search by column name...' data-bind="value:columnNameSearchTerm, valueUpdate:'afterkeydown'")-->
     <div style="padding:0 0 10px 0">
-      <button class="flow-button" type="button" data-bind="click:goToPreviousPage, enable:canGoToPreviousPage"><i class="fa fa-arrow-left"></i><span>Previous 20 Columns</span></button>
-      <button class="flow-button" type="button" data-bind="click:goToNextPage, enable:canGoToNextPage"><i class="fa fa-arrow-right"></i><span>Next 20 Columns</span></button>
+      <button class="flow-button" type="button" data-bind="click:goToPreviousPage, enable:canGoToPreviousPage"><i class="fa fa-arrow-left"></i><span>前 20 列</span></button>
+      <button class="flow-button" type="button" data-bind="click:goToNextPage, enable:canGoToNextPage"><i class="fa fa-arrow-right"></i><span>后 20 列</span></button>
     </div>
     <div class="flow-plot" data-bind="raw:data"></div>
     <div>
-      <button class="flow-button" type="button" data-bind="click:goToPreviousPage, enable:canGoToPreviousPage"><i class="fa fa-arrow-left"></i><span>Previous 20 Columns</span></button>
-      <button class="flow-button" type="button" data-bind="click:goToNextPage, enable:canGoToNextPage"><i class="fa fa-arrow-right"></i><span>Next 20 Columns</span></button>
+      <button class="flow-button" type="button" data-bind="click:goToPreviousPage, enable:canGoToPreviousPage"><i class="fa fa-arrow-left"></i><span>前 20 列</span></button>
+      <button class="flow-button" type="button" data-bind="click:goToNextPage, enable:canGoToNextPage"><i class="fa fa-arrow-right"></i><span>后 20 列</span></button>
     </div>
   </div>
 </div>
@@ -3172,26 +3171,26 @@
     </script>
     <script type="text/html" id="flow-job-output">
 <div class="flow-widget">
-  <h3 class="flow-hint"><i class="fa fa-tasks"></i>Job</h3>
+  <h3 class="flow-hint"><i class="fa fa-tasks"></i>任务</h3>
   <!-- ko if:exception-->
   <div data-bind="template: { name:'flow-failure', data:exception }"></div>
   <!-- /ko-->
   <table class="flow-form">
     <tbody>
       <tr>
-        <th class="flow-narrow">Run Time</th>
+        <th class="flow-narrow">运行时间</th>
         <td class="flow-wide" data-bind="text:runTime" style="font-size:120%"></td>
       </tr>
       <tr>
-        <th class="flow-narrow">Remaining Time</th>
+        <th class="flow-narrow">剩余时间</th>
         <td class="flow-wide" data-bind="text:remainingTime" style="font-size:120%"></td>
       </tr>
       <tr>
-        <th class="flow-narrow">Type</th>
+        <th class="flow-narrow">目标类型</th>
         <td class="flow-wide" data-bind="text:destinationType"></td>
       </tr>
       <tr>
-        <th class="flow-narrow">Key</th>
+        <th class="flow-narrow">键</th>
         <td class="flow-wide">
           <!-- ko ifnot:canView--><span data-bind="text:destinationKey"></span>
           <!-- /ko-->
@@ -3201,15 +3200,15 @@
         </td>
       </tr>
       <tr>
-        <th class="flow-narrow">Description</th>
+        <th class="flow-narrow">描述</th>
         <td class="flow-wide" data-bind="text:description"></td>
       </tr>
       <tr>
-        <th class="flow-narrow">Status</th>
+        <th class="flow-narrow">状态</th>
         <td class="flow-wide" data-bind="text:status"></td>
       </tr>
       <tr>
-        <th class="flow-narrow">Progress</th>
+        <th class="flow-narrow">进度</th>
         <td class="flow-wide">
           <table>
             <tbody>
@@ -3240,10 +3239,10 @@
       </tr>
       <!-- /ko-->
       <tr>
-        <th class="flow-narrow">Actions</th>
+        <th class="flow-narrow">操作</th>
         <td class="flow-wide">
-          <button class="flow-button" type="button" data-bind="click:view, visible:canView"><i class="fa fa-search"></i>View</button>
-          <button class="flow-button" type="button" data-bind="click:cancel, visible:canCancel"><i class="fa fa-ban"></i>Cancel Job</button>
+          <button class="flow-button" type="button" data-bind="click:view, visible:canView"><i class="fa fa-search"></i>查看详情</button>
+          <button class="flow-button" type="button" data-bind="click:cancel, visible:canCancel"><i class="fa fa-ban"></i>取消任务</button>
         </td>
       </tr>
     </tbody>
@@ -3259,12 +3258,12 @@
     </script>
     <script type="text/html" id="flow-predict-input">
       <div class="flow-widget">
-            <h3 class="flow-hint"><i class="fa fa-bolt"></i>Predict
+            <h3 class="flow-hint"><i class="fa fa-bolt"></i>预测
             </h3>
         <table class="flow-form">
           <tr>
-            <th width="1">
-              <label>Name:</label>
+            <th width="1" style="white-space:nowrap;">
+              <label>预测名称：</label>
             </th>
             <td>
               <input data-bind="value:destinationKey">
@@ -3272,7 +3271,7 @@
           </tr>
           <tr>
             <th width="1">
-              <label>Model:</label>
+              <label>模型：</label>
             </th>
             <td>
               <!-- ko if:hasModels--><span data-bind="text:selectedModelsCaption"></span>
@@ -3285,7 +3284,7 @@
           <!-- ko ifnot:hasExemplarIndex-->
           <tr>
             <th>
-              <label>Frame:</label>
+              <label>数据帧：</label>
             </th>
             <td>
               <!-- ko if:hasFrames--><span data-bind="text:selectedFramesCaption"></span>
@@ -3341,10 +3340,10 @@
           <!-- /ko-->
           <tr>
             <th>
-              <label>Actions:</label>
+              <label>操作：</label>
             </th>
             <td>
-              <button class="flow-button" type="button" data-bind="click:predict, enable:canPredict"><i class="fa fa-bolt"></i><span>Predict</span></button>
+              <button class="flow-button" type="button" data-bind="click:predict, enable:canPredict"><i class="fa fa-bolt"></i><span>预测</span></button>
             </td>
           </tr>
           <!-- /ko-->
@@ -3353,12 +3352,12 @@
     </script>
     <script type="text/html" id="flow-predicts-output">
       <div class="flow-widget">
-            <h3 class="flow-hint"><i class="fa fa-bolt"></i>Predictions
+            <h3 class="flow-hint"><i class="fa fa-bolt"></i>预测列表
             </h3>
         <!-- ko ifnot:hasPredictions-->
-        <blockquote>Your H<sub>2</sub>O cloud has no predictions.</blockquote>
+        <blockquote>您的AIR云端还没有预测信息。</blockquote>
         <div class="flow-panel">
-              <button class="flow-button" type="button" data-bind="click:predict"><i class="fa fa-bolt"></i><span>Make a prediction&hellip;</span>
+              <button class="flow-button" type="button" data-bind="click:predict"><i class="fa fa-bolt"></i><span>进行预测&hellip;</span>
               </button>
         </div>
         <!-- /ko-->
@@ -3367,12 +3366,12 @@
           <tbody>
             <tr>
               <th width="1" style="font-size:inherit">
-                <input type="checkbox" title="Select or deselect all" data-bind="checked:checkAllPredictions">
+                <input type="checkbox" title="全选或全不选" data-bind="checked:checkAllPredictions">
               </th>
               <th width="1">&nbsp;</th>
-              <th>Model</th>
-              <th>Frame</th>
-              <th class="flow-right">Actions</th>
+              <th>模型</th>
+              <th>数据帧</th>
+              <th class="flow-right">操作</th>
             </tr>
           </tbody>
           <tbody>
@@ -3387,7 +3386,7 @@
               <td data-bind="text:frameKey"></td>
               <td class="flow-right"> 
                 <!-- ko if:hasFrame-->
-                    <button class="flow-button" type="button" data-bind="click:view"><i class="fa fa-bolt"></i><span>View</span>
+                    <button class="flow-button" type="button" data-bind="click:view"><i class="fa fa-bolt"></i><span>查看详情</span>
                     </button>
                 <!-- /ko-->
               </td>
@@ -3401,17 +3400,17 @@
     </script>
     <script type="text/html" id="flow-predict-output">
       <div class="flow-widget">
-            <h3 class="flow-hint"><i class="fa fa-bolt"></i>Prediction
+            <h3 class="flow-hint"><i class="fa fa-bolt"></i>预测
             </h3>
         <!-- ko if:canInspect-->
         <table class="flow-form">
           <tbody>
             <tr>
-              <th width="1">
-                <label>Actions:</label>
+              <th width="1" style="white-space:nowrap;">
+                <label>操作:</label>
               </th>
               <td>
-                    <button class="flow-button" type="button" data-bind="click:inspect"><i class="fa fa-list"></i><span>Inspect</span>
+                    <button class="flow-button" type="button" data-bind="click:inspect"><i class="fa fa-list"></i><span>检查</span>
                     </button>
               </td>
             </tr>
@@ -3422,7 +3421,7 @@
         <h4 data-bind="text:title, collapse:false"></h4>
         <div class="flow-plot" data-bind="raw:plot"></div>
         <!-- ko if:canCombineWithFrame-->
-            <button class="flow-button" type="button" data-bind="click:combineWithFrame"><i class="fa fa-table"></i><span>Combine predictions with frame</span>
+            <button class="flow-button" type="button" data-bind="click:combineWithFrame"><i class="fa fa-table"></i><span>结合数据帧和预测</span>
             </button>
         <!-- /ko-->
         <!-- /ko-->
@@ -3431,34 +3430,34 @@
     <script type="text/html" id="flow-cloud-output">
       <div class="flow-widget flow-cloud-output">
         <h3 class="flow-hint"><i class="fa fa-cloud"></i><span data-bind="text:name"></span></h3>
-        <h4>Cloud Status</h4>
+        <h4>云端状态</h4>
         <div>
           <!-- ko if:isHealthy-->
-          <div class="flow-hud"><i class="fa fa-check-circle text-success"></i><span class="flow-small-caps">Healthy</span></div>
+          <div class="flow-hud"><i class="fa fa-check-circle text-success"></i><span class="flow-small-caps">健康</span></div>
           <!-- /ko-->
           <!-- ko ifnot:isHealthy-->
-          <div class="flow-hud"><i class="fa fa-exclamation-circle text-danger"></i><span class="flow-small-caps text-danger">Not healthy</span></div>
+          <div class="flow-hud"><i class="fa fa-exclamation-circle text-danger"></i><span class="flow-small-caps text-danger">不健康</span></div>
           <!-- /ko-->
           <!-- ko if:hasConsensus-->
-          <div class="flow-hud"><i class="fa fa-check-circle text-success"></i><span class="flow-small-caps">Consensus</span></div>
+          <div class="flow-hud"><i class="fa fa-check-circle text-success"></i><span class="flow-small-caps">一致</span></div>
           <!-- /ko-->
           <!-- ko ifnot:hasConsensus-->
-          <div class="flow-hud"><i class="fa fa-exclamation-circle text-danger"></i><span class="flow-small-caps">text-danger No consensus</span></div>
+          <div class="flow-hud"><i class="fa fa-exclamation-circle text-danger"></i><span class="flow-small-caps">text-danger 不一致</span></div>
           <!-- /ko-->
           <!-- ko if:isLocked-->
-          <div class="flow-hud"><i class="fa fa-lock text-muted"></i><span class="flow-small-caps">Locked</span></div>
+          <div class="flow-hud"><i class="fa fa-lock text-muted"></i><span class="flow-small-caps">锁定</span></div>
           <!-- /ko-->
           <!-- ko ifnot:isLocked-->
-          <div class="flow-hud"><i class="fa fa-unlock text-muted"></i><span class="flow-small-caps">Not locked</span></div>
+          <div class="flow-hud"><i class="fa fa-unlock text-muted"></i><span class="flow-small-caps">非锁定</span></div>
           <!-- /ko-->
         </div>
         <div class="flow-plot">
           <table>
             <thead>
               <tr>
-                <th style="text-align:left">Version</th>
-                <th>Started</th>
-                <th>Nodes (Used / All)</th>
+                <th style="text-align:left">版本</th>
+                <th>启动于</th>
+                <th>节点 (使用的 / 所有)</th>
               </tr>
             </thead>
             <tbody>
@@ -3470,23 +3469,23 @@
             </tbody>
           </table>
         </div>
-        <h4>Nodes</h4>
+        <h4>节点状态</h4>
         <div class="flow-right flow-margin-after"> 
           <!-- ko ifnot:isExpanded-->
-              <button class="flow-button" type="button" data-bind="click:toggleExpansion"><i class="fa fa-angle-double-down"></i><span>Show advanced</span>
+              <button class="flow-button" type="button" data-bind="click:toggleExpansion"><i class="fa fa-angle-double-down"></i><span>显示高级属性</span>
               </button>
           <!-- /ko-->
           <!-- ko if:isExpanded-->
-              <button class="flow-button" type="button" data-bind="click:toggleExpansion"><i class="fa fa-angle-double-up"></i><span>Hide advanced</span>
+              <button class="flow-button" type="button" data-bind="click:toggleExpansion"><i class="fa fa-angle-double-up"></i><span>隐藏高级属性</span>
               </button>
           <!-- /ko-->
         </div>
         <div class="flow-plot flow-nowrap" data-bind="raw:nodes"></div>
         <div class="flow-panel">
           <button class="flow-button" type="button" data-bind="click:toggleRefresh, css:{ 'flow-button-toggle':isLive }">
-            <!-- ko if:isLive--><i class="fa fa-refresh fa-spin"></i>Stop
+            <!-- ko if:isLive--><i class="fa fa-refresh fa-spin"></i>结束
             <!-- /ko-->
-            <!-- ko ifnot:isLive--><i class="fa fa-refresh"></i>Refresh
+            <!-- ko ifnot:isLive--><i class="fa fa-refresh"></i>刷新
             <!-- /ko-->
           </button>
         </div>
@@ -3494,31 +3493,31 @@
     </script>
     <script type="text/html" id="flow-impute-input">
       <div class="flow-widget">
-        <h3 class="flow-hint"><i class="fa fa-reply-all"></i>Impute</h3>
+        <h3 class="flow-hint"><i class="fa fa-reply-all"></i>插补</h3>
         <table class="flow-form">
           <tbody>
             <tr>
-              <th class="flow-narrow">Frame</th>
+              <th class="flow-narrow">数据帧</th>
               <td class="flow-wide">
                 <select data-bind="options:frames, value:frame, optionsCaption:'Choose...'"></select>
               </td>
             </tr>
             <!-- ko if:hasFrame-->
             <tr>
-              <th class="flow-narrow">Column</th>
+              <th class="flow-narrow">列</th>
               <td class="flow-wide">
                 <select data-bind="options:columns, value:column, optionsCaption:'Choose...'"></select>
               </td>
             </tr>
             <tr>
-              <th class="flow-narrow">Method</th>
+              <th class="flow-narrow">方法</th>
               <td class="flow-wide">
                 <select data-bind="options:methods, optionsText:'caption', value:method"></select>
               </td>
             </tr>
             <!-- ko if:canUseCombineMethod-->
             <tr>
-              <th class="flow-narrow">Combine Method</th>
+              <th class="flow-narrow">混合方法</th>
               <td class="flow-wide">
                 <select data-bind="options:combineMethods, optionsText:'caption', value:combineMethod"></select>
               </td>
@@ -3526,7 +3525,7 @@
             <!-- /ko-->
             <!-- ko if:canGroupByColumns-->
             <tr>
-              <th class="flow-narrow">Group By</th>
+              <th class="flow-narrow">分组列</th>
               <td class="flow-wide">
                 <select data-bind="options:columns, selectedOptions:groupByColumns" size="15" multiple="true"></select>
               </td>
@@ -3536,19 +3535,19 @@
           </tbody>
         </table>
         <div class="flow-panel">
-              <button class="flow-button" type="button" data-bind="click:impute, enable:canImpute"><i class="fa fa-reply-all"></i><span>Impute</span>
+              <button class="flow-button" type="button" data-bind="click:impute, enable:canImpute"><i class="fa fa-reply-all"></i><span>插补</span>
               </button>
         </div>
       </div>
     </script>
     <script type="text/html" id="flow-timeline-output">
 <div class="flow-widget flow-timeline-output">
-  <h3 class="flow-hint"><i class="fa fa-clock-o"></i><span>Timeline</span></h3>
+  <h3 class="flow-hint"><i class="fa fa-clock-o"></i><span>时间轴</span></h3>
   <div class="flow-panel">
     <button class="flow-button" type="button" data-bind="click:toggleRefresh, css:{ 'flow-button-toggle':isLive }">
-      <!-- ko if:isLive--><i class="fa fa-refresh fa-spin"></i>Stop
+      <!-- ko if:isLive--><i class="fa fa-refresh fa-spin"></i>结束
       <!-- /ko-->
-      <!-- ko ifnot:isLive--><i class="fa fa-refresh"></i>Refresh
+      <!-- ko ifnot:isLive--><i class="fa fa-refresh"></i>刷行
       <!-- /ko-->
     </button>
   </div>
@@ -3557,8 +3556,8 @@
     </script>
     <script type="text/html" id="flow-profile-output">
 <div class="flow-widget flow-profile-output">
-  <h3 class="flow-hint"><i class="fa fa-wrench"></i><span>Profiler</span></h3>
-  <div>Select Node: 
+  <h3 class="flow-hint"><i class="fa fa-wrench"></i><span>分析工具</span></h3>
+  <div>选择节点： 
     <select data-bind="options:nodes, optionsText:'name', value:activeNode"></select>
   </div>
   <!-- ko with:activeNode-->
@@ -3572,8 +3571,8 @@
     </script>
     <script type="text/html" id="flow-stacktrace-output">
 <div class="flow-widget flow-stacktrace-output">
-  <h3 class="flow-hint"><i class="fa fa-wrench"></i><span>Stack Trace</span></h3>
-  <div>Select Node: 
+  <h3 class="flow-hint"><i class="fa fa-wrench"></i><span>堆栈信息</span></h3>
+  <div>选择节点： 
     <select data-bind="options:nodes, optionsText:'name', value:activeNode, optionsCaption:'(Select)'"></select>
   </div>
   <!-- ko with:activeNode-->
@@ -3587,24 +3586,24 @@
     </script>
     <script type="text/html" id="flow-log-file-output">
       <div class="flow-widget">
-        <h3 class="flow-hint"><i class="fa fa-file-text-o"></i><span>Log</span></h3>
+        <h3 class="flow-hint"><i class="fa fa-file-text-o"></i><span>日志</span></h3>
         <table class="flow-form" style="width:auto">
           <tbody>
             <tr>
               <th>
-                <label>Select Log File Type:</label>
+                <label>请选择日志类型:</label>
               </th>
               <td> 
                 <select data-bind="options:fileTypes, value:activeFileType"></select>
               </td>
               <th>
-                <label>Select Node: </label>
+                <label>请选择服务节点: </label>
               </th>
               <td>
                 <select data-bind="options:nodes, optionsText:'name', value:activeNode"></select>
               </td>
               <td>
-                    <button class="flow-button" type="button" data-bind="click:refresh"><i class="fa fa-refresh"></i><span>Refresh</span>
+                    <button class="flow-button" type="button" data-bind="click:refresh"><i class="fa fa-refresh"></i><span>刷新</span>
                     </button>
               </td>
             </tr>
@@ -3615,7 +3614,7 @@
     </script>
     <script type="text/html" id="flow-network-test-output">
 <div class="flow-widget">
-  <h3 class="flow-hint"><i class="fa fa-tachometer"></i>Network Test</h3>
+  <h3 class="flow-hint"><i class="fa fa-tachometer"></i>网络测试</h3>
   <div class="flow-plot" data-bind="raw:result"></div>
 </div>
     </script>
@@ -3653,8 +3652,8 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button class="close" type="button" data-dismiss="modal"><span>×</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title">Upload Dataset...</h4>
+        <button class="close" type="button" data-dismiss="modal"><span>×</span><span class="sr-only">关闭</span></button>
+        <h4 class="modal-title">上传数据集...</h4>
       </div>
       <div class="modal-body">
         <form enctype="multipart/form-data" data-bind="element:form">
@@ -3662,8 +3661,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-default" type="button" data-bind="click:decline">Cancel</button>
-        <button class="btn btn-primary" type="button" data-bind="click:accept">Upload</button>
+        <button class="btn btn-default" type="button" data-bind="click:decline">取消</button>
+        <button class="btn btn-primary" type="button" data-bind="click:accept">上传</button>
       </div>
     </div>
   </div>
