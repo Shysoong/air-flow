@@ -10,11 +10,11 @@ module.exports = (_, _go, _profile) ->
 
     entries = for entry in node.entries
       stacktrace: entry.stacktrace
-      caption: "Count: #{entry.count}"
+      caption: "堆栈计数： #{entry.count}"
 
     self =
       name: node.node_name
-      caption: "#{node.node_name} at #{new Date node.timestamp}"
+      caption: "#{node.node_name} 时间 #{new Date node.timestamp}"
       entries: entries 
       display: display
 

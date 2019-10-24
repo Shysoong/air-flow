@@ -671,7 +671,7 @@ exports.init = (_, _renderers) ->
         createMenuItem '堆栈信息', executeCommand 'getStackTrace'
         createMenuItem '网络测试', executeCommand 'testNetwork'
         #TODO Cluster I/O
-        createMenuItem '分析工具', executeCommand 'getProfile depth: 10'
+        createMenuItem '分析器', executeCommand 'getProfile depth: 10'
         createMenuItem '时间轴', executeCommand 'getTimeline'
         #TODO UDP Drop Test
         #TODO Task Status

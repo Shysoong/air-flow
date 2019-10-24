@@ -12,7 +12,7 @@ module.exports = (_, _go, _timeline) ->
 
   _headers = [
     '时间'
-    'Unix时间戳（毫秒）'
+    '持续的时间（毫秒）'
     '参与方'
     'I/O 类型'
     '事件'
