@@ -1780,6 +1780,23 @@
           </table>
         </td>
       </tr>
+      <tr>
+        <th width="125">Fetch mode:</th>
+        <td>
+          <table width="100%">
+            <tbody>
+              <tr>
+                <td class="flow-wide">
+                  <select data-bind="value:specifiedFetchMode">
+                    <option value="DISTRIBUTED">DISTRIBUTED</option>
+                    <option value="SINGLE">SINGLE</option>
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
       <!-- ko if:hasErrorMessage-->
       <tr>
         <th>&nbsp;</th>
@@ -2300,12 +2317,12 @@
     </script>
     <script type="text/html" id="flow-import-model-input">
       <div class="flow-widget">
-            <h3 class="flow-hint"><i class="fa fa-cube"></i>Import Model
+            <h3 class="flow-hint"><i class="fa fa-cube"></i>导入模型
             </h3>
         <table class="flow-form">
           <tr>
-            <th width="1">
-              <label>Path:</label>
+            <th width="1" style="white-space:nowrap;">
+              <label>路径：</label>
             </th>
             <td>
               <input class="flow-textbox" type="text" data-bind="value:path, valueUpdate:'afterkeydown'">
@@ -2313,7 +2330,7 @@
           </tr>
           <tr>
             <th width="1">
-              <label>Overwrite:</label>
+              <label>覆盖：</label>
             </th>
             <td>
               <input type="checkbox" data-bind="checked:overwrite">
@@ -2321,10 +2338,10 @@
           </tr>
           <tr>
             <th>
-              <label>Actions:</label>
+              <label>操作：</label>
             </th>
             <td>
-              <button class="flow-button" type="button" data-bind="click:importModel, enable:canImportModel"><i class="fa fa-cloud-upload"></i><span>Import</span></button>
+              <button class="flow-button" type="button" data-bind="click:importModel, enable:canImportModel"><i class="fa fa-cloud-upload"></i><span>导入</span></button>
             </td>
           </tr>
         </table>

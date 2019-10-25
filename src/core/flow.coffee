@@ -19,14 +19,12 @@ getContextPath = (_) ->
       console.debug "开发模式, 正在使用 localhost:54321 的服务"
       _.ContextPath = "http://localhost:54321/"
     else
-      _.ContextPath = "/"
-      $.ajax
-          url: window.referrer
-          type: 'GET'
-          success: (data, status, xhr) ->
-              if xhr.getAllResponseHeaders().search(/x-h2o-context-path/i) != -1
-                  _.ContextPath = xhr.getResponseHeader('X-h2o-context-path')
-          async: false
+      url = window.location.toString()
+      if !url.endsWith("flow/index.html")
+        console.warn("URL does not have expected form -> does not end with /flow/index.html")
+        _.ContextPath = "/"
+      else
+        _.ContextPath = url.substring(0, url.length - "flow/index.html".length)
 
 checkSparklingWater = (context) ->
     context.onSparklingWater = false
