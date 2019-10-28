@@ -18,7 +18,7 @@ fileOpenDialog = require('../../ext/components/file-open-dialog')
 fileUploadDialog = require('../../ext/components/file-upload-dialog')
 
 exports.init = (_, _renderers) ->
-  _localName = signal '未命名的流程'
+  _localName = signal 'Untitled Flow'
   react _localName, (name) ->
     document.title = 'AIR' + if name and name.trim() then "- #{name}" else ''
 
@@ -436,7 +436,7 @@ exports.init = (_, _renderers) ->
     _.confirm '这个操作会替换你当前激活的流程笔记。\n您确定要继续吗？', {acceptCaption: '创建新的流程笔记', declineCaption: '取消'}, (accept) ->
       if accept
         currentTime = (new Date()).getTime()
-        deserialize '未命名的流程', null,
+        deserialize 'Untitled Flow', null,
           cells: [
             type: 'cs'
             input: ''

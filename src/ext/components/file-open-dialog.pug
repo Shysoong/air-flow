@@ -4,22 +4,22 @@
       .modal-header
         button.close(type='button', data-dismiss='modal')
           span ×
-          span.sr-only Close
-        h4.modal-title Open File...
+          span.sr-only 关闭
+        h4.modal-title 打开文件...
       .modal-body
         form(enctype='multipart/form-data' data-bind='element:form')
           input(name='file' type='file' data-bind='file:file')
 
         // ko if:overwrite
-        p(style='color:red') A notebook with that name already exists. Do you want to replace it?
+        p(style='color:red') 这个名字的流程笔记已经存在，你想替换它吗？
         // /ko
 
       .modal-footer
-        button.btn.btn-default(type='button' data-bind='click:decline') Cancel
+        button.btn.btn-default(type='button' data-bind='click:decline') 取消
         // ko ifnot:overwrite
-        button.btn.btn-primary(type='button' data-bind='click:accept, enable:canAccept') Open
+        button.btn.btn-primary(type='button' data-bind='click:accept, enable:canAccept') 打开
         // /ko
 
         // ko if:overwrite
-        button.btn.btn-danger(type='button' data-bind='click:accept, enable:canAccept') Replace
+        button.btn.btn-danger(type='button' data-bind='click:accept, enable:canAccept') 替换
         // /ko

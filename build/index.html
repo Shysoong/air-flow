@@ -1781,15 +1781,15 @@
         </td>
       </tr>
       <tr>
-        <th width="125">Fetch mode:</th>
+        <th width="125">抓取模式：</th>
         <td>
           <table width="100%">
             <tbody>
               <tr>
                 <td class="flow-wide">
                   <select data-bind="value:specifiedFetchMode">
-                    <option value="DISTRIBUTED">DISTRIBUTED</option>
-                    <option value="SINGLE">SINGLE</option>
+                    <option value="DISTRIBUTED">分布式</option>
+                    <option value="SINGLE">单节点</option>
                   </select>
                 </td>
               </tr>
@@ -3608,13 +3608,13 @@
           <tbody>
             <tr>
               <th>
-                <label>请选择日志类型:</label>
+                <label>请选择日志类型：</label>
               </th>
               <td> 
                 <select data-bind="options:fileTypes, value:activeFileType"></select>
               </td>
               <th>
-                <label>请选择服务节点: </label>
+                <label>请选择服务节点：</label>
               </th>
               <td>
                 <select data-bind="options:nodes, optionsText:'name', value:activeNode"></select>
@@ -3640,24 +3640,24 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button class="close" type="button" data-dismiss="modal"><span>×</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title">Open File...</h4>
+        <button class="close" type="button" data-dismiss="modal"><span>×</span><span class="sr-only">关闭</span></button>
+        <h4 class="modal-title">打开文件...</h4>
       </div>
       <div class="modal-body">
         <form enctype="multipart/form-data" data-bind="element:form">
           <input name="file" type="file" data-bind="file:file">
         </form>
         <!-- ko if:overwrite-->
-        <p style="color:red">A notebook with that name already exists. Do you want to replace it?</p>
+        <p style="color:red">这个名字的流程笔记已经存在，你想替换它吗？</p>
         <!-- /ko-->
       </div>
       <div class="modal-footer">
-        <button class="btn btn-default" type="button" data-bind="click:decline">Cancel</button>
+        <button class="btn btn-default" type="button" data-bind="click:decline">取消</button>
         <!-- ko ifnot:overwrite-->
-        <button class="btn btn-primary" type="button" data-bind="click:accept, enable:canAccept">Open</button>
+        <button class="btn btn-primary" type="button" data-bind="click:accept, enable:canAccept">打开</button>
         <!-- /ko-->
         <!-- ko if:overwrite-->
-        <button class="btn btn-danger" type="button" data-bind="click:accept, enable:canAccept">Replace</button>
+        <button class="btn btn-danger" type="button" data-bind="click:accept, enable:canAccept">替换</button>
         <!-- /ko-->
       </div>
     </div>
