@@ -602,7 +602,10 @@ exports.init = (_, _renderers) ->
     builderMenuItems = builders
       .filter (builder) -> builder.algo != "generic"
       .map (builder) -> createMenuItem("#{ builder.algo_full_name }...", executeCommand "buildModel #{stringify builder.algo}")
-    modelMenuItems = [createMenuItem('运行自动机器学习...', executeCommand 'runAutoML'), menuDivider]
+    modelMenuItems = [
+        createMenuItem '运行自动机器学习...', executeCommand 'runAutoML'
+        menuDivider
+    ]
     modelMenuItems = modelMenuItems.concat builderMenuItems
     modelMenuItems = modelMenuItems.concat [ menuDivider ]
     modelMenuItems = modelMenuItems.concat mojoModelMenuItem

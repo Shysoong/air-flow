@@ -40,12 +40,13 @@
             a(href='#' data-bind='text:key, click:view')
           // ko if:isText
           p
-            +button('解析&hellip;', 'cog', 'view')
+            +button('解析', 'cog', 'view')
           // /ko
           // ko ifnot:isText
           p
-            +button('构建模型&hellip;', 'cube', 'createModel')
-            +button('预测&hellip;', 'bolt', 'predict')
+            +button('构建模型', 'cube', 'createModel')
+            +button('运行自动机器学习', 'sitemap', 'createAutoML')
+            +button('预测', 'bolt', 'predict')
             +button('检查', 'list', 'inspect')
           // /ko
         td.flow-right(data-bind='text:rowCount')
