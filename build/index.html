@@ -2357,12 +2357,12 @@
     </script>
     <script type="text/html" id="flow-export-model-input">
       <div class="flow-widget">
-            <h3 class="flow-hint"><i class="fa fa-cube"></i>Export Model
+            <h3 class="flow-hint"><i class="fa fa-cube"></i>导出模型
             </h3>
         <table class="flow-form">
           <tr>
-            <th width="1">
-              <label>Model:</label>
+            <th width="1" style="white-space:nowrap;">
+              <label>模型：</label>
             </th>
             <td>
               <select data-bind="options:models, value:selectedModelKey, optionsCaption:'(Select)'"></select>
@@ -2370,7 +2370,7 @@
           </tr>
           <tr>
             <th width="1">
-              <label>Path:</label>
+              <label>路径：</label>
             </th>
             <td>
               <input class="flow-textbox" type="text" data-bind="value:path, valueUpdate:'afterkeydown'">
@@ -2378,7 +2378,7 @@
           </tr>
           <tr>
             <th width="1">
-              <label>Overwrite:</label>
+              <label>覆盖：</label>
             </th>
             <td>
               <input type="checkbox" data-bind="checked:overwrite">
@@ -2386,16 +2386,16 @@
           </tr>
           <tr>
             <th>
-              <label>Actions:</label>
+              <label>操作：</label>
             </th>
             <td>
-              <button class="flow-button" type="button" data-bind="click:exportModel, enable:canExportModel"><i class="fa fa-save"></i><span>Export</span></button>
+              <button class="flow-button" type="button" data-bind="click:exportModel, enable:canExportModel"><i class="fa fa-save"></i><span>导出</span></button>
             </td>
           </tr>
           <tr>
             <th></th>
             <td>
-              <button class="flow-button" type="button" data-bind="click:exportModelMojo, enable:canExportModelMojo"><i class="fa fa-save"></i><span>Export Model Deployment Package (MOJO)</span></button>
+              <button class="flow-button" type="button" data-bind="click:exportModelMojo, enable:canExportModelMojo"><i class="fa fa-save"></i><span>导出模型部署包(MOJO)</span></button>
             </td>
           </tr>
         </table>
@@ -3614,7 +3614,7 @@
                 <select data-bind="options:fileTypes, value:activeFileType"></select>
               </td>
               <th>
-                <label>请选择服务节点：</label>
+                <label>请选择服务节点： </label>
               </th>
               <td>
                 <select data-bind="options:nodes, optionsText:'name', value:activeNode"></select>
